@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="84f085d4bdb66ee025fb337bcd571eab7469da97"
+fixed_commit_id ="9d6ac71c27b1dfb662c795ef598dbfd0286682da"
+test_file="test/test_InfoExtractor.py"

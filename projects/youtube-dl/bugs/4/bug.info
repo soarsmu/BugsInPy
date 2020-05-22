@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="bc40b3a5ba44006c23daf7fe0ed872af5e33bdc5"
+fixed_commit_id ="189935f15960300d316e8b07108b076ac6c2186a"
+test_file="test/test_jsinterp.py"
