@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="9bd8b4e8f75eb475073358856bb9748dee2bce21"
+fixed_commit_id="d998013655ccc0367bac2746fe198727c6d7d8d5"
+test_file="tests/test_config.py"

@@ -1,0 +1,1 @@
+pytest tests/test_config.py::test_config_dir_not_writeable

@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="04819577154fc1b11fc20ae7ac584d67614eca25"
+fixed_commit_id="c301305a59ddff7fc17c3fba1ce2b1418deddb28"
+test_file="tests/test_uploads.py"

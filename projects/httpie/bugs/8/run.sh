@@ -1,0 +1,1 @@
+pytest tests/test_auth.py::TestAuth::test_only_username_in_url
