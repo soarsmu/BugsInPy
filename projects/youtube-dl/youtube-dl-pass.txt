@@ -1,0 +1,12 @@
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/1
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/3
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/6
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/2
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/11
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/8
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/4
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/12
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/10
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/9
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/7
+PASS: 11
