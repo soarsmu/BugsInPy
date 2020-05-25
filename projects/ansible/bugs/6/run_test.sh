@@ -1,0 +1,1 @@
+pytest test/units/playbook/test_collectionsearch.py::test_collection_static_warning

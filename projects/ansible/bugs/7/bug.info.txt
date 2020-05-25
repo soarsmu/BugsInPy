@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="8c044b846d1ea9e2a9c8870b1eaf6db3775e8e2c"
+fixed_commit_id="a20a52701402a12f91396549df04ac55809f68e9"
+test_file="test/units/galaxy/test_collection.py"
