@@ -35,31 +35,57 @@ for dir in "${dirs[@]}"; do
      project_location="$folder_location/$var"
      project_name=$var
   fi
+ echo $dir
 done
 my_function () {
-  while IFS= read -r line
-  do
-    if [[ "$line" == "buggy_commit_id"* ]]; then
-       buggy_commit="$(cut -d'"' -f 2 <<< $line)"
-    elif [[ "$line" == "fixed_commit_id"* ]]; then
-       fix_commit="$(cut -d'"' -f 2 <<< $line)"
-    elif [[ "$line" == "test_file"* ]]; then
-       test_file="$(cut -d'"' -f 2 <<< $line)"
-    fi
-  done < "bug.info"
-  while IFS= read -r line
-  do
-    echo "$line"
-    run_command="$line"
-  done < "run_test.sh"
-  #echo "$buggy_commit"
-  #echo "$fix_commit"
-  #echo "$test_file"
+  DONE=false
+  until $DONE ;do
+  read || DONE=true
+  if [[ "$REPLY" != "" ]]; then
+     run_command="$REPLY"
+  fi
+  done < run_test.sh
+
+  DONE=false
+  until $DONE ;do
+  read || DONE=true
+  if [[ "$REPLY" == "buggy_commit_id"* ]]; then
+       buggy_commit="$(cut -d'"' -f 2 <<< $REPLY)"
+  elif [[ "$REPLY" == "fixed_commit_id"* ]]; then
+       fix_commit="$(cut -d'"' -f 2 <<< $REPLY)"
+  elif [[ "$REPLY" == "test_file"* ]]; then
+       test_file="$(cut -d'"' -f 2 <<< $REPLY)"
+  fi
+  done < bug.info
+
+  #while IFS= read -r line
+  #do
+  #  if [[ "$line" == "buggy_commit_id"* ]]; then
+  #     buggy_commit="$(cut -d'"' -f 2 <<< $line)"
+  #  elif [[ "$line" == "fixed_commit_id"* ]]; then
+  #     fix_commit="$(cut -d'"' -f 2 <<< $line)"
+  #  elif [[ "$line" == "test_file"* ]]; then
+  #     test_file="$(cut -d'"' -f 2 <<< $line)"
+  #  fi
+  #  echo "$line"
+  #done < "bug.info"
+  #while IFS= read -r line
+  #do
+  #  echo "$line"
+  #  run_command="$line"
+  #done < "run_test.sh"
+  echo "$buggy_commit"
+  echo "$fix_commit"
+  echo "$test_file"
+  echo "$run_command"
+  
   cd "$project_location"
+  pwd
   source env/bin/activate
   git reset --hard "$fix_commit"
   pip install -r "$temp_location/requirements.txt"
   res_first=$($run_command 2>&1)
+  echo "$run_command"
   echo "$res_first"
   if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* ]]; then
      cp -v "$project_location/$test_file" "$temp_location"
@@ -69,6 +95,7 @@ my_function () {
      mv -f  "$temp_location/$string2" "$project_location/$string1"
      pip install -r "$temp_location/requirements.txt"
      res_second=$($run_command 2>&1)
+     echo "SECOND"
      echo "$res_second"
      if [[ ${res_second##*$'\n'} == *"FAIL"* || ${res_second##*$'\n'} == *"error"* || ${res_second##*$'\n'} == *"fail"* ]]; then
          pass_list+=($temp_location)
@@ -85,7 +112,9 @@ my_function () {
   #echo "INSIDE"
   #echo "$folder_location"
 }
+echo "TESSS"
 cd "$project_name"
+echo "$project_name"
 pwd
 python -m venv env
 source env/bin/activate
