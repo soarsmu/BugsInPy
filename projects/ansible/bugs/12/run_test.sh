@@ -1,0 +1,1 @@
+pytest test/units/plugins/shell/test_powershell.py::test_join_path_unc

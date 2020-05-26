@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="d91658ec0c8434c82c3ef98bfe9eb4e1027a43a3"
+fixed_commit_id="18a66e291dad71128a32d662aa808213acefe0e9"
+test_file="test/units/playbook/test_collectionsearch.py"

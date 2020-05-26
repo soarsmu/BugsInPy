@@ -37,50 +37,114 @@ for dir in "${dirs[@]}"; do
   fi
 done
 my_function () {
-  while IFS= read -r line
+  run_command_all=""
+  DONE=false
+  until $DONE ;do
+  read || DONE=true
+  if [[ "$REPLY" != "" ]]; then
+     run_command_all+="$REPLY;"
+     echo $REPLY
+  fi
+  done < run_test.sh
+  IFS=';' read -r -a run_command <<< "$run_command_all"
+  echo "$run_command"
+  DONE=false
+  until $DONE ;do
+  read || DONE=true
+  if [[ "$REPLY" == "buggy_commit_id"* ]]; then
+       buggy_commit="$(cut -d'"' -f 2 <<< $REPLY)"
+  elif [[ "$REPLY" == "fixed_commit_id"* ]]; then
+       fix_commit="$(cut -d'"' -f 2 <<< $REPLY)"
+  elif [[ "$REPLY" == "test_file"* ]]; then
+       test_file_all="$(cut -d'"' -f 2 <<< $REPLY)"
+       IFS=';' read -r -a test_file <<< "$test_file_all"
+  fi
+  done < bug.info
+
+  #while IFS= read -r line
+  #do
+  #  if [[ "$line" == "buggy_commit_id"* ]]; then
+  #     buggy_commit="$(cut -d'"' -f 2 <<< $line)"
+  #  elif [[ "$line" == "fixed_commit_id"* ]]; then
+  #     fix_commit="$(cut -d'"' -f 2 <<< $line)"
+  #  elif [[ "$line" == "test_file"* ]]; then
+  #     test_file="$(cut -d'"' -f 2 <<< $line)"
+  #  fi
+  #  echo "$line"
+  #done < "bug.info.txt"
+  #while IFS= read -r line
+  #do
+  #  echo "$line"
+  #  run_command="$line"
+  #done < "run_test.sh"
+  echo "$buggy_commit"
+  echo "$fix_commit"
+  printf "%s\n" "${test_file[@]}"
+  echo "BARRR"
+  for index in "${!run_command[@]}"
   do
-    if [[ "$line" == "buggy_commit_id"* ]]; then
-       buggy_commit="$(cut -d'"' -f 2 <<< $line)"
-    elif [[ "$line" == "fixed_commit_id"* ]]; then
-       fix_commit="$(cut -d'"' -f 2 <<< $line)"
-    elif [[ "$line" == "test_file"* ]]; then
-       test_file="$(cut -d'"' -f 2 <<< $line)"
-    fi
-  done < "bug.info"
-  while IFS= read -r line
-  do
-    echo "$line"
-    run_command="$line"
-  done < "run_test.sh"
-  #echo "$buggy_commit"
-  #echo "$fix_commit"
-  #echo "$test_file"
+     echo ${run_command[index]}
+  done
   cd "$project_location"
   source env/bin/activate
   git reset --hard "$fix_commit"
   pip install -r "$temp_location/requirements.txt"
-  res_first=$($run_command 2>&1)
+
+  run_command_filter=""
+  for index in "${!run_command[@]}"
+  do
+  run_command_now=${run_command[index]}
+  
+  echo "RUN EVERY COMMAND"
+  echo "$index"
+  echo "$run_command_now"
+  echo "$test_file_now"
+  
+  res_first=$($run_command_now 2>&1)
+
   echo "$res_first"
   if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* ]]; then
-     cp -v "$project_location/$test_file" "$temp_location"
-     git reset --hard "$buggy_commit"
-     string1="${test_file%/*}"
-     string2="${test_file##*/}"
-     mv -f  "$temp_location/$string2" "$project_location/$string1"
-     pip install -r "$temp_location/requirements.txt"
-     res_second=$($run_command 2>&1)
-     echo "$res_second"
-     if [[ ${res_second##*$'\n'} == *"FAIL"* || ${res_second##*$'\n'} == *"error"* || ${res_second##*$'\n'} == *"fail"* ]]; then
-         pass_list+=($temp_location)
-         pass_number=$(($pass_number + 1))
-     else
-         fail_list+=($temp_location)
-         fail_number=$(($fail_number + 1))       
-     fi
+     run_command_filter+="$run_command_now;"
   else
-     fail_list+=($temp_location)
+     fail_list+=("$temp_location ($run_command_now)")
      fail_number=$(($fail_number + 1))
   fi
+  done
+
+  for index in "${!test_file[@]}"
+  do
+     test_file_now=${test_file[index]}
+     cp -v "$project_location/$test_file_now" "$temp_location"
+  done
+  git reset --hard "$buggy_commit"
+  
+  for index in "${!test_file[@]}"
+  do
+     test_file_now=${test_file[index]}
+     string1="${test_file_now%/*}"
+     string2="${test_file_now##*/}"
+     mv -f  "$temp_location/$string2" "$project_location/$string1"
+  done
+
+  pip install -r "$temp_location/requirements.txt"
+  
+  
+  IFS=';' read -r -a run_command_2 <<< "$run_command_filter"
+  for index in "${!run_command_2[@]}"
+  do
+     run_command_now=${run_command_2[index]}
+     res_second=$($run_command_now 2>&1)
+     echo "$res_second"
+     if [[ ${res_second##*$'\n'} == *"FAIL"* || ${res_second##*$'\n'} == *"error"* || ${res_second##*$'\n'} == *"fail"* ]]; then
+         pass_list+=("$temp_location ($run_command_now)")
+         pass_number=$(($pass_number + 1))
+     else
+         fail_list+=("$temp_location ($run_command_now)")
+         fail_number=$(($fail_number + 1))       
+     fi
+  done
+  
+
   #echo "$temp_location"
   #echo "INSIDE"
   #echo "$folder_location"

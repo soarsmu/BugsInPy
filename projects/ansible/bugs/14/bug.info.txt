@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="e368f788f71c338cd3f049d5d6bdc643a51c0514"
+fixed_commit_id="a4b59d021368285490f7cda50c11ac4f7a8030b5"
+test_file="test/units/modules/system/test_pamd.py"

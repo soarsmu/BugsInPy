@@ -1,12 +1,12 @@
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/1
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/3
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/6
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/2
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/11
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/8
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/4
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/12
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/10
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/9
-/home/ratna/BugsInPy/projects/youtube-dl/bugs/7
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/1 (python test/test_utils.py TestUtil.test_match_str)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/3 (python test/test_utils.py TestUtil.test_unescape_html)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/6 (python test/test_utils.py TestUtil.test_unified_timestamps)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/2 (python test/test_InfoExtractor.py TestInfoExtractor.test_parse_mpd_formats)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/11 (python test/test_YoutubeDL.py TestFormatSelection.test_youtube_format_selection)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/8 (python test/test_utils.py TestUtil.test_parse_dfxp_time_expr)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/4 (python test/test_jsinterp.py TestJSInterpreter.test_call)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/12 (python test/test_utils.py TestUtil.test_js_to_json_realworld)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/10 (python test/test_YoutubeDL.py TestFormatSelection.test_youtube_format_selection)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/9 (python test/test_utils.py TestUtil.test_js_to_json_realworld)
+/home/ratna/BugsInPy/projects/youtube-dl/bugs/7 (python test/test_YoutubeDL.py TestFormatSelection.test_format_not_available)
 PASS: 11

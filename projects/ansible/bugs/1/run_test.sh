@@ -1,0 +1,1 @@
+pytest test/units/galaxy/test_collection.py::test_verify_collections_no_version
