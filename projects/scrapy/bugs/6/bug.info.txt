@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="c8f3d07e86dd41074971b5423fb932c2eda6db1e"
+fixed_commit_id="16dad81715d3970149c0cf7a318e73a0d84be1ff"
+test_file="tests/test_contracts.py"
