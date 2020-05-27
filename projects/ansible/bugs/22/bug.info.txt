@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="926e423690162b3bdf3ab255b0d50f0a9ae48e1a"
+fixed_commit_id="918f768890a32d5f1b03bd1d4d4de3f48261b63e"
+test_file="test/units/modules/network/nxos/test_nxos_l3_interfaces.py"

@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="b75fc87a86ba28632c1d0bf02058e1051e58b2a9"
+fixed_commit_id="f1d568749fd24b9a874b11804fc2775cfbad8821"
+test_file="test/units/modules/network/checkpoint/test_cp_network.py"
