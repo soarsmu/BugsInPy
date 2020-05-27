@@ -41,7 +41,7 @@ done
 
 #function for verifying bugs
 my_function () {
-  #read file run_test.sj
+  #read file run_test.sh
   run_command_all=""
   DONE=false
   until $DONE ;do
@@ -78,7 +78,11 @@ my_function () {
   
   #go to project location
   cd "$project_location"
-  source env/bin/activate
+  if [ -d "$folder_location/$project_name/env/Scripts" ]; then
+      source env/Scripts/activate
+  else
+	  source env/bin/activate
+  fi
   
   #reset to fix commit and install the requirement based on requirements.txt in bugs
   git reset --hard "$fix_commit"
@@ -88,12 +92,13 @@ my_function () {
   run_command_filter=""
   for index in "${!run_command[@]}"
   do
-  run_command_now=${run_command[index]}
+  run_command_trail=${run_command[index]} 
   
   echo "RUN EVERY COMMAND"
   echo "$index"
   echo "$run_command_now"
   echo "$test_file_now"
+  run_command_now=$(echo $run_command_trail | sed -e 's/\r//g')
   
   res_first=$($run_command_now 2>&1)
   #update list for command if running output OK and write on the fail if not
@@ -103,8 +108,8 @@ my_function () {
   else
      fail_list+=("$temp_location ($run_command_now)")
      fail_number=$(($fail_number + 1))
-     echo "$run_command_now" &>>"$project_name-$var-fail.txt"
-     echo "$res_first" &>>"$project_name-$var-fail.txt"
+     echo "$run_command_now" &>>"$folder_location/$project_name-$var-fail.txt"
+     echo "$res_first" &>>"$folder_location/$project_name-$var-fail.txt"
   fi
   done
 
@@ -134,7 +139,9 @@ my_function () {
   IFS=';' read -r -a run_command_2 <<< "$run_command_filter"
   for index in "${!run_command_2[@]}"
   do
-     run_command_now=${run_command_2[index]}
+     run_command_trail=${run_command_2[index]}
+     run_command_now=$(echo $run_command_trail | sed -e 's/\r//g')
+  
      res_second=$($run_command_now 2>&1)
      echo "$res_second"
      if [[ ${res_second##*$'\n'} == *"FAIL"* || ${res_second##*$'\n'} == *"error"* || ${res_second##*$'\n'} == *"fail"* ]]; then
@@ -143,8 +150,8 @@ my_function () {
      else
          fail_list+=("$temp_location ($run_command_now)")
          fail_number=$(($fail_number + 1))
-         echo "$run_command_now" &>>"$project_name-$var-fail.txt"
-         echo "$res_first" &>>"$project_name-$var-fail.txt"       
+         echo "$run_command_now" &>>"$folder_location/$project_name-$var-fail.txt"
+         echo "$res_first" &>>"$folder_location/$project_name-$var-fail.txt"       
      fi
   done
   
@@ -154,7 +161,11 @@ my_function () {
 cd "$project_name"
 pwd
 python -m venv env
-source env/bin/activate
+if [ -d "$folder_location/$project_name/env/Scripts" ]; then
+  source env/Scripts/activate
+else
+  source env/bin/activate
+fi
 cd ..
 cd "bugs"
 #loop for every bugs, calling funct.
@@ -179,4 +190,3 @@ printf "%s\n" "${pass_list[@]}" > "$project_name-pass.txt"
 
 echo "PASS: $pass_number" &>>"$project_name-pass.txt"
 echo "FAIL: $fail_number" &>>"$project_name-fail.txt" 
-
