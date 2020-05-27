@@ -1,1 +1,1 @@
-pytest tests/test_uploads.py::TestMultipartFormDataFileUpload::test_upload_multiple_fields_with_the_same_name
+pytest tests/test_auth.py::TestAuth::test_only_username_in_url

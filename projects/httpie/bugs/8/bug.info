@@ -1,4 +1,4 @@
 python_version="3.7.3"
-buggy_commit_id="0f96348fd1f5435a36ce40f33357fb1872774880"
-fixed_commit_id="ca36f1de04310de644857ebbea9c94984971ab7c"
-test_file="tests/test_auth.py"
+buggy_commit_id="d5bc564e4ffbc8625f8d87ad01a6affde5fa4cdb"
+fixed_commit_id="0bcd4d2fb0f3bd73dc20e55002114a880157bf48"
+test_file="tests/tests.py"

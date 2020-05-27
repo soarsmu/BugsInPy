@@ -1,4 +1,4 @@
 python_version="3.7.3"
-buggy_commit_id="8c33e5e3d31d3cd6476c4d9bc963a4c529f883d2"
-fixed_commit_id="589887939507ff26d36ec74bd2c045819cfa3d56"
-test_file="tests/test_sessions.py"
+buggy_commit_id="8c892edd4fe700a7ca5cc733dcb4817831d253e2"
+fixed_commit_id="040d981f00c3f6830b2d0db3daf3c64c080e96e3"
+test_file="tests/test_regressions.py"

@@ -1,1 +1,1 @@
-pytest tests/tests.py::ItemParsingTest::test_valid_items
+pytest tests/tests.py::TestItemParsing::test_escape_longsep

@@ -1,1 +1,1 @@
-pytest tests/test_downloads.py::TestDownloadUtils::test_unique_filename
+pytest tests/test_redirects.py::TestRedirects::test_max_redirects
