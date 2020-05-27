@@ -11,6 +11,7 @@ project_name=""
 declare -a fail_list
 declare -a pass_list
 
+#check project info
 echo $folder_location
 while IFS= read -r line
 do
@@ -18,8 +19,8 @@ do
      githubURL="$(cut -d'"' -f 2 <<< $line)"
      echo "$githubURL"
   elif [[ "$line" == 'status="OK"'* ]]; then
-     echo "TES"
      checkfurther="YES"
+     #clone project if status OK
      git clone "$githubURL"
   fi
   echo "$line"
@@ -28,6 +29,7 @@ if [[ "$checkfurther" == "NO" ]]; then
   exit
 fi
 
+#get project name
 dirs=($(find . -maxdepth 1 -type d))
 for dir in "${dirs[@]}"; do
   if [[ "$dir" != "./bugs" && "$dir" != "." ]]; then
@@ -36,7 +38,10 @@ for dir in "${dirs[@]}"; do
      project_name=$var
   fi
 done
+
+#function for verifying bugs
 my_function () {
+  #read file run_test.sj
   run_command_all=""
   DONE=false
   until $DONE ;do
@@ -48,6 +53,8 @@ my_function () {
   done < run_test.sh
   IFS=';' read -r -a run_command <<< "$run_command_all"
   echo "$run_command"
+  
+  #read bug.info file
   DONE=false
   until $DONE ;do
   read || DONE=true
@@ -61,35 +68,23 @@ my_function () {
   fi
   done < bug.info
 
-  #while IFS= read -r line
-  #do
-  #  if [[ "$line" == "buggy_commit_id"* ]]; then
-  #     buggy_commit="$(cut -d'"' -f 2 <<< $line)"
-  #  elif [[ "$line" == "fixed_commit_id"* ]]; then
-  #     fix_commit="$(cut -d'"' -f 2 <<< $line)"
-  #  elif [[ "$line" == "test_file"* ]]; then
-  #     test_file="$(cut -d'"' -f 2 <<< $line)"
-  #  fi
-  #  echo "$line"
-  #done < "bug.info.txt"
-  #while IFS= read -r line
-  #do
-  #  echo "$line"
-  #  run_command="$line"
-  #done < "run_test.sh"
   echo "$buggy_commit"
   echo "$fix_commit"
   printf "%s\n" "${test_file[@]}"
-  echo "BARRR"
   for index in "${!run_command[@]}"
   do
      echo ${run_command[index]}
   done
+  
+  #go to project location
   cd "$project_location"
   source env/bin/activate
+  
+  #reset to fix commit and install the requirement based on requirements.txt in bugs
   git reset --hard "$fix_commit"
   pip install -r "$temp_location/requirements.txt"
 
+  #run every command on the run_test.sh
   run_command_filter=""
   for index in "${!run_command[@]}"
   do
@@ -101,23 +96,29 @@ my_function () {
   echo "$test_file_now"
   
   res_first=$($run_command_now 2>&1)
-
+  #update list for command if running output OK and write on the fail if not
   echo "$res_first"
   if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* ]]; then
      run_command_filter+="$run_command_now;"
   else
      fail_list+=("$temp_location ($run_command_now)")
      fail_number=$(($fail_number + 1))
+     echo "$run_command_now" &>>"$project_name-$var-fail.txt"
+     echo "$res_first" &>>"$project_name-$var-fail.txt"
   fi
   done
 
+  #copy test file from project to bugs folder
   for index in "${!test_file[@]}"
   do
      test_file_now=${test_file[index]}
      cp -v "$project_location/$test_file_now" "$temp_location"
   done
+
+  #reset to buggy commit
   git reset --hard "$buggy_commit"
   
+  #move test file from bugs folder to project
   for index in "${!test_file[@]}"
   do
      test_file_now=${test_file[index]}
@@ -126,9 +127,10 @@ my_function () {
      mv -f  "$temp_location/$string2" "$project_location/$string1"
   done
 
+  #install the requirement from requirements.txt in bugs folder
   pip install -r "$temp_location/requirements.txt"
   
-  
+  #run every command that output ok from before
   IFS=';' read -r -a run_command_2 <<< "$run_command_filter"
   for index in "${!run_command_2[@]}"
   do
@@ -140,21 +142,22 @@ my_function () {
          pass_number=$(($pass_number + 1))
      else
          fail_list+=("$temp_location ($run_command_now)")
-         fail_number=$(($fail_number + 1))       
+         fail_number=$(($fail_number + 1))
+         echo "$run_command_now" &>>"$project_name-$var-fail.txt"
+         echo "$res_first" &>>"$project_name-$var-fail.txt"       
      fi
   done
   
-
-  #echo "$temp_location"
-  #echo "INSIDE"
-  #echo "$folder_location"
 }
+
+#go to project folder and activate the env
 cd "$project_name"
 pwd
 python -m venv env
 source env/bin/activate
 cd ..
 cd "bugs"
+#loop for every bugs, calling funct.
 dirs=($(find . -maxdepth 1 -type d))
 for dir in "${dirs[@]}"; do
   if [[ "$dir" != "." ]]; then
@@ -170,10 +173,10 @@ for dir in "${pass_list[@]}"; do
 done
 cd "$folder_location"
 
+#print fail and pass on the file txt
 printf "%s\n" "${fail_list[@]}" > "$project_name-fail.txt"
 printf "%s\n" "${pass_list[@]}" > "$project_name-pass.txt"
 
 echo "PASS: $pass_number" &>>"$project_name-pass.txt"
 echo "FAIL: $fail_number" &>>"$project_name-fail.txt" 
-#find . -type d -print0 | xargs -0 -L1 sh -c 'cd "$0" && pwd && echo "$folder_location"'
 
