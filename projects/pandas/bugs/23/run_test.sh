@@ -1,0 +1,1 @@
+pytest pandas/tests/indexes/datetimes/test_setops.py::TestDatetimeIndexSetOps::test_intersection

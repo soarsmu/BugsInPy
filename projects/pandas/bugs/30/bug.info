@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="b828d74"
+fixed_commit_id="63651f3ed2c41bc71781be1c9f4274a14361311a"
+test_file="pandas/tests/window/test_base_indexer.py

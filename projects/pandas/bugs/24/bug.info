@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="1c88e6a"
+fixed_commit_id="b7f061c3d24df943e16918ad3932e767f5639a38"
+test_file="pandas/tests/reshape/test_concat.py"
