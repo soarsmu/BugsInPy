@@ -1,0 +1,9 @@
+pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_subclassed_reductions
+pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_subclassed_count
+pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_isin
+pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_duplicated
+pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_idx
+pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_dot
+pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_memory_usage
+pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_asof
+pytest pandas/tests/series/test_subclass.py::TestSeriesSubclassing::test_explode
