@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="a9c69458ff1667cc4d20ba25bb6a0dd9a5a08ce6"
+fixed_commit_id="ff3aec661355a82a6f77355a95e1f391fa586c2b"
+test_file="tests/test_mail.py"

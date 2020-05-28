@@ -1,0 +1,1 @@
+python -m unittest -q tests.test_pipeline_images.ImagesPipelineTestCase.test_convert_image

@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="6320b743cff305132861ce2d7701701471891167"
+fixed_commit_id="11cdf58abe26a9f65d8c1aefa717b6735e5734c9"
+test_file="tests/test_downloadermiddleware_httpcompression.py;tests/test_spider.py"

@@ -1,0 +1,1 @@
+python -m unittest -q tests.test_spidermiddleware_referer.TestPolicyHeaderPredecence004
