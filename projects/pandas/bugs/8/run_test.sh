@@ -1,0 +1,1 @@
+pytest pandas/tests/groupby/test_size.py::test_size_period_index

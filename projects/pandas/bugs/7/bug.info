@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="965bd59"
+fixed_commit_id="e71052cc40ebd3a8ce163320c47b8b8f7000b088"
+test_file="pandas/tests/arrays/sparse/test_array.py"

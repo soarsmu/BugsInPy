@@ -1,0 +1,1 @@
+pytest pandas/tests/arrays/sparse/test_array.py::TestSparseArrayAnalytics::test_sum_min_count
