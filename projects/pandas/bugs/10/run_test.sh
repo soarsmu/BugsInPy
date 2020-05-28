@@ -1,0 +1,2 @@
+pytest pandas/tests/arithmetic/test_period.py::TestPeriodIndexArithmetic::test_pi_add_sub_td64_array_non_tick_raises
+pytest pandas/tests/arithmetic/test_period.py::TestPeriodIndexArithmetic::test_parr_sub_td64array
