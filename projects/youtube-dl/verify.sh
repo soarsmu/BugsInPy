@@ -99,8 +99,8 @@ my_function () {
   if [[ "$pythonpath_set" != "" ]]; then
      echo $pythonpath_set
      if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-        echo "TESSSS"
-        cp /dev/null TES.txt
+        echo "READ BASH"
+        saveReply=""
         pythonpath_exist="NO"
         should_change="NO"
         DONE=false
@@ -119,6 +119,7 @@ my_function () {
             if [[ "$REPLY" != *"$pythonpath_set:"* ]]; then
                should_change="YES"
                echo $REPLY
+               saveReply=$REPLY
                string1="${REPLY%:*}"
                string2="${REPLY##*:}"
                if [[ "$string2" == *"PYTHONPATH"* ]]; then
@@ -135,23 +136,30 @@ my_function () {
         fi 
         done <  ~/.bashrc 
         if [[ "$pythonpath_exist" == "NO" ]]; then
-            should_change="YES"
-            echo 'PYTHONPATH="$pythonpath_set:$PYTHONPATH"' >> "TES.txt"
-            echo "export PYTHONPATH" >> "TES.txt"
+            should_change="NO"
+            echo 'PYTHONPATH="$pythonpath_set:$PYTHONPATH"' >> ~/.bashrc 
+            echo "export PYTHONPATH" >> ~/.bashrc 
+            source ~/.bashrc
         fi
-        #if [[ "$should_change" == "YES" ]]; then
-        #    first_loop="YES"
-        #    DONE=false
-        #    until $DONE ;do
-        #    read || DONE=true
-        #        if [[ "$first_loop" == "YES" ]]; then
-        #           echo "$REPLY" > ~/.bashrc 
-        #           first_loop="NO"
-        #        else
-        #           echo "$REPLY" >> ~/.bashrc 
-        #        fi
-        #    done < TES.txt
-        #fi
+        if [[ "$should_change" == "YES" ]]; then
+            echo "SHOULD CHANGE"
+            sed -i.bak '/PYTHONPATH=/d' ~/.bashrc
+            if [[ "$pythonpath_exist" == "YES1" ]]; then
+                sed -i.bak '/export PYTHONPATH/d' ~/.bashrc
+            fi
+            string1="${saveReply%:*}"
+            string2="${saveReply##*:}"
+            if [[ "$string2" == *"PYTHONPATH"* ]]; then
+               echo "$string1:$pythonpath_set:$string2" >> ~/.bashrc
+            else
+               temp="$"
+               temp_py="PYTHONPATH"
+               temp2=${saveReply%$tes*}
+               echo "$temp2:$pythonpath_set:$temp$temp_py$tes" >> ~/.bashrc
+            fi
+            echo "export PYTHONPATH" >> ~/.bashrc
+            source ~/.bashrc
+        fi
         
         rm TES.txt
         #echo 'export APP=/opt/tinyos-2.x/apps' >> ~/.bashrc 
