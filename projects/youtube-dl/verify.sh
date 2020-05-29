@@ -74,6 +74,19 @@ my_function () {
        pythonpath_set=${pythonpath_all//;/:}
   fi
   done < bug.info
+  
+  #read setup.sh
+  run_setup_all=""
+  if [[ -f "setup.sh" ]]; then
+    DONE=false
+    until $DONE ;do
+    read || DONE=true
+       run_setup_all+="$REPLY;"
+       echo $REPLY
+    done < setup.sh
+  fi
+  
+  IFS=';' read -r -a run_setup <<< "$run_setup_all"
 
   echo "$buggy_commit"
   echo "$fix_commit"
@@ -109,10 +122,8 @@ my_function () {
                string1="${REPLY%:*}"
                string2="${REPLY##*:}"
                if [[ "$string2" == *"PYTHONPATH"* ]]; then
-                  echo "AAAAA"
                   echo "$string1:$pythonpath_set:$string2" >>"TES.txt"
                else
-                  echo "BBBBBB"
                   temp="$"
                   temp_py="PYTHONPATH"
                   temp2=${REPLY%$tes*}
@@ -141,7 +152,8 @@ my_function () {
         #        fi
         #    done < TES.txt
         #fi
-  
+        
+        rm TES.txt
         #echo 'export APP=/opt/tinyos-2.x/apps' >> ~/.bashrc 
       fi
 
@@ -156,6 +168,16 @@ my_function () {
   
   #reset to fix commit and install the requirement based on requirements.txt in bugs
   git reset --hard "$fix_commit"
+  
+  #run from setup.sh
+  for index in "${!run_setup[@]}"
+  do
+     run_setup_trail=${run_setup[index]} 
+     run_setup_now=$(echo $run_setup_trail | sed -e 's/\r//g')
+     echo "$run_setup_now"
+     $run_setup_now
+  done
+  
   pip install -r "$temp_location/requirements.txt"
 
   #run every command on the run_test.sh
@@ -200,6 +222,15 @@ my_function () {
      string1="${test_file_now%/*}"
      string2="${test_file_now##*/}"
      mv -f  "$temp_location/$string2" "$project_location/$string1"
+  done
+  
+  #run from setup.sh
+  for index in "${!run_setup[@]}"
+  do
+     run_setup_trail=${run_setup[index]} 
+     run_setup_now=$(echo $run_setup_trail | sed -e 's/\r//g')
+     echo "$run_setup_now"
+     $run_setup_now
   done
 
   #install the requirement from requirements.txt in bugs folder
