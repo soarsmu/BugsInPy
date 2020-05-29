@@ -10,7 +10,6 @@ pass_number=0
 project_name=""
 declare -a fail_list
 declare -a pass_list
-
 #check project info
 echo $folder_location
 while IFS= read -r line
@@ -18,6 +17,11 @@ do
   if [[ "$line" == "github_url="* ]]; then
      githubURL="$(cut -d'"' -f 2 <<< $line)"
      echo "$githubURL"
+     githubName="${githubUrl##*/}"
+     if [[ "$githubName" == "" ]]; then
+         temp="${githubUrl%?}"
+         githubName="${temp##*/}"
+     fi
   elif [[ "$line" == 'status="OK"'* ]]; then
      checkfurther="YES"
      #clone project if status OK
@@ -32,7 +36,7 @@ fi
 #get project name
 dirs=($(find . -maxdepth 1 -type d))
 for dir in "${dirs[@]}"; do
-  if [[ "$dir" != "./bugs" && "$dir" != "." ]]; then
+  if [[ "$dir" != "./bugs" && "$dir" != "." && "$dir" == *"$githubName"* ]]; then
      var="$(cut -d'/' -f 2 <<< $dir)"
      project_location="$folder_location/$var"
      project_name=$var
@@ -65,6 +69,9 @@ my_function () {
   elif [[ "$REPLY" == "test_file"* ]]; then
        test_file_all="$(cut -d'"' -f 2 <<< $REPLY)"
        IFS=';' read -r -a test_file <<< "$test_file_all"
+  elif [[ "$REPLY" == "pythonpath"* ]]; then
+       pythonpath_all="$(cut -d'"' -f 2 <<< $REPLY)"
+       pythonpath_set=${pythonpath_all//;/:}
   fi
   done < bug.info
 
@@ -75,13 +82,76 @@ my_function () {
   do
      echo ${run_command[index]}
   done
+  #add pythonpath if does not exist
+  if [[ "$pythonpath_set" != "" ]]; then
+     echo $pythonpath_set
+     if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+        echo "TESSSS"
+        cp /dev/null TES.txt
+        pythonpath_exist="NO"
+        should_change="NO"
+        DONE=false
+        until $DONE ;do
+        read || DONE=true
+        if [[ "$pythonpath_exist" == "YES" ]]; then
+            if [[ "$REPLY" != "export PYTHONPATH"* ]]; then
+               should_change="YES"
+               echo "export PYTHONPATH" >>"TES.txt"
+            fi
+            pythonpath_exist="YES1"
+        fi
+        if [[ "$REPLY" == "PYTHONPATH="* ]]; then
+            pythonpath_exist="YES"
+            tes='"'
+            if [[ "$REPLY" != *"$pythonpath_set:"* ]]; then
+               should_change="YES"
+               echo $REPLY
+               string1="${REPLY%:*}"
+               string2="${REPLY##*:}"
+               if [[ "$string2" == *"PYTHONPATH"* ]]; then
+                  echo "AAAAA"
+                  echo "$string1:$pythonpath_set:$string2" >>"TES.txt"
+               else
+                  echo "BBBBBB"
+                  temp="$"
+                  temp_py="PYTHONPATH"
+                  temp2=${REPLY%$tes*}
+                  echo "$temp2:$pythonpath_set:$temp$temp_py$tes" >>"TES.txt"
+               fi
+            fi
+        else
+            echo "$REPLY" >>"TES.txt"   
+        fi 
+        done <  ~/.bashrc 
+        if [[ "$pythonpath_exist" == "NO" ]]; then
+            should_change="YES"
+            echo 'PYTHONPATH="$pythonpath_set:$PYTHONPATH"' >> "TES.txt"
+            echo "export PYTHONPATH" >> "TES.txt"
+        fi
+        #if [[ "$should_change" == "YES" ]]; then
+        #    first_loop="YES"
+        #    DONE=false
+        #    until $DONE ;do
+        #    read || DONE=true
+        #        if [[ "$first_loop" == "YES" ]]; then
+        #           echo "$REPLY" > ~/.bashrc 
+        #           first_loop="NO"
+        #        else
+        #           echo "$REPLY" >> ~/.bashrc 
+        #        fi
+        #    done < TES.txt
+        #fi
   
+        #echo 'export APP=/opt/tinyos-2.x/apps' >> ~/.bashrc 
+      fi
+
+  fi
   #go to project location
   cd "$project_location"
   if [ -d "$folder_location/$project_name/env/Scripts" ]; then
       source env/Scripts/activate
   else
-	  source env/bin/activate
+      source env/bin/activate
   fi
   
   #reset to fix commit and install the requirement based on requirements.txt in bugs
