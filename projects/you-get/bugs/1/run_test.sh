@@ -1,0 +1,1 @@
+python tests/test.py YouGetTests.test_xinpianchang
