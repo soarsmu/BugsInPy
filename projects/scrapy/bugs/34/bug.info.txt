@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="41588397c04356f2b0c393b61ed68271a08d6ccd"
+fixed_commit_id="cabed6f183cfb2ab778c57be8c75802fec5e54d4"
+test_file="tests/test_responsetypes.py"

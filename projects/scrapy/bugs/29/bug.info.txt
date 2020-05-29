@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="10b79c9b3ec438653b25d531c30888849e080aa5"
+fixed_commit_id="fa4d0cdfe5df7165c220e2c17c2de14262fc713e"
+test_file="tests/test_pipeline_files.py;tests/test_pipeline_images.py"

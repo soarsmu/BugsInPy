@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="c9e046d11dc63fbdc40effce4e6d15bcecd44593"
+fixed_commit_id="f042ad0f39594d59a1a2032e6294ff1890638138"
+test_file="tests/test_downloadermiddleware_httpproxy.py"

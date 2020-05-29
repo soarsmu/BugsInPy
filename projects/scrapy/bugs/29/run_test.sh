@@ -1,0 +1,5 @@
+python -m unittest -q tests.test_pipeline_files.FilesPipelineTestCaseCustomSettings
+python -m unittest -q tests.test_pipeline_files.FilesPipelineTestCaseCustomSettings._generate_fake_pipeline.test_different_settings_for_different_instances
+python -m unittest -q tests.test_pipeline_files.FilesPipelineTestCaseCustomSettings.test_subclass_attributes_preserved_if_no_settings
+python -m unittest -q tests.test_pipeline_files.FilesPipelineTestCaseCustomSettings.test_subclass_attrs_preserved_custom_settings
+python -m unittest -q tests.test_pipeline_images.ImagesPipelineTestCaseCustomSettings.test_cls_attrs_with_DEFAULT_prefix

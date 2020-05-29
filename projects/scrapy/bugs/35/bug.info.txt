@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="e328a9b9dfa4fbc79c59ed4f45f757e998301c31"
+fixed_commit_id="1f743996ff00a7b728d59b93d0967e1eb50072f0"
+test_file="tests/test_http_cookies.py"

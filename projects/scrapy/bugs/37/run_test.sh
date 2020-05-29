@@ -1,0 +1,1 @@
+python -m unittest -q tests.test_mail.MailSenderTest.test_send_attach_utf8

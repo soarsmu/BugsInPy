@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="b7553d921afe356ec858bb1d2e5b1702df05ea24"
+fixed_commit_id="d43a35735a062a4260b002cfbcd3236c77ef9399"
+test_file="tests/test_utils_gz.py"
