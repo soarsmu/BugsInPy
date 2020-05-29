@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="185a654"
+fixed_commit_id="a142ad7bb25a614c8a4031955d25e016de659b3f"
+test_file="pandas/tests/frame/methods/test_diff.py"

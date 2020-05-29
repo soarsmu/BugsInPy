@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="6e3537d"
+fixed_commit_id="4334482c348c3adc69683c8332295e22092c1b57"
+test_file="pandas/tests/arrays/interval/test_interval.py;pandas/tests/series/methods/test_convert_dtypes.py"
