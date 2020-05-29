@@ -1,0 +1,1 @@
+pytest pandas/tests/indexes/datetimes/test_misc.py::test_isocalendar_returns_correct_values_clos

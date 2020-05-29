@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="be30d0a"
+fixed_commit_id="c632f72241e37182ef5bf9df11fa3fa01a8f6593"
+test_file="pandas/tests/frame/methods/test_truncate.py;pandas/tests/series/methods/test_truncate.py"

@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="91dcc3a"
+fixed_commit_id="6367bd23b935a85f1bcd2ae762c7f08433d0efbd"
+test_file="pandas/tests/indexes/datetimes/test_timezones.py"

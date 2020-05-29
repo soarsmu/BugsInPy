@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="ea09d50"
+fixed_commit_id="92afd5c2c08216e4e9c80eb6b92b1660f91846e0"
+test_file="pandas/tests/tseries/offsets/test_yqm_offsets.py"

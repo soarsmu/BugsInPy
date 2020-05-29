@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="fee7d1e"
+fixed_commit_id="a046596fa302ab51c9bbe117f645648fad0dc7a4"
+test_file="pandas/tests/indexes/datetimes/test_insert.py;pandas/tests/indexes/timedeltas/test_insert.py"
