@@ -1,0 +1,2 @@
+>python -m unittest -q tornado.test.web_test.StaticFileTest.test_static_with_range_neg_past_start
+>python -m unittest -q tornado.test.web_test.StaticFileTest.test_static_unsatisfiable_range_end_less_than_start
