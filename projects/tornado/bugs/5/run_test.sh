@@ -1,0 +1,1 @@
+python -m unittest -q tornado.test.curl_httpclient_test.CurlHTTPClientTestCase.test_digest_auth_non_ascii

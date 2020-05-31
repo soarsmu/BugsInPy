@@ -1,0 +1,5 @@
+python_version="3.7.0"
+pythonpath=""
+buggy_commit_id="729f1d904225c5d1b15571f125207c319b22616a"
+fixed_commit_id="cc3ca857a0d5d92309c655a37a60160abc51679b"
+test_file="tornado/test/curl_httpclient_test.py"
