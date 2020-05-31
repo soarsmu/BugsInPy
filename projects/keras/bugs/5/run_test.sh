@@ -1,0 +1,1 @@
+pytest tests/keras/initializers_test.py::test_statefulness

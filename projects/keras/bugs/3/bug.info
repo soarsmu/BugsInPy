@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="29f27f333efb427830e62bec62fd79b444df4011"
+fixed_commit_id="08f6bdeb5652550f36210f64aefda3d0d41e2d79"
+test_file="tests/keras/optimizers_test.py"

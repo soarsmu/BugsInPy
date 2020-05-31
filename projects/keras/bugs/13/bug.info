@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="88af7d0c97497b5c3a198ee9416b2accfbc72c36"
+fixed_commit_id="4b54657ab4806b0aaef8f8eeb973edb83c3d3483"
+test_file="tests/test_loss_masking.py"
