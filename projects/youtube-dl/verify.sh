@@ -45,6 +45,7 @@ done
 
 #function for verifying bugs
 my_function () {
+  rm -f "$folder_location/$project_name-$var-fail.txt"
   #read file run_test.sh
   run_command_all=""
   DONE=false
@@ -203,11 +204,12 @@ my_function () {
   res_first=$($run_command_now 2>&1)
   #update list for command if running output OK and write on the fail if not
   echo "$res_first"
-  if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* ]]; then
+  if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* || $res_first == *"passed"* ]]; then
      run_command_filter+="$run_command_now;"
   else
      fail_list+=("$temp_location ($run_command_now)")
      fail_number=$(($fail_number + 1))
+     echo "OUTPUT AT FIXED COMMIT ID" &>>"$folder_location/$project_name-$var-fail.txt"
      echo "$run_command_now" &>>"$folder_location/$project_name-$var-fail.txt"
      echo "$res_first" &>>"$folder_location/$project_name-$var-fail.txt"
   fi
@@ -253,12 +255,13 @@ my_function () {
   
      res_second=$($run_command_now 2>&1)
      echo "$res_second"
-     if [[ ${res_second##*$'\n'} == *"FAIL"* || ${res_second##*$'\n'} == *"error"* || ${res_second##*$'\n'} == *"fail"* ]]; then
+     if [[ ${res_second##*$'\n'} == *"FAIL"* || ${res_second##*$'\n'} == *"error"* || ${res_second##*$'\n'} == *"fail"* || $res_second == *"failed"* ]]; then
          pass_list+=("$temp_location ($run_command_now)")
          pass_number=$(($pass_number + 1))
      else
          fail_list+=("$temp_location ($run_command_now)")
          fail_number=$(($fail_number + 1))
+         echo "OUTPUT AT BUGGY COMMIT ID" &>>"$folder_location/$project_name-$var-fail.txt"
          echo "$run_command_now" &>>"$folder_location/$project_name-$var-fail.txt"
          echo "$res_first" &>>"$folder_location/$project_name-$var-fail.txt"       
      fi
