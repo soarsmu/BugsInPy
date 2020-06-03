@@ -1,17 +1,22 @@
 # BugsInPy
 BugsInPy: Benchmarking Bugs in Python Projects
 
-##  List of Contributors
-Name | Bugs Data
---- | --- 
-simshengqin | 55
-Camellia Lok | 42
-qijintay | 27
-Qi Haodi | 24
-ratnadiraw | 11 
-Ethelda | 9
-Yieh Yuheng | 1
+##  Top 3 Contributors (of all time)
+Name | Bugs Data | Verified Bugs Data
+--- | --- | ---
+simshengqin | 55 | 0
+Camellia Lok | 42 | 0
+qijintay | 27 | 0
 
-#### Total data : 169
+##  Top 3 Contributors (last week)
+Name | Bugs Data | Verified Bugs Data
+--- | --- | ---
+simshengqin | 55 | 0
+Camellia Lok | 42 | 0
+qijintay | 27 | 0
+
+
+#### Total data : 170
+#### Total verified bugs data : 11
 
 ###### Note: this list is based on the dataset bug without verifying the data. We will update this list of contributors based on the output of verify.sh that you pushed on the repo.
