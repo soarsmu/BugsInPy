@@ -72,7 +72,9 @@ my_function () {
        IFS=';' read -r -a test_file <<< "$test_file_all"
   elif [[ "$REPLY" == "pythonpath"* ]]; then
        pythonpath_all="$(cut -d'"' -f 2 <<< $REPLY)"
-       pythonpath_set=${pythonpath_all//;/:}
+       temp_folder=":${folder_location}/"
+       pythonpath_set=${pythonpath_all//;/$temp_folder}
+       pythonpath_set="${folder_location}/${pythonpath_set}"
   fi
   done < bug.info
   
