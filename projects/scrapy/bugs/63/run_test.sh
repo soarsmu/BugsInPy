@@ -1,0 +1,1 @@
+python -m unittest -q tests.test_http_request.RequestTest.test_copy

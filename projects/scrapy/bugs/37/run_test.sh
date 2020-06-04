@@ -1,1 +1,1 @@
-python -m unittest -q tests.test_mail.MailSenderTest.test_send_attach_utf8
+python -m unittest -q tests.test_cmdline.__init__.CmdlineTest.test_override_dict_settings

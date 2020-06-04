@@ -1,0 +1,1 @@
+python -m unittest -q tests.test_spider.CrawlSpiderTest.test_start_url

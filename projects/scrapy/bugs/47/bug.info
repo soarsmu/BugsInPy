@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="5f02ef82e8560242eb34b336f385addfdef3211d"
+fixed_commit_id="dba7e39f61cbe2c22d3c9064f32f6e36d74f14b2"
+test_file="tests/test_downloadermiddleware_cookies.py"

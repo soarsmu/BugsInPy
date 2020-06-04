@@ -1,1 +1,1 @@
-python -m unittest -q tests.test_pipeline_files.FilesPipelineTestCase.test_file_expired
+python -m unittest -q tests.test_responsetypes.ResponseTypesTest.test_from_content_disposition
