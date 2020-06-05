@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="4b99525" 
+fixed_commit_id="33f67d98aa74bdfdc4237930229b3dbe06d4fca7"  
+test_file="pandas/tests/indexing/test_iloc.py" 

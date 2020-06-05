@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="a7dd3ea" 
+fixed_commit_id="f10ec595eccaf86a9f52fe9683e1181a51ba675b"  
+test_file="pandas/tests/indexes/multi/test_get_level_values.py" 

@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="d219c2c" 
+fixed_commit_id="bdcb5da0906f7d8c7437d8531b8e3219f1ef554c"  
+test_file="pandas/tests/arithmetic/test_datetime64.py" 

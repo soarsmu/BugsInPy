@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="292a993" 
+fixed_commit_id="8dd9fabd2ad9104e747084437b9ad436d5be087a"  
+test_file="pandas/tests/window/test_pairwise.py" 

@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="6bc2dca" 
+fixed_commit_id="fcf7258c19b0a6a712f33fb0bcefdae426be7e7f"  
+test_file="pandas/tests/window/test_grouper.py" 

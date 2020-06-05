@@ -1,0 +1,8 @@
+/c/Users/sheng/Documents/GitHub/BugsInPy2/projects/pandas/bugs/17 ()
+/c/Users/sheng/Documents/GitHub/BugsInPy2/projects/pandas/bugs/18 ()
+/c/Users/sheng/Documents/GitHub/BugsInPy2/projects/pandas/bugs/42 ()
+/c/Users/sheng/Documents/GitHub/BugsInPy2/projects/pandas/bugs/74 ()
+/c/Users/sheng/Documents/GitHub/BugsInPy2/projects/pandas/bugs/75 ()
+/c/Users/sheng/Documents/GitHub/BugsInPy2/projects/pandas/bugs/97 ()
+
+FAIL: 6

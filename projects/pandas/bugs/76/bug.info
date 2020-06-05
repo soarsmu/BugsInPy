@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="81149fb" 
+fixed_commit_id="be7bfe6ab7ae2cba056f61dea6c3b0226bf80082"  
+test_file="pandas/tests/frame/test_arithmetic.py" 
