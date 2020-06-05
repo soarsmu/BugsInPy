@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="2086ff4065a43fa40d909f81e62623e265df5759"
-fixed_commit_id="5ff64ad015aff872ffae78193b67525dd53ae80d"
-test_file="tests/test_spider.py;tests/test_utils_sitemap.py"

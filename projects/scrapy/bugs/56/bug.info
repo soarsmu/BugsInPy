@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="1d5c270ce8caf954ce83c8db262e2a35707e0c5e"
+fixed_commit_id="f701f5b0db10faef08e4ed9a21b98fd72f9cfc9a"
+test_file="tests/test_http_request.py"

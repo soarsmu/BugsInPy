@@ -1,1 +1,1 @@
-python -m unittest -q tests.test_responsetypes.ResponseTypesTest.test_from_content_disposition
+python -m unittest -q tests.test_spider.SitemapSpiderTest.test_get_sitemap_urls_from_robotstxt

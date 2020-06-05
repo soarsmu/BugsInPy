@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="7d24df37380cd5a5b7394cd2534e240bd2eff0ca"
+fixed_commit_id="f1d971a5c0cdfe0f4fe5619146cd6818324fc98e"
+test_file="tests/test_exporters.py"

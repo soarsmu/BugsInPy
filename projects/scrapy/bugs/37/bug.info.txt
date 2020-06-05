@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="https://www.youtube.com/watch?v=gB6NSO4MQ6U&feature=youtu.be"
-fixed_commit_id="061c63592a3678e059fdeb964e6878663698237b"
-test_file="tests/test_mail.py"

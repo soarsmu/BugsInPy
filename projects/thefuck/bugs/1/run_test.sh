@@ -1,0 +1,1 @@
+pytest tests/rules/test_pip_unknown_command.py::test_get_new_command

@@ -1,1 +1,1 @@
-python -m unittest -q tests.test_exporters.XmlItemExporterTest.test_nonstring_types_item
+python -m unittest -q tests.test_downloader_handlers.HttpProxyTestCase.test_download_with_proxy_https_timeout

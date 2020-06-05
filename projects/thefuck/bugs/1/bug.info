@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="2ced7a7f33ae0bec3ffc7a43ce95330bdf6cfcb9"
+fixed_commit_id="444908ce1c17767ef4aaf9e0b4950497914f7f63"
+test_file="tests/rules/test_pip_unknown_command.py"

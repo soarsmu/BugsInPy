@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="e2f31f3018c0037f65982209c22f93b80a5d6e7b"
+fixed_commit_id="457b97c13ccf9a84f3dc7800c180cf059822c09a"
+test_file="tests/test_dupefilters.py"

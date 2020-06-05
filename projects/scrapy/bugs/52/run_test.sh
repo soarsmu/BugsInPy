@@ -1,0 +1,1 @@
+python -m unittest -q tests.test_crawler.CrawlerRunnerTestCase.test_spidermanager_deprecation

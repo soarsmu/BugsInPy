@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="280eab241680c93a763a3ef3a9ccd0c257259ca0"
+fixed_commit_id="d164398a27736f75286cc435eca69b06ff7c1c06"
+test_file="tests/test_downloadermiddleware_redirect.py"

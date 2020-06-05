@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="692975acb40c6394424dfb728b1ffa46b3b3c55d"
+fixed_commit_id="a1e8a8525d2312842c7e1cca8ba6e4e1a83084b7"
+test_file="tests/test_spider.py"
