@@ -265,7 +265,7 @@ my_function () {
          fail_number=$(($fail_number + 1))
          echo "OUTPUT AT BUGGY COMMIT ID" &>>"$folder_location/$project_name-$var-fail.txt"
          echo "$run_command_now" &>>"$folder_location/$project_name-$var-fail.txt"
-         echo "$res_first" &>>"$folder_location/$project_name-$var-fail.txt"       
+         echo "$res_second" &>>"$folder_location/$project_name-$var-fail.txt"       
      fi
   done
   
