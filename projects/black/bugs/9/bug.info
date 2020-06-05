@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="026c81b83454f176a9f9253cbfb70be2c159d822"
+fixed_commit_id="d6db1c12a8e14833fe22da377cddc2bd1f43dc14"
+test_file="tests/data/python2_print_function.py;tests/test_black.py"

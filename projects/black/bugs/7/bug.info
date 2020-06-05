@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="18119d38466652ae818436cb497f601294ed4558"
+fixed_commit_id="de806405d2934b629d67e2a6317ad7e826765a20"
+test_file="tests/data/tupleassign.py;tests/test_black.py"
