@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="68949a592248913b52bfd50036893553153fcddb"
+fixed_commit_id="8db3cf604865e559090412ce80b0640e290ad83a"
+test_file="tests/shells/test_fish.py"

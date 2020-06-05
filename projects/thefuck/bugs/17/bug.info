@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="8a4f37edb3ea72b965805cbcde8c3c5cec05d966"
+fixed_commit_id="bab5de236f4a9a44b033bc563198e8d188733c9f"
+test_file="tests/rules/test_brew_update_formula.py"

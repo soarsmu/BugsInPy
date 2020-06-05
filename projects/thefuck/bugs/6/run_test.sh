@@ -1,0 +1,3 @@
+pytest tests/rules/test_docker_not_command.py::test_get_new_management_command_subcommand
+pytest tests/rules/test_docker_not_command.py::test_get_new_management_command
+pytest tests/rules/test_docker_not_command.py::test_match_management_subcmd
