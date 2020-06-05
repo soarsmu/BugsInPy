@@ -46,19 +46,24 @@ done
 #function for verifying bugs
 my_function () {
   rm -f "$folder_location/$project_name-$var-fail.txt"
+
   #read file run_test.sh
   run_command_all=""
   DONE=false
   until $DONE ;do
   read || DONE=true
-  if [[ "$REPLY" != "" ]]; then
+  if [ "$REPLY" != "" ]; then
      run_command_all+="$REPLY;"
      echo $REPLY
   fi
   done < run_test.sh
   IFS=';' read -r -a run_command <<< "$run_command_all"
+
   echo "$run_command"
-  
+  pythonpath_set=""
+  buggy_commit=""
+  fix_commit=""
+
   #read bug.info file
   DONE=false
   until $DONE ;do
@@ -72,9 +77,13 @@ my_function () {
        IFS=';' read -r -a test_file <<< "$test_file_all"
   elif [[ "$REPLY" == "pythonpath"* ]]; then
        pythonpath_all="$(cut -d'"' -f 2 <<< $REPLY)"
-       temp_folder=":${folder_location}/"
-       pythonpath_set=${pythonpath_all//;/$temp_folder}
-       pythonpath_set="${folder_location}/${pythonpath_set}"
+       if [ "$pythonpath_all" != "" ]; then
+          temp_folder=":${folder_location}/"
+          pythonpath_set=${pythonpath_all//;/$temp_folder}
+          pythonpath_set="${folder_location}/${pythonpath_set}"
+          echo "$pythonpath_set"
+          echo "$pythonpath_all"
+       fi
   fi
   done < bug.info
   
@@ -99,8 +108,9 @@ my_function () {
      echo ${run_command[index]}
   done
   #add pythonpath if does not exist
-  if [[ "$pythonpath_set" != "" ]]; then
+  if [ "$pythonpath_set" != "" ]; then
      echo $pythonpath_set
+     echo "PYTHONPATH"
      if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
         echo "READ BASH"
         saveReply=""
