@@ -1,0 +1,5 @@
+python_version="3.7.0"
+pythonpath=""
+buggy_commit_id="fa3409179588536f2f743d16e537f6f9827fa92f"
+fixed_commit_id="a3b44cd701e0e82693363701bc0346b0125d2362"
+test_file="tornado/test/ioloop_test.py"
