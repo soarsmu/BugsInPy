@@ -1,1 +1,2 @@
-python -m unittest -q tornado.test.autoreload_test.AutoreloadTest.test_reload_module_with_argv_preservation
+python -m unittest -q tornado.test.asyncio_test.LeakTest.test_ioloop_close_leak
+python -m unittest -q tornado.test.asyncio_test.LeakTest.test_asyncio_close_leak
