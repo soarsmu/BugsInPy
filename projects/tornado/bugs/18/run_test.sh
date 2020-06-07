@@ -1,0 +1,1 @@
+python -m unittest -q tornado.test.ioloop_test.TestIOLoopCurrent.test_force_current
