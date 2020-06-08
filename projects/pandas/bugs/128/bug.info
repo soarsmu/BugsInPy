@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="9a211aa" 
+fixed_commit_id="839e7f1416148caff518a5b75327a2480a2bbbb4"  
+test_file="pandas/tests/indexes/timedeltas/test_constructors.py" 

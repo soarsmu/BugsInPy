@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="f5aa542" 
+fixed_commit_id="bd6b395a1e8fb7d099fa17a0e24f8fe3b628822c"  
+test_file="pandas/tests/frame/test_subclass.py" 

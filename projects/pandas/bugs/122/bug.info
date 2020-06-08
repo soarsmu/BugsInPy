@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="a05e6c9" 
+fixed_commit_id="06ef193a5c1957c0a76e3e88bc7b834b38972c39"  
+test_file="pandas/tests/groupby/test_categorical.py" 

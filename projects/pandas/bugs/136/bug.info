@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="fff4f3f" 
+fixed_commit_id="d5e4bc502afd62ae6eb3e739e07f0d077dc82cfa"  
+test_file="pandas/tests/indexes/datetimes/test_indexing.py" 
