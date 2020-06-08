@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="c3eca8234a3dad4566a1a2193472331e1f77c095"
+fixed_commit_id="d41cbb6810d4d82fdee6e411594c2211ed260326"
+test_file="tests/rules/test_heroku_not_command.py"

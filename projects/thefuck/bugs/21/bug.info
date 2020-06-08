@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="d47ff8cbf26c2c854e8a76252c505df488dd71e8"
+fixed_commit_id="c3eca8234a3dad4566a1a2193472331e1f77c095"
+test_file="tests/test_argument_parser.py;tests/test_conf.py"

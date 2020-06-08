@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="8a8ade1e6b327a09301e9801e630ddedfcf5c376"
+fixed_commit_id="309fe8f6ee5ccc014886ee0725506ea97d945a9e"
+test_file="tests/rules/test_hostscli.py"
