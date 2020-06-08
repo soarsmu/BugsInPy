@@ -1,0 +1,5 @@
+python_version="3.7.0"
+pythonpath=""
+buggy_commit_id="d7d9c467cda38f4c9352172ba7411edc29a85196"
+fixed_commit_id="34903f9e1a99441b2729bbe6f1d65d46cf352ea7"
+test_file="tornado/test/http1connection_test.py"

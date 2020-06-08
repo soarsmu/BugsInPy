@@ -1,0 +1,1 @@
+python -m unittest -q tornado.test.websocket_test.WebSocketTest.test_missing_websocket_key

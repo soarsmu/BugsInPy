@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="36b9e4c055f32718a036cabaf767325b010c7485"
+fixed_commit_id="d6b5c5ebb410e3366c9d7aca41977a60134bfe10"
+test_file="tests/integration_tests/test_image_data_tasks.py"

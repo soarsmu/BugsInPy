@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="8b340e210271a8108995fd479c55dbc0a34466bd"
+fixed_commit_id="b53cb9474348e13533ccba3735191a55ef3da6c4"
+test_file="tests/data/bracketmatch.py;tests/test_black.py"

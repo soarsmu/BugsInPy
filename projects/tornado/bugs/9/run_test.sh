@@ -1,1 +1,1 @@
-python -m unittest -q tornado.test.gen_test.RunnerGCTest.test_multi_moment
+python -m unittest -q tornado.test.ioloop_test.TestIOLoopFutures.test_run_in_executor_native

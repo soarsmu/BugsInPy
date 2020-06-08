@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="cd44c6e0aaff4bb52a060d778025b32dbde09b44"
+fixed_commit_id="1c221934aaeab20ed5b6fa245b33b00a8b557533"
+test_file="tests/keras/backend/backend_test.py"

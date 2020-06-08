@@ -1,4 +1,4 @@
 python_version="3.7.3"
-buggy_commit_id="26b620fb37c885d60183f83abc744f43775ce75a"
-fixed_commit_id="c05ef1fd95a6024155ab59656fef8dac5a45c335"
-test_file="tests/keras/wrappers/scikit_learn_test.py"
+buggy_commit_id="b847b4601d608050bab6eccd049fce28b7bf1b1f"
+fixed_commit_id="e11c48d9ce3ee47bb8a966549b14cbd5b10ee70d"
+test_file="tests/keras/utils/data_utils_test.py"

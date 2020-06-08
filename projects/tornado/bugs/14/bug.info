@@ -1,0 +1,5 @@
+python_version="3.7.0"
+pythonpath=""
+buggy_commit_id="555f3a069f9a6a6ae03c63ccc05386212c347c4f"
+fixed_commit_id="b49c87a715a87b2c31f4ba8e664379c783ff68cc"
+test_file="tornado/test/windows_test.py"
