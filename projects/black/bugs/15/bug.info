@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="8a8c58252cc023ae250d6febd24f50a8166450d4"
+fixed_commit_id="df2ae3bbe6c45298aabb6c04e85cb353205626f1"
+test_file="tests/data/fmtonoff2.py;tests/test_black.py"

@@ -1,1 +1,1 @@
-pip install pipenv
+touch tests/__init__.py

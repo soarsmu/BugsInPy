@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="dbe26161fa68632d608a440666a0960a32630902"
+fixed_commit_id="00a302560b92951c22f0f4c8d618cf63de39bd57"
+test_file="tests/test_black.py"
