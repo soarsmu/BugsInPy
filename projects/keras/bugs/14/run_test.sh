@@ -1,1 +1,1 @@
-pytest tests/keras/wrappers/scikit_learn_test.py::test_regression_predict_shape_correct_num_test_1
+pytest tests/keras/utils/data_utils_test.py::test_data_utils

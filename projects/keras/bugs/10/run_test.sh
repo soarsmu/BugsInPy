@@ -1,1 +1,1 @@
-pytest tests/keras/utils/data_utils_test.py::test_data_utils
+pytest tests/keras/test_sequential_model.py::test_clone_functional_model_with_multi_outputs
