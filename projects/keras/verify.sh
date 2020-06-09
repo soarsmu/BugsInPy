@@ -45,19 +45,25 @@ done
 
 #function for verifying bugs
 my_function () {
+  rm -f "$folder_location/$project_name-$var-fail.txt"
+
   #read file run_test.sh
   run_command_all=""
   DONE=false
   until $DONE ;do
   read || DONE=true
-  if [[ "$REPLY" != "" ]]; then
+  if [ "$REPLY" != "" ]; then
      run_command_all+="$REPLY;"
      echo $REPLY
   fi
   done < run_test.sh
   IFS=';' read -r -a run_command <<< "$run_command_all"
+
   echo "$run_command"
-  
+  pythonpath_set=""
+  buggy_commit=""
+  fix_commit=""
+
   #read bug.info file
   DONE=false
   until $DONE ;do
@@ -71,7 +77,13 @@ my_function () {
        IFS=';' read -r -a test_file <<< "$test_file_all"
   elif [[ "$REPLY" == "pythonpath"* ]]; then
        pythonpath_all="$(cut -d'"' -f 2 <<< $REPLY)"
-       pythonpath_set=${pythonpath_all//;/:}
+       if [ "$pythonpath_all" != "" ]; then
+          temp_folder=":${folder_location}/"
+          pythonpath_set=${pythonpath_all//;/$temp_folder}
+          pythonpath_set="${folder_location}/${pythonpath_set}"
+          echo "$pythonpath_set"
+          echo "$pythonpath_all"
+       fi
   fi
   done < bug.info
   
@@ -96,8 +108,9 @@ my_function () {
      echo ${run_command[index]}
   done
   #add pythonpath if does not exist
-  if [[ "$pythonpath_set" != "" ]]; then
+  if [ "$pythonpath_set" != "" ]; then
      echo $pythonpath_set
+     echo "PYTHONPATH"
      if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
         echo "READ BASH"
         saveReply=""
@@ -168,7 +181,6 @@ my_function () {
   fi
   #go to project location
   cd "$project_location"
-  
   if [ -d "$folder_location/$project_name/env/Scripts" ]; then
       source env/Scripts/activate
   else
@@ -204,11 +216,12 @@ my_function () {
   res_first=$($run_command_now 2>&1)
   #update list for command if running output OK and write on the fail if not
   echo "$res_first"
-  if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* ]]; then
+  if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* || $res_first == *"passed"* ]]; then
      run_command_filter+="$run_command_now;"
   else
      fail_list+=("$temp_location ($run_command_now)")
      fail_number=$(($fail_number + 1))
+     echo "OUTPUT AT FIXED COMMIT ID" &>>"$folder_location/$project_name-$var-fail.txt"
      echo "$run_command_now" &>>"$folder_location/$project_name-$var-fail.txt"
      echo "$res_first" &>>"$folder_location/$project_name-$var-fail.txt"
   fi
@@ -254,14 +267,15 @@ my_function () {
   
      res_second=$($run_command_now 2>&1)
      echo "$res_second"
-     if [[ ${res_second##*$'\n'} == *"FAIL"* || ${res_second##*$'\n'} == *"error"* || ${res_second##*$'\n'} == *"fail"* ]]; then
+     if [[ ${res_second##*$'\n'} == *"FAIL"* || ${res_second##*$'\n'} == *"error"* || ${res_second##*$'\n'} == *"fail"* || $res_second == *"failed"* ]]; then
          pass_list+=("$temp_location ($run_command_now)")
          pass_number=$(($pass_number + 1))
      else
          fail_list+=("$temp_location ($run_command_now)")
          fail_number=$(($fail_number + 1))
+         echo "OUTPUT AT BUGGY COMMIT ID" &>>"$folder_location/$project_name-$var-fail.txt"
          echo "$run_command_now" &>>"$folder_location/$project_name-$var-fail.txt"
-         echo "$res_first" &>>"$folder_location/$project_name-$var-fail.txt"       
+         echo "$res_second" &>>"$folder_location/$project_name-$var-fail.txt"       
      fi
   done
   
