@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="9ce059dd067ecc3f097d04023e3cfa0d70d35bb8"
+fixed_commit_id="a987e9e45d4084f30964a4cec9914ae6ed25a73c"
+test_file="spacy/tests/test_errors.py"

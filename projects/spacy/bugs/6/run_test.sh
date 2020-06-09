@@ -1,0 +1,1 @@
+py.test spacy/tests/lang/lb/test_text.py::test_lb_tokenizer_handles_long_text
