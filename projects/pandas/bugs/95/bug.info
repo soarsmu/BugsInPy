@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="fcadff3" 
+fixed_commit_id="861df91ae9c0742d0ee0108b36f54dfac6a4506e"  
+test_file="pandas/tests/io/parser/test_python_parser_only.py" 

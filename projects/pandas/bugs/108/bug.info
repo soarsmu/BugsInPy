@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="634a41f" 
+fixed_commit_id="16684f2affaf901b42a12e50f9c29e7c034ad7ea"  
+test_file="pandas/tests/arrays/categorical/test_constructors.py" 

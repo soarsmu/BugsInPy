@@ -1,1 +1,1 @@
-pytest tests/keras/optimizers_test.py::test_tfoptimizer_pass_correct_named_params_to_native_tensorflow_optimizer
+pytest tests/keras/engine/test_training.py::test_model_with_crossentropy_losses_channels_first

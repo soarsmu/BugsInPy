@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="8a5f291" 
+fixed_commit_id="a3097b5bd172e76dd3524eb5dbe18b6b4c22df50"  
+test_file="pandas/tests/frame//test_axis_select_reindex.py" 

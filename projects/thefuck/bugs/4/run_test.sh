@@ -1,0 +1,1 @@
+pytest tests/rules/test_apt_invalid_operation.py::test_get_new_command

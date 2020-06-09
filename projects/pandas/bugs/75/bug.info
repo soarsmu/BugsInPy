@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="b3a0fe4" 
+fixed_commit_id="05780a760400e42ce1b00200dd8204ae4f94044a"  
+test_file="pandas/tests/util/test_assert_frame_equal.py;pandas/tests/util/test_assert_series_equal.py" 

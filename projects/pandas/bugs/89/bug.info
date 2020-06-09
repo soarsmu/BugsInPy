@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="c1fd95b" 
+fixed_commit_id="983fae65fbadb83a064dfec53031d875d8e13928"  
+test_file="pandas/tests/io/json/test_normalize.py" 

@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="78ef9eec88f43d5727986be2237f6e0e250cbbbc"
+fixed_commit_id="201c01fc74d479d9e418d32c92a88b50b27728a7"
+test_file="tests/rules/test_pacman_not_found.py"

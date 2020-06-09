@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="e0b93ad" 
+fixed_commit_id="21fd692f744b47379b9b2f0760b2663d6338f0cd"  
+test_file="pandas/tests/io/parser/test_compression.py" 

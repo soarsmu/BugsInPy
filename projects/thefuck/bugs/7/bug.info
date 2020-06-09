@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="01a5ba99d0648bbb54193d36878141fb6ab363c5"
+fixed_commit_id="3bbe391391d3f54d4ad8b3bc4bdf594ffbe4388d"
+test_file="tests/rules/test_apt_list_upgradable.py"

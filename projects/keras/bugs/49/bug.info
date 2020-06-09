@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="b470a595f7278acf5e7e47521edf25d3c4f479f1"
+fixed_commit_id="84e168b5fa55933e02e767ff7c86fcc0232aecc6"
+test_file="tests/keras/applications/imagenet_utils_test.py"

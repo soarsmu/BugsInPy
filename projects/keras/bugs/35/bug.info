@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="c913b6da92f6ab9a3f4c897caa4085e782a14680"
+fixed_commit_id="5a6af4bc6d44e9adbc2a21804bfcd18c4ce849ef"
+test_file="tests/keras/metrics_test.py"

@@ -1,0 +1,1 @@
+pytest tests/integration_tests/test_image_data_tasks.py::test_image_data_generator_training

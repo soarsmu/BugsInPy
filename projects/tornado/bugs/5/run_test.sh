@@ -1,1 +1,1 @@
-python -m unittest -q tornado.test.curl_httpclient_test.CurlHTTPClientTestCase.test_digest_auth_non_ascii
+python -m unittest -q tornado.test.ioloop_test.TestPeriodicCallbackMath.test_clock_backwards

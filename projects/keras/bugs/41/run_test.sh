@@ -1,0 +1,1 @@
+pytest tests/keras/test_callbacks.py::test_EarlyStopping_final_weights_when_restoring_model_weights

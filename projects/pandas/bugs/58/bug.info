@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="d1b1236" 
+fixed_commit_id="6ae710adf2739ca9da0877e7cc780f420661b670"  
+test_file="pandas/tests/groupby/test_nth.py" 

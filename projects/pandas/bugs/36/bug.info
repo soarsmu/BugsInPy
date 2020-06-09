@@ -1,4 +1,4 @@
-python_version="3.8.3"
-buggy_commit_id="c6a1638"
-fixed_commit_id="3c09d22f7f6bb59b916859a63c359387dbd08b75"
-test_file="pandas/tests/arrays/test_datetimelike.py;pandas/tests/indexes/datetimes/test_indexing.py;pytest pandas/tests/indexes/period/test_indexing.py;pandas/tests/indexes/timedeltas/test_indexing.py"
+python_version="3.8.3" 
+buggy_commit_id="b310ed9" 
+fixed_commit_id="8dfb54967a935562e3379f999a696fdd1b4ba545"  
+test_file="pandas/tests/io/formats/test_format.py" 

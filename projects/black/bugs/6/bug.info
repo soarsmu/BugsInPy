@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="8c8adedc2a74a494c24f93e405b6418ac32f54cd"
+fixed_commit_id="f8617f975d56e81cfb4070ce65584f7b29a77e7a"
+test_file="tests/test_black.py;tests/data/comment_after_escaped_newline.py"

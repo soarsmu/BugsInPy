@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="5e488a0" 
+fixed_commit_id="6d67cf9f02dd22cc870fd407f569197512700203"  
+test_file="pandas/tests/indexes/datetimes/test_date_range.py" 

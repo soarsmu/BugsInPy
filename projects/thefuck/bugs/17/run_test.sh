@@ -1,0 +1,1 @@
+pytest tests/rules/test_brew_update_formula.py::test_match

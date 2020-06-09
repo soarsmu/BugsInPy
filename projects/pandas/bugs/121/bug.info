@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="426d445" 
+fixed_commit_id="948f95756c79543bb089a94a85e73011a3730b2d"  
+test_file="pandas/tests/indexes/test_numeric.py" 
