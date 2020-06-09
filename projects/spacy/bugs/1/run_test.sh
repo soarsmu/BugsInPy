@@ -1,0 +1,1 @@
+py.test spacy/tests/test_errors.py::test_add_codes
