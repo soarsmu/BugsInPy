@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="641346c" 
+fixed_commit_id="a890239b7020dec714d9819b718d83f786bfda34"  
+test_file="pandas/tests/reshape/test_pivot.py" 

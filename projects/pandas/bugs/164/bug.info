@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="7da951f" 
+fixed_commit_id="c38a416186b2ed789fb6ce6f1b0859d33bb57898"  
+test_file="pandas/tests/arithmetic/test_period.py" 

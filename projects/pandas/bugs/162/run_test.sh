@@ -1,0 +1,1 @@
+pytest pandas/tests/arithmetic/test_datetime64.py::TestDatetime64ArrayLikeComparisons::test_dt64arr_cmp_arraylike_invalid 

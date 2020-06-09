@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="f2b213c" 
+fixed_commit_id="511a2847f4330c54d079d04b3cac4febe0fe9915"  
+test_file="pandas/tests/frame/methods/test_asof.py" 
