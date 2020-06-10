@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="7ef5244a2f1f7f7b76e3c804b82cbb20cdf4d139"
+fixed_commit_id="4b74fc5418944c9f449eb88ed4b40ada280fa5ca"
+test_file="tests/test_multiprocessing.py"

@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="81f6b3aa5b2b6215a533180e848a3b4dff851d03"
+fixed_commit_id="1d2ad790dd43a2d702176c1170b2f3fd592a385a"
+test_file="tests/keras/layers/wrappers_test.py"
