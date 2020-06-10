@@ -1,0 +1,2 @@
+/c/Users/Camellia/Desktop/BugsInPy/projects/sanic/bugs/1 (pytest tests/test_reloader.py::test_reloader_live)
+FAIL: 1
