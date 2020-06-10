@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="b77a43bcac3ec8e7edbe82543e777c60ae85c178"
+fixed_commit_id="38495fffa560fa57a8f0e6437d8e43c36c8e5612"
+test_file="tests/test_skip_defaults.py"

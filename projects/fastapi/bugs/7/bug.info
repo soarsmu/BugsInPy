@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="7b31e527667b016f9aa525262d778fdba453c454"
+fixed_commit_id="cb1410426e11886825fece1cdc10a781bbfd57b2"
+test_file="tests/test_sub_callbacks.py"

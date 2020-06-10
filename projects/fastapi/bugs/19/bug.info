@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="92c825be6a7362099400c9c3fe8b01ea13add3dc"
+fixed_commit_id="9745a5d1ae86a7fefacf79bdde8e5dd2d59fa2f4"
+test_file="tests/test_datetime_custom_encoder.py;tests/test_jsonable_encoder.py"

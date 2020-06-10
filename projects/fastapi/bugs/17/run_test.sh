@@ -1,0 +1,1 @@
+pytest tests/test_additional_properties.py::test_additional_properties_schema

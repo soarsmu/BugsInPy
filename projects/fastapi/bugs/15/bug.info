@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="d61f5e4b555b123bf222503fc0e076cbae6a7ebc"
+fixed_commit_id="d262f6e9296993e528e2327f0a73f7bf5514e7c6"
+test_file="tests/test_security_http_bearer_optional.py"

@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="cc4c13e4ae3f65fc76c23962b316df4a60e0c7e0"
+fixed_commit_id="19c77e35bdde33aeec1eb2cfa680f95016492b69"
+test_file="tests/test_multi_body_errors.py"

@@ -1,0 +1,1 @@
+pytest tests/test_security_http_bearer_optional.py::test_security_http_bearer_incorrect_scheme_credentials

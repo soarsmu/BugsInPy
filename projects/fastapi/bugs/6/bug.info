@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="5db99a27cf640864b4793807811848698c5ff4a2"
+fixed_commit_id="874d24181e779ebc6e1c52afb7d6598f863fd6a8"
+test_file="tests/test_forms_from_non_typing_sequences.py"

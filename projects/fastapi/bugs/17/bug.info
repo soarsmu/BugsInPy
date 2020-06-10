@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="2ddb804940bbcad4ed730b2a910c8fd3c1167127"
+fixed_commit_id="b7d184363fad5f6b55d15ec3a3a844aa81092bbd"
+test_file="tests/test_additional_properties.py"
