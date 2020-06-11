@@ -1,2 +1,2 @@
+python setup.py build
 python setup.py install
-pip install psutil
