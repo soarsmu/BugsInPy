@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="23f5940e8b267919d6e717ff13cb2e913f0a7e6e"
+fixed_commit_id="e04bae22860e53e8c08f2c1cd476b8a7aa5b9b12"
+test_file="tests/test_jsonable_encoder.py"

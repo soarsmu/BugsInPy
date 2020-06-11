@@ -1,0 +1,5 @@
+python_version="3.6.9"
+pythonpath="tqdm/build/lib/"
+buggy_commit_id="a4b9c86db548b2d0dbb5af7a6bbdc26ab47e1eec"
+fixed_commit_id="6dad2e89019317e875c46d5a3a82a811ad6de2f9"
+test_file="tqdm/tests/tests_synchronisation.py"

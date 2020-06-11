@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="869c7389e22dc9ad659940fa271da76c4f3ba3b1"
+fixed_commit_id="aea04ee32ee1942e6e1a904527bb8da6ba76abd9"
+test_file="tests/test_serialize_response_model.py"

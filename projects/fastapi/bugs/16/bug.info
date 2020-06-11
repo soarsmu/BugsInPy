@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="6f7f9268f6b03f42831dcfeaa5c15ba9813333ec"
+fixed_commit_id="c8df3ae57c57e119d115dd3c1f44efa78de1022a"
+test_file="tests/test_additional_responses_router.py"

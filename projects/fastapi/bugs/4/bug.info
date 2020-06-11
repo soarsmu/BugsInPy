@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="7ccd81f70653857bd8f3a15ee946aa3fb0edc2cb"
+fixed_commit_id="74c4d1c1dbe6bfdb05d6e4fc767ffe062398f0a3"
+test_file="tests/test_param_in_path_and_dependency.py"

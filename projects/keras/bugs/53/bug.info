@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="6171b3656ebd9b6038f709ba83f7475de284ba4e"
+fixed_commit_id="5422fdd38baad36730cb6aeb946e17eeae6a551c"
+test_file="tests/keras/preprocessing/sequence_test.py"

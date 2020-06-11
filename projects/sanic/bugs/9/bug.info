@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="e3a27c2cc485d57aa1ff87d9f69098e4ab12727e"
+fixed_commit_id="b63c06c75a54752d7f3115d3c635580db44b8399"
+test_file="tests/test_logging.py"

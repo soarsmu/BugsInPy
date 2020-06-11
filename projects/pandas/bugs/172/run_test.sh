@@ -1,0 +1,1 @@
+pytest pandas/tests/frame/test_constructors.py::TestDataFrameConstructorWithDatetimeTZ::test_from_2d_ndarray_with_dtype 

@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="1c9a49781da2101507db23e2014e4e5d16bd2e52"
+fixed_commit_id="70ad0d6e4a569701ef106058397ad0540ec08340"
+test_file="tests/keras/preprocessing/text_test.py"

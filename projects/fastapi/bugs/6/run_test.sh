@@ -1,0 +1,3 @@
+pytest tests/test_forms_from_non_typing_sequences.py::test_python_list_param_as_form
+pytest tests/test_forms_from_non_typing_sequences.py::test_python_set_param_as_form
+pytest tests/test_forms_from_non_typing_sequences.py::test_python_tuple_param_as_form

@@ -1,0 +1,1 @@
+pytest tests/test_multiprocessing.py::test_pickle_app_with_static

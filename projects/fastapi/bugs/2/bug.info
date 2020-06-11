@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="210af1fd3dc0f612a08fa02a0cb3f5adb81e5bfb"
+fixed_commit_id="02441ff0313d5b471b662293244c53e712f1243f"
+test_file="tests/test_ws_router.py"

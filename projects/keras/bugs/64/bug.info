@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="e3a20c7e2460e6a2b8cc65bdecb139df91edee57"
+fixed_commit_id="87a618210dbe9d9ec82fe9fa0ea49322fa22f927"
+test_file="tests/keras/engine/test_topology.py"

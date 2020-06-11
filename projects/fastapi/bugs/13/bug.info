@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="bf229ad5d830eb5320f966d51a55e590e8d57008"
+fixed_commit_id="06eb4219345a77d23484528c9d164eb8d2097fec"
+test_file="tests/test_union_body.py;tests/test_union_inherited_body.py"

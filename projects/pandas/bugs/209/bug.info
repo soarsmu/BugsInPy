@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="221c8a7" 
+fixed_commit_id="bd8f07fb29d2ac819f4c8e8e1b8e6d40f8b0f40c"  
+test_file="pandas/tests/reductions/test_reductions.py" 

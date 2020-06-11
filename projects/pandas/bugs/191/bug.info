@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="9333e3d" 
+fixed_commit_id="c4fa6a52f7737aecda08f6b0f2d6c27476298ae1"  
+test_file="pandas/tests/reshape/merge/test_merge_asof.py" 

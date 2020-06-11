@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="06eaeebecfb73c23bfd531013ca172ee3bf5069c"
+fixed_commit_id="738819de0b7e6bc45abed8d0640f02b81c6ac4e9"
+test_file="tests/keras/preprocessing/image_test.py"
