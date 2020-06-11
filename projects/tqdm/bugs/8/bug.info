@@ -1,0 +1,5 @@
+python_version="3.6.9"
+pythonpath="tqdm/build/lib/"
+buggy_commit_id="1e4b60c6509b98338d4b9bd26c4bd027613c3d04"
+fixed_commit_id="dc259ca87ce830b34da5aace6f08c96e1bc25fb6"
+test_file="tqdm/tests/tests_tqdm.py"
