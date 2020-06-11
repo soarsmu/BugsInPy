@@ -1,5 +1,0 @@
-python_version="3.6.9"
-pythonpath="build/lib/"
-buggy_commit_id="fd6a26239cc2eeba8ada3f80e49e3cdf1d999f0c"
-fixed_commit_id="5a769a5a4dd7bb626ed7f098c7751280ec92f204"
-test_file="test/TestConstants.py"
