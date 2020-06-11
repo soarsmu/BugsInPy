@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="8806ed7" 
+fixed_commit_id="2b1b3da4c68fdaf9637d12706c5ba3de1a9b20de"  
+test_file="pandas/tests/frame/methods/test_pct_change.py" 

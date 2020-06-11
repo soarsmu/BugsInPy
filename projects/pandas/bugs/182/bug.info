@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="20e4c18" 
+fixed_commit_id="53a0dfd41a65a33dd7b0963734b24c749212e625"  
+test_file="pandas/tests/dtypes/cast/test_infer_dtype.py" 

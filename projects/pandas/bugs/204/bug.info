@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="0e6efcf" 
+fixed_commit_id="2064876e271358f178ad806b3a97d6bc0b37e5ca"  
+test_file="pandas/tests/arrays/test_datetimelike.py;pandas/tests/series/test_datetime_values.py" 

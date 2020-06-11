@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="f7d6b58" 
+fixed_commit_id="710d82c0d393c9031e469ec0371660d8187b7dc3"  
+test_file="pandas/tests/series/test_timeseries.py" 

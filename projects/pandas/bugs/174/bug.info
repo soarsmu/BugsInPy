@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="d1f82f7" 
+fixed_commit_id="19578e364fb47ce10dd14174cffc3ecfea1a58cd"  
+test_file="pandas/tests/groupby/test_transform.py" 

@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="07e6b9d" 
+fixed_commit_id="30059081e946a2020d08d49bf4fa7b771d10089a"  
+test_file="pandas/tests/internals/test_internals.py" 

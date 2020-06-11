@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="8f0310a" 
+fixed_commit_id="9a222ea0300053ff46da984e3b3f68622ccba9c3"  
+test_file="pandas/tests/extension/decimal/test_decimal.py" 

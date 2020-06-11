@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="28715a7" 
+fixed_commit_id="27836e93dc3c9d55c60282ccb15c88c42a340d87"  
+test_file="pandas/tests/indexing/test_categorical.py;pandas/tests/indexing/test_floats.py" 

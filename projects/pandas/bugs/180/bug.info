@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="47ac4b3" 
+fixed_commit_id="fa4949f27ccfbc255bb8dbcd5ec5464b8663f1d2"  
+test_file="pandas/tests/frame/test_combine_concat.py" 

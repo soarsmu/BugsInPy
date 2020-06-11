@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="b164624" 
+fixed_commit_id="8705aad961dd227d38ff93a39697547b98109c9d"  
+test_file="pandas/tests/extension/test_integer.py" 
