@@ -1,0 +1,2 @@
+pytest test/scheduler_api_test.py::SchedulerApiTest::test_mark_running_as_done_works
+pytest test/scheduler_api_test.py::SchedulerApiTest::test_mark_failed_as_done_works

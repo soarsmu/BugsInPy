@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="c165ead2465a02289b6dd755738d2646bfec4feb"
+fixed_commit_id="55ca81d77677f19f654d868b2bc160d9c3a6197e"
+test_file="test/contrib/postgres_test.py"

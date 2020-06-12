@@ -1,0 +1,1 @@
+pytest test/choice_parameter_test.py::ChoiceParameterTest::test_invalid_choice_task

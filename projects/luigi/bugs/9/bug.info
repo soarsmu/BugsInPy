@@ -1,0 +1,4 @@
+python_version="3.6.2"
+buggy_commit_id="d994bca6fac1442bf44c58a60c77bd751df04b09"
+fixed_commit_id="bdfcb6c2540a143a71e6dc6a89793cb8bd048ee0"
+test_file="test/choice_parameter_test.py"

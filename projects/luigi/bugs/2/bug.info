@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="e2228418eec60b68ca09a30c878ab26413846847"
+fixed_commit_id="2de1b686d14e4c3d844d1eaca62405b8256fdd3f"
+test_file="test/notifications_test.py"

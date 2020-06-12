@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="7716fa567b1909227d5be9beb5d2c9be6b1ac53c"
+fixed_commit_id="447489aa7f2733bb0a5a701ef46b0bec065543b3"
+test_file="test/dict_parameter_test.py"

@@ -1,0 +1,1 @@
+pytest test/scheduler_api_test.py::SchedulerApiTest::test_count_pending_on_disabled_worker
