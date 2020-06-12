@@ -1,5 +1,5 @@
 python_version="3.6.9"
-pythonpath="build/lib/"
+pythonpath="ansible/build/lib/"
 buggy_commit_id="28b2428d22a1f74bba277c2eb696a509acc26cf6"
 fixed_commit_id="fe454d27a1aa5386801563ffe8dde44064f84302"
 test_file="test/units/module_utils/common/parameters/test_list_deprecations.py"
