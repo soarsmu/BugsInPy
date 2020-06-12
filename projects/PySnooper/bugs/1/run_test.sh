@@ -1,0 +1,1 @@
+pytest -q -s  tests/test_mini_toolbox.py::test_output_capturer_doesnt_swallow_exceptions

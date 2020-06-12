@@ -1,0 +1,6 @@
+/c/code/RA/BugsInPy/projects/PySnooper/bugs/1 (pytest -q -s tests/test_mini_toolbox.py::test_output_capturer_doesnt_swallow_exceptions)
+/c/code/RA/BugsInPy/projects/PySnooper/bugs/2 (pytest -q -s tests/test_pysnooper.py::test_snooping_on_class_does_not_cause_base_class_to_be_snooped)
+/c/code/RA/BugsInPy/projects/PySnooper/bugs/3 (pytest -q -s tests/test_chinese.py::test_chinese)
+/c/code/RA/BugsInPy/projects/PySnooper/bugs/4 (pytest -q -s tests/test_pysnooper.py::test_custom_repr_single)
+/c/code/RA/BugsInPy/projects/PySnooper/bugs/5 (pytest -q -s tests/test_pysnooper.py::test_file_output)
+PASS: 5

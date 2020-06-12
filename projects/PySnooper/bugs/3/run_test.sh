@@ -1,0 +1,1 @@
+pytest -q -s tests/test_chinese.py::test_chinese
