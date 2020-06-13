@@ -1,0 +1,1 @@
+python test/test_YoutubeDL.py TestFormatSelection.test_default_format_spec

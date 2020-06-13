@@ -1,0 +1,4 @@
+python_version="3.7.4"
+buggy_commit_id="dc6520aa3d1fe7afc52613e392f15dde90af4844"
+fixed_commit_id ="0396806f671e5828c2abdeb8048acf8b654507b6"
+test_file="test/test_YoutubeDL.py"

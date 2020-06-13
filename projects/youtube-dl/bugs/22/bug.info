@@ -1,0 +1,4 @@
+python_version="3.7.4"
+buggy_commit_id="562de77f41d0c08df9dbb08cfa86ba6c7d239c5a"
+fixed_commit_id ="84213ea8d41d5fe1608333a16ac578dccdf9a915"
+test_file="test/test_youtube_chapters.py"
