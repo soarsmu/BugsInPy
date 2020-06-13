@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="3a431ea52d090fb3ef8a1e0e5d7f796d9a42e097"
+fixed_commit_id="a5ecde595c47f35fd7293d52eba48efd687ca94e"
+test_file="tests/keras/utils/generic_utils_test.py"
