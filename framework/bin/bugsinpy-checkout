@@ -1,0 +1,154 @@
+#!/bin/bash
+
+framework_location="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+###Read the flag of checkout
+while getopts p:i:v:w: flag
+do
+    case "${flag}" in
+        p) project_name=${OPTARG};;
+        i) bug_id=${OPTARG};;
+        v) version_id=${OPTARG};;
+        w) work_dir=${OPTARG};;
+    esac
+done
+
+###Project name and bug id are mandatory
+if [ "$project_name" == "" ]; then 
+   echo "Please input project name"
+   exit
+fi
+
+if [ "$bug_id" == "" ]; then 
+   echo "Please input bug id"
+   exit
+fi
+
+if [ "$version_id" == "" ]; then 
+   version_id=1
+fi
+
+if [ "$work_dir" == "" ]; then 
+   work_dir="$framework_location/temp"
+fi
+
+
+echo "PROJECT_NAME: $project_name";
+echo "BUG_ID: $bug_id";
+echo "VERSION_ID: $version_id";
+echo "WORK_DIR: $work_dir";
+
+cd "$framework_location"
+cd ..
+cd ..
+bugsinpy_location=$(pwd)
+
+###Check if project exist
+project_location="$bugsinpy_location/projects/$project_name"
+if [ ! -d "$project_location" ]; then
+  echo "Project $project_name does not exist, please check the project name"
+  exit
+fi
+
+###Check if bug exist
+if [ ! -d "$project_location/bugs/$bug_id" ]; then
+  echo "Bug number $bug_id does not exist, please check the bug id"
+  exit
+fi
+
+cd "$project_location"
+
+input="project.info"
+githubURL=""
+checkfurther="NO"
+
+###Read the project.info
+while IFS= read -r line
+do
+  if [[ "$line" == "github_url="* ]]; then
+     githubURL="$(cut -d'"' -f 2 <<< $line)"
+     echo "$githubURL"
+     githubName="${githubUrl##*/}"
+     if [[ "$githubName" == "" ]]; then
+         temp="${githubUrl%?}"
+         githubName="${temp##*/}"
+     fi
+  elif [[ "$line" == 'status="OK"'* ]]; then
+     checkfurther="YES"
+     #clone project if status OK
+  fi
+  echo "$line"
+done < "$input"
+
+###Clone the project
+if [[ "$checkfurther" == "NO" ]]; then
+  exit
+elif [[ "$checkfurther" == "YES" ]]; then
+   git clone "$githubURL" "$work_dir"
+fi
+
+cd "$project_location/bugs/$bug_id"
+pythonpath_set=""
+buggy_commit=""
+fix_commit=""
+
+###Read bug.info file
+DONE=false
+until $DONE ;do
+read || DONE=true
+if [[ "$REPLY" == "buggy_commit_id"* ]]; then
+   buggy_commit="$(cut -d'"' -f 2 <<< $REPLY)"
+elif [[ "$REPLY" == "fixed_commit_id"* ]]; then
+   fix_commit="$(cut -d'"' -f 2 <<< $REPLY)"
+elif [[ "$REPLY" == "test_file"* ]]; then
+   test_file_all="$(cut -d'"' -f 2 <<< $REPLY)"
+   IFS=';' read -r -a test_file <<< "$test_file_all"
+elif [[ "$REPLY" == "pythonpath"* ]]; then
+   pythonpath_all="$(cut -d'"' -f 2 <<< $REPLY)"
+   if [ "$pythonpath_all" != "" ]; then
+       temp_folder=":${folder_location}/"
+       pythonpath_set=${pythonpath_all//;/$temp_folder}
+       pythonpath_set="${folder_location}/${pythonpath_set}"
+   fi
+fi
+done < bug.info
+
+###Reset head to version id
+cd "$work_dir"
+git reset --hard "$fix_commit"
+
+if [ $version_id == 0 ]; then
+   ###copy test file from project to temp
+   for index in "${!test_file[@]}"
+   do
+      test_file_now=${test_file[index]}
+      cp -v "$work_dir/$project_name/$test_file_now" "$project_location/bugs/$bug_id"
+   done
+   
+   cd "$work_dir"
+   git reset --hard "$buggy_commit"
+   git clean -f -d
+
+   ###Copy test file from fixed to buggy
+   for index in "${!test_file[@]}"
+   do
+      test_file_now=${test_file[index]}
+      string1="${test_file_now%/*}"
+      string2="${test_file_now##*/}"
+      mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
+   done
+fi
+###Copy other change file from fixed to buggy if version is fixed commit
+
+###Move information about bug to clone project folder
+cp -f "$project_location/bugs/$bug_id/bug.info" "$work_dir/$project_name/bugsinpy_bug.info"
+cp -f "$project_location/bugs/$bug_id/requirements.txt" "$work_dir/$project_name/bugsinpy_requirements.txt"
+cp -f "$project_location/bugs/$bug_id/run_test.sh" "$work_dir/$project_name/bugsinpy_run_test.sh"
+rm -f "$work_dir/$project_name/bugsinpy_setup.sh"
+rm -f "$work_dir/$project_name/bugsinpy_compile_flag"
+if [[ -e "$project_location/bugs/$bug_id/setup.sh" ]]; then
+   cp -f "$project_location/bugs/$bug_id/setup.sh" "$work_dir/$project_name/bugsinpy_setup.sh"
+fi
+
+
+
