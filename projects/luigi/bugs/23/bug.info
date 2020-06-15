@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="d40c7535ddee75738febca8b5b1bf4f76975231d"
+fixed_commit_id="06a75395bd670dc2a582757e98dc3298d12a2db5"
+test_file="test/parameter_test.py"

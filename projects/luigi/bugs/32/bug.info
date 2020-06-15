@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="a822f55d4d7c5adf5b9e3b64f23189d8305e9bf9"
+fixed_commit_id="736c0f1352463c20ece84f2f651bcd37fd2b88ae"
+test_file="test/central_planner_test.py"

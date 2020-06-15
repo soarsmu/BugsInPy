@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="c3119757c9ad4141fb446554109fa09cbd31173c"
+fixed_commit_id="b3e9ad57f8502a390686957b69070105fddcfd49"
+test_file="test/hdfs_client_test.py"

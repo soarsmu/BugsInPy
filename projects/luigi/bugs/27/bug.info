@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="e8a37f8fac3f4fe8348d1e18ba1b94e3921f0b82"
+fixed_commit_id="62b6aa85375fdb150f8da0da14b834d5d2c628e6"
+test_file="test/execution_summary_test.py;test/retcodes_test.py"
