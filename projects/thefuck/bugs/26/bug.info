@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="a015c0f5e271e9e3c668a9c6a75d13f337baafd0"
+fixed_commit_id="ac7b633e288fad8f5bae06664a9cf6b90b99923a"
+test_file="tests/rules/test_apt_get.py"
