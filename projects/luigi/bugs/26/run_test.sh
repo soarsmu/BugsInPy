@@ -1,0 +1,1 @@
+pytest test/notifications_test.py::TestSMTPEmail::test_sends_smtp_email_exceptions

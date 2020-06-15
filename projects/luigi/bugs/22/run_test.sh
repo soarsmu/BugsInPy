@@ -1,0 +1,3 @@
+pytest test/task_register_test.py::TaskRegisterTest::test_externalize_taskclass
+pytest test/task_test.py::ExternalizeTaskTest::test_externalize_doesnt_affect_the_registry
+pytest test/task_test.py::ExternalizeTaskTest::test_can_uniquely_command_line_parse
