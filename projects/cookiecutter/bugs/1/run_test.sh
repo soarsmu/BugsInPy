@@ -1,0 +1,1 @@
+tox tests/test_generate_context.py::test_generate_context_decodes_non_ascii_chars
