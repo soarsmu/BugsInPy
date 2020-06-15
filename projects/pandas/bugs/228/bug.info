@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="95edcf1" 
+fixed_commit_id="3ffcc74f5464317156eda94fb89967c6fed51bb0"  
+test_file="pandas/tests/plotting/test_boxplot_method.py" 
