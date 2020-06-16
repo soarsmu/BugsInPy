@@ -1,0 +1,9 @@
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/1 (py.test spacy/tests/test_errors.py::test_add_codes)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/2 (py.test spacy/tests/regression/test_issue5137.py::test_issue5137)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/3 (py.test spacy/tests/regression/test_issue5314.py::test_issue5314)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/4 (py.test spacy/tests/regression/test_issue4665.py::test_issue4665)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/5 (py.test spacy/tests/test_language.py::test_evaluate_no_pipe)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/6 (py.test spacy/tests/lang/lb/test_text.py::test_lb_tokenizer_handles_long_text)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/7 (py.test spacy/tests/pipeline/test_analysis.py::test_analysis_validate_attrs_remove_pipe)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/8 (py.test spacy/tests/doc/test_span.py::test_filter_spans)
+PASS: 8
