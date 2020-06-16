@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="3f8c0c4" 
+fixed_commit_id="4729766172e1d9f1272c720816e8b6e1759ca2f6"  
+test_file="pandas/tests/tseries/offsets/test_offsets.py" 

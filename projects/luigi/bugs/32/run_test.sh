@@ -1,0 +1,1 @@
+pytest test/central_planner_test.py::CentralPlannerTest::test_assistants_dont_nurture_finished_statuses

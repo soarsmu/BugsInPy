@@ -1,0 +1,63 @@
+#!/bin/bash
+
+###Read the flag of checkout
+while getopts p:i:v:w: flag
+do
+    case "${flag}" in
+        w) work_dir=${OPTARG};;
+    esac
+done
+
+###Update the work directory
+if [ "$work_dir" == "" ]; then 
+   work_dir=$(pwd)
+fi
+
+if [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
+   echo "This is not a checkout project folder"
+   exit
+fi
+
+if [[ ! -e "$work_dir/bugsinpy_compile_flag" ]]; then
+   echo "You have not compile this project"
+   exit
+fi
+
+#read file run_test.sh
+run_command_all=""
+DONE=false
+until $DONE ;do
+read || DONE=true
+if [ "$REPLY" != "" ]; then
+   run_command_all+="$REPLY;"
+   echo $REPLY
+fi
+done < "$work_dir/bugsinpy_run_test.sh"
+IFS=';' read -r -a run_command <<< "$run_command_all"
+
+rm -f "$work_dir/bugsinpy_fail.txt"
+
+#run every command on the run_test.sh
+run_command_filter=""
+for index in "${!run_command[@]}"
+do
+  run_command_trail=${run_command[index]} 
+  
+  echo "RUN EVERY COMMAND"
+  echo "$index"
+  echo "$run_command_now"
+  echo "$test_file_now"
+  run_command_now=$(echo $run_command_trail | sed -e 's/\r//g')
+  
+  res_first=$($run_command_now 2>&1)
+  echo "$res_first"
+  if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* || $res_first == *"passed"* || $res_first == *"OK "* ]]; then
+     run_command_filter+="$run_command_now;"
+  else
+     fail_list+=("$temp_location ($run_command_now)")
+     fail_number=$(($fail_number + 1))
+     echo "OUTPUT AT COMMIT ID" &>>"$work_dir/bugsinpy_fail.txt"
+     echo "$run_command_now" &>>"$work_dir/bugsinpy_fail.txt"
+     echo "$res_first" &>>"$work_dir/bugsinpy_fail.txt"
+  fi
+done

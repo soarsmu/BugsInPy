@@ -1,0 +1,151 @@
+#!/bin/bash
+
+###Read the flag of checkout
+while getopts p:i:v:w: flag
+do
+    case "${flag}" in
+        w) work_dir=${OPTARG};;
+    esac
+done
+
+###Update the work directory
+if [ "$work_dir" == "" ]; then 
+   work_dir=$(pwd)
+fi
+
+###Check work directory 
+if [[ ! -e "$work_dir/bugsinpy_bug.info" ]]; then
+   echo "This is not a checkout project folder"
+   exit
+elif [[ ! -e "$work_dir/bugsinpy_requirements.txt" ]]; then
+   echo "This is not a checkout project folder"
+   exit
+elif [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
+   echo "This is not a checkout project folder"
+   exit
+fi
+
+###Remove environment if exist
+
+###Add environment
+python -m venv env
+
+###Activate environment
+source env/bin/activate
+
+###Add pythonpath
+pythonpath_set=""
+buggy_commit=""
+fix_commit=""
+
+###Read bug.info file
+DONE=false
+until $DONE ;do
+read || DONE=true
+if [[ "$REPLY" == "buggy_commit_id"* ]]; then
+   buggy_commit="$(cut -d'"' -f 2 <<< $REPLY)"
+elif [[ "$REPLY" == "fixed_commit_id"* ]]; then
+   fix_commit="$(cut -d'"' -f 2 <<< $REPLY)"
+elif [[ "$REPLY" == "test_file"* ]]; then
+   test_file_all="$(cut -d'"' -f 2 <<< $REPLY)"
+   IFS=';' read -r -a test_file <<< "$test_file_all"
+elif [[ "$REPLY" == "pythonpath"* ]]; then
+   pythonpath_all="$(cut -d'"' -f 2 <<< $REPLY)"
+   if [ "$pythonpath_all" != "" ]; then
+       temp_folder=":${folder_location}/"
+       pythonpath_set=${pythonpath_all//;/$temp_folder}
+       pythonpath_set="${folder_location}/${pythonpath_set}"
+   fi
+fi
+done < "$work_dir/bugsinpy_bug.info"
+
+###Add pythonpath
+  if [ "$pythonpath_set" != "" ]; then
+     if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+        saveReply=""
+        pythonpath_exist="NO"
+        should_change="NO"
+        DONE=false
+        until $DONE ;do
+        read || DONE=true
+        if [[ "$pythonpath_exist" == "YES" ]]; then
+            if [[ "$REPLY" != "export PYTHONPATH"* ]]; then
+               should_change="YES"
+            fi
+            pythonpath_exist="YES1"
+        fi
+        if [[ "$REPLY" == "PYTHONPATH="* ]]; then
+            pythonpath_exist="YES"
+            tes='"'
+            if [[ "$REPLY" != *"$pythonpath_set:"* ]]; then
+               should_change="YES"
+               saveReply=$REPLY
+               string1="${REPLY%:*}"
+               string2="${REPLY##*:}"
+               if [[ "$string2" == *"PYTHONPATH"* ]]; then
+                  echo "$string1:$pythonpath_set:$string2"
+               else
+                  temp="$"
+                  temp_py="PYTHONPATH"
+                  temp2=${REPLY%$tes*}
+                  echo "$temp2:$pythonpath_set:$temp$temp_py$tes"
+               fi
+            fi
+        fi 
+        done <  ~/.bashrc 
+        if [[ "$pythonpath_exist" == "NO" ]]; then
+            should_change="NO"
+            echo 'PYTHONPATH="$pythonpath_set:$PYTHONPATH"' >> ~/.bashrc 
+            echo "export PYTHONPATH" >> ~/.bashrc 
+            source ~/.bashrc
+        fi
+        if [[ "$should_change" == "YES" ]]; then
+            echo "SHOULD CHANGE"
+            sed -i.bak '/PYTHONPATH=/d' ~/.bashrc
+            if [[ "$pythonpath_exist" == "YES1" ]]; then
+                sed -i.bak '/export PYTHONPATH/d' ~/.bashrc
+            fi
+            string1="${saveReply%:*}"
+            string2="${saveReply##*:}"
+            if [[ "$string2" == *"PYTHONPATH"* ]]; then
+               echo "$string1:$pythonpath_set:$string2" >> ~/.bashrc
+            else
+               temp="$"
+               temp_py="PYTHONPATH"
+               temp2=${saveReply%$tes*}
+               echo "$temp2:$pythonpath_set:$temp$temp_py$tes" >> ~/.bashrc
+            fi
+            echo "export PYTHONPATH" >> ~/.bashrc
+            source ~/.bashrc
+        fi
+      fi
+  fi
+
+###Read setup.sh
+  run_setup_all=""
+  if [[ -f "$work_dir/bugsinpy_setup.sh" ]]; then
+    DONE=false
+    until $DONE ;do
+    read || DONE=true
+       run_setup_all+="$REPLY;"
+       echo $REPLY
+    done < "$work_dir/bugsinpy_setup.sh"
+  fi
+  
+  IFS=';' read -r -a run_setup <<< "$run_setup_all"
+
+###Run setup.sh
+pip install -r "$work_dir/bugsinpy_requirements.txt"
+for index in "${!run_setup[@]}"
+do
+   run_setup_trail=${run_setup[index]} 
+   run_setup_now=$(echo $run_setup_trail | sed -e 's/\r//g')
+   $run_setup_now
+done
+  
+###Install requirement
+pip install -r "$work_dir/bugsinpy_requirements.txt"
+
+###Add compile flag
+echo "1" > "$work_dir/bugsinpy_compile_flag"
+

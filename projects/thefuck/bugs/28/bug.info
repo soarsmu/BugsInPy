@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="ce6b82c92d78ae283cb3db001766b76f6647bc47"
+fixed_commit_id="feb36ede5c518fdc3b6eddf945b2d8b1e2294d15"
+test_file="tests/rules/test_git_push.py"

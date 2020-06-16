@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="3dcbec5" 
+fixed_commit_id="c59c2df94e5563819a824f49fa6f55636bdb4445"  
+test_file="pandas/tests/reshape/test_qcut.py" 

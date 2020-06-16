@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="da1401b" 
+fixed_commit_id="b1eb97bdfe17f477600eef19e82d65480457bbf5"  
+test_file="pandas/tests/tseries/holiday/test_calendar.py" 

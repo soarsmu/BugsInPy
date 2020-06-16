@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="5e046f72ae82788788c7e9b9354b87b131891cd8"
+fixed_commit_id="2a3707d9c3472b1a010492322b6946388d4989ae"
+test_file="lib/matplotlib/tests/test_marker.py"

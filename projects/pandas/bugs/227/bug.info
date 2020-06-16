@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="6acfc75" 
+fixed_commit_id="773f341c8cc5a481a5a222508718034457ed1ebc"  
+test_file="pandas/tests/dtypes/test_dtypes.py" 

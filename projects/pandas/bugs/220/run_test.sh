@@ -1,0 +1,1 @@
+pytest pandas/tests/groupby/test_apply.py::test_apply_datetime_issue

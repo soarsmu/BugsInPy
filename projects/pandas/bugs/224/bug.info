@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="b106108" 
+fixed_commit_id="ffe6cfdbf82d663c3f77567bde11f1666de1df38"  
+test_file="pandas/tests/plotting/test_series.py" 

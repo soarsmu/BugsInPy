@@ -1,0 +1,5 @@
+python_version="3.6.9"
+pythonpath="cookiecutter/build/lib/"
+buggy_commit_id="c15633745df6abdb24e02746b82aadb20b8cdf8c"
+fixed_commit_id="7f6804c4953a18386809f11faf4d86898570debc"
+test_file="tests/test_generate_context.py"

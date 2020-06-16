@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="7721f31" 
+fixed_commit_id="65815e6f33e25991e3d40a53c581ffb3c7daf70f"  
+test_file="pandas/tests/series/test_analytics.py" 
