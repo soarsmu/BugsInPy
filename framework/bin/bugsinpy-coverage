@@ -1,0 +1,101 @@
+#!/bin/bash
+
+###Read the flag of checkout
+while getopts p:i:v:w: flag
+do
+    case "${flag}" in
+        w) work_dir=${OPTARG};;
+    esac
+done
+
+###Update the work directory
+if [ "$work_dir" == "" ]; then 
+   work_dir=$(pwd)
+fi
+
+if [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
+   echo "This is not a checkout project folder"
+   exit
+fi
+
+if [[ ! -e "$work_dir/bugsinpy_compile_flag" ]]; then
+   echo "You have not compile this project"
+   exit
+fi
+
+###Activate environment
+source env/bin/activate
+
+pytest="0"
+#read file run_test.sh
+run_command_all=""
+DONE=false
+until $DONE ;do
+read || DONE=true
+if [ "$REPLY" != "" ]; then
+   run_command_all+="$REPLY;"
+   if [[ "$REPLY" == *"pytest"* || "$REPLY" == *"py.test"* ]]; then
+       pytest="1"
+   fi
+fi
+done < "$work_dir/bugsinpy_run_test.sh"
+IFS=';' read -r -a run_command <<< "$run_command_all"
+
+if [[ "$pytest" == "1" ]]; then
+  run_command_filter=""
+  for index in "${!run_command[@]}"
+  do
+     run_command_trail=${run_command[index]} 
+     echo "RUN EVERY COMMAND"
+     echo "$index"
+     echo "$run_command_now"
+     echo "$test_file_now"
+     run_command_now=$(echo $run_command_trail | sed -e 's/\r//g')
+  
+     coverage=$(coverage run -m "$run_command_now" 2>&1)
+     echo "coverage run -m $run_command_now" &>>"$work_dir/coverage.txt"
+     echo "$coverage" &>>"$work_dir/coverage.txt"
+  
+  done
+else
+  run_command_filter=""
+  for index in "${!run_command[@]}"
+  do
+     run_command_trail=${run_command[index]} 
+  
+     
+     run_command_now=$(echo $run_command_trail | sed -e 's/\r//g')
+     echo "RUN EVERY COMMAND"
+     echo "$index"
+     echo "$run_command_now"
+     if [[ "$run_command_now" == *"unittest"* ]]; then
+         searchstring="unittest "
+         temp_run=${run_command_now##*$searchstring}
+         run_command_now="unittest $temp_run"
+     else
+         echo "AAAA"
+         if [[ "$run_command_now" == "python -m "* ]]; then
+             searchstring="python -m "
+         else
+             searchstring="python "
+         fi 
+         echo "$searchstring"
+         temp_run=${run_command_now##*$searchstring}
+         run_command_now="unittest $temp_run"
+         echo "$run_command_now"
+     fi
+     
+     coverage=$(coverage run -m $run_command_now 2>&1)
+     echo "$coverage"
+     echo "coverage run -m $run_command_now" &>>"$work_dir/coverage_bugsinpy.txt"
+     echo "$coverage" &>>"$work_dir/coverage_bugsinpy.txt"
+
+     coverage_report=$(coverage report -m 2>&1)
+     echo "$coverage_report"
+     printf "\nCoverage Report\n" &>>"$work_dir/coverage_bugsinpy.txt"
+     echo "$coverage_report" &>>"$work_dir/coverage_bugsinpy.txt"
+     printf "\n\n" &>>"$work_dir/coverage_bugsinpy.txt"
+
+   done
+fi
+
