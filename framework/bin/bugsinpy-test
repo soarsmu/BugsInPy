@@ -13,12 +13,12 @@ if [ "$work_dir" == "" ]; then
    work_dir=$(pwd)
 fi
 
-if [[ -e "$work_dir/bugsinpy_run_test.sh" ]]; then
+if [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
    echo "This is not a checkout project folder"
    exit
 fi
 
-if [[ -e "$work_dir/bugsinpy_compile_flag" ]]; then
+if [[ ! -e "$work_dir/bugsinpy_compile_flag" ]]; then
    echo "You have not compile this project"
    exit
 fi
