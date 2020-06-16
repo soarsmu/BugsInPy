@@ -1,4 +1,16 @@
 #!/bin/bash
+usage="-w work_dir
+             The working directory to compile the project. Default will be the current directory.
+"
+
+case $1 in
+ -[h?] | --help)
+    cat <<-____HALP
+        Usage: ${0##*/} [ --help ]
+        $usage
+____HALP
+        exit 0;;
+esac
 
 ###Read the flag of checkout
 while getopts p:i:v:w: flag
@@ -26,6 +38,8 @@ elif [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
 fi
 
 ###Remove environment if exist
+deactivate
+rm -r env/
 
 ###Add environment
 python -m venv env
