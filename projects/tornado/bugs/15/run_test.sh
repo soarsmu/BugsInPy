@@ -1,1 +1,1 @@
-python -m unittest -q tornado.test.web_test.GzipTestCase.test_vary_already_present_multiple
+python -m unittest -q tornado.test.auth_test.AuthTest.test_facebook_login
