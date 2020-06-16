@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="a76df79" 
+fixed_commit_id="b1c871ce4b5e76b3cffe1ebd4216d36379872352"  
+test_file="pandas/tests/series/test_alter_axes.py" 

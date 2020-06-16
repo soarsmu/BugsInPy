@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="69c58da" 
+fixed_commit_id="e55b6980fd5c99087d0959952b22e74434e9f5e2"  
+test_file="pandas/tests/plotting/test_converter.py" 

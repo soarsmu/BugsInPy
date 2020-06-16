@@ -1,0 +1,1 @@
+pytest pandas/tests/series/test_operators.py::TestSeriesLogicalOps::test_logical_ops_bool_dtype_with_ndarray 

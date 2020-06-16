@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="6110608" 
+fixed_commit_id="5a227a410c520ceec2d94369a44e2ab774a40dc3"  
+test_file="pandas/tests/arrays/test_numpy.py" 

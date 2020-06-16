@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="42d6ee7" 
+fixed_commit_id="05cc95971e56b503d4df9911a44cd60a7b74cc79"  
+test_file="pandas/tests/sparse/frame/test_frame.py" 

@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="e4c4b78" 
+fixed_commit_id="32b47102aa95da5a68ef9939c0e9429269ced016"  
+test_file="pandas/tests/plotting/test_datetimelike.py" 

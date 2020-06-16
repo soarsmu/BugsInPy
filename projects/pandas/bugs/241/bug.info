@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="2d65e38" 
+fixed_commit_id="820072a0f9bccdfbfb11fe82caf60adb9fad1323"  
+test_file="pandas/tests/groupby/test_function.py" 

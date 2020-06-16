@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="4252ab7" 
+fixed_commit_id="0bde7cedf46209a9fd4fa8c7f9fbce8b49aa78cd"  
+test_file="pandas/tests/window/test_rolling.py" 
