@@ -45,6 +45,8 @@ fi
 
 if [ "$version_id" == "" ]; then 
    version_id=1
+elif [[ "$version_id" != "1" || "$version_id" != "0" ]]; then 
+   version_id=1
 fi
 
 if [ "$work_dir" == "" ]; then 
@@ -136,28 +138,53 @@ done < bug.info
 cd "$work_dir/$project_name"
 git reset --hard "$fix_commit"
 
-if [ $version_id == 0 ]; then
-   ###copy test file from project to temp
-   for index in "${!test_file[@]}"
-   do
-      test_file_now=${test_file[index]}
-      cp -v "$work_dir/$project_name/$test_file_now" "$project_location/bugs/$bug_id"
-   done
-   
-   cd "$work_dir/$project_name"
-   git reset --hard "$buggy_commit"
-   git clean -f -d
+if [ $version_id == 1 ]; then
+   check_file=$(git show --name-only 2>&1)
+   change_file_all=""
+   while IFS= read -r line; do
+       if [ "$line" != "" ]; then
+           if [[ -e "$work_dir/$project_name/$line" ]]; then
+               change_file_all+="$line;"
+               cp -v "$work_dir/$project_name/$line" "$project_location/bugs/$bug_id"
+           fi
+       fi
+   done <<< "$check_file"
+   IFS=';' read -r -a change_file <<< "$change_file_all"
+fi
 
-   ###Copy test file from fixed to buggy
-   for index in "${!test_file[@]}"
+###copy test file from project to temp
+for index in "${!test_file[@]}"
+do
+   test_file_now=${test_file[index]}
+   cp -v "$work_dir/$project_name/$test_file_now" "$project_location/bugs/$bug_id"
+done
+   
+cd "$work_dir/$project_name"
+git reset --hard "$buggy_commit"
+git clean -f -d
+
+###Copy test file from fixed to buggy
+for index in "${!test_file[@]}"
+do
+   test_file_now=${test_file[index]}
+   string1="${test_file_now%/*}"
+   string2="${test_file_now##*/}"
+   mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
+done
+
+###Copy other change file from fixed to buggy if version is fixed commit
+if [ $version_id == 1 ]; then
+   ###Copy change file from fixed to buggy
+   for index in "${!change_file[@]}"
    do
-      test_file_now=${test_file[index]}
-      string1="${test_file_now%/*}"
-      string2="${test_file_now##*/}"
-      mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
+      change_file_now=${change_file[index]}
+      string1="${change_file_now%/*}"
+      string2="${change_file_now##*/}"
+      if [[ -e "$project_location/bugs/$bug_id/$string2" ]]; then
+          mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
+      fi
    done
 fi
-###Copy other change file from fixed to buggy if version is fixed commit
 
 
 ###Move information about bug to clone project folder
