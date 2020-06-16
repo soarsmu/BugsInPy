@@ -1,0 +1,7 @@
+/c/code/RA/BugsInPy/projects/matplotlib/bugs/1 (pytest lib/matplotlib/tests/test_bbox_tight.py::test_noop_tight_bbox)
+/c/code/RA/BugsInPy/projects/matplotlib/bugs/2 (pytest lib/matplotlib/tests/test_colors.py::test_same_color)
+/c/code/RA/BugsInPy/projects/matplotlib/bugs/3 (pytest lib/matplotlib/tests/test_axes.py::TestScatter::test_scatter_unfilled)
+/c/code/RA/BugsInPy/projects/matplotlib/bugs/4 (pytest lib/matplotlib/tests/test_marker.py::test_marker_fillstyle)
+/c/code/RA/BugsInPy/projects/matplotlib/bugs/5 (pytest lib/matplotlib/tests/test_axes.py::test_vlines_default)
+/c/code/RA/BugsInPy/projects/matplotlib/bugs/6 (pytest lib/matplotlib/tests/test_axes.py::TestScatter::test_scatter_linewidths)
+PASS: 6

@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="c404d1f716e8aaefd4d7371ff49673e9c1f7f07c"
+fixed_commit_id="5324adaec6a7fd3d78dea7b28451d5f6e95392a6"
+test_file="lib/matplotlib/tests/test_bbox_tight.py"

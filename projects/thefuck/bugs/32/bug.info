@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="4c2fc490f280ca3921785d8f58a37274ced35ce6"
+fixed_commit_id="ca787a1cba3cc9b26b43919c5e60acb40ebcd919"
+test_file="tests/rules/test_no_command.py"
