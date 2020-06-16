@@ -133,7 +133,7 @@ fi
 done < bug.info
 
 ###Reset head to version id
-cd "$work_dir"
+cd "$work_dir/$project_name"
 git reset --hard "$fix_commit"
 
 if [ $version_id == 0 ]; then
@@ -144,7 +144,7 @@ if [ $version_id == 0 ]; then
       cp -v "$work_dir/$project_name/$test_file_now" "$project_location/bugs/$bug_id"
    done
    
-   cd "$work_dir"
+   cd "$work_dir/$project_name"
    git reset --hard "$buggy_commit"
    git clean -f -d
 
