@@ -73,7 +73,6 @@ else
          temp_run=${run_command_now##*$searchstring}
          run_command_now="unittest $temp_run"
      else
-         echo "AAAA"
          if [[ "$run_command_now" == "python -m "* ]]; then
              searchstring="python -m "
          else

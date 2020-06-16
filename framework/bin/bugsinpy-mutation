@@ -1,0 +1,52 @@
+#!/bin/bash
+
+###Read the flag of checkout
+while getopts t:u:w: flag
+do
+    case "${flag}" in
+        w) work_dir=${OPTARG};;
+        t) target=${OPTARG};;
+        u) unit=${OPTARG};;
+    esac
+done
+
+###Update the work directory
+if [ "$work_dir" == "" ]; then 
+   work_dir=$(pwd)
+fi
+
+if [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
+   echo "This is not a checkout project folder"
+   exit
+fi
+
+if [[ ! -e "$work_dir/bugsinpy_compile_flag" ]]; then
+   echo "You have not compile this project"
+   exit
+fi
+
+
+###Activate environment
+source env/bin/activate
+
+pytest="unittest"
+#read file run_test.sh
+run_command_all=""
+DONE=false
+until $DONE ;do
+read || DONE=true
+if [ "$REPLY" != "" ]; then
+   run_command_all+="$REPLY;"
+   if [[ "$REPLY" == *"pytest"* || "$REPLY" == *"py.test"* ]]; then
+       pytest="pytest"
+   fi
+fi
+done < "$work_dir/bugsinpy_run_test.sh"
+IFS=';' read -r -a run_command <<< "$run_command_all"
+
+
+mutation=$(mut.py --target $target --unit-test $unit --runner $pytest -m 2>&1)
+echo "$mutation"
+echo "mut.py --target $target --unit-test $unit --runner $pytest -m" &>>"$work_dir/mutation_bugsinpy.txt"
+echo "$mutation" &>>"$work_dir/mutation_bugsinpy.txt"
+
