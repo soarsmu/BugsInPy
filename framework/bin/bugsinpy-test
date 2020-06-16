@@ -1,10 +1,36 @@
 #!/bin/bash
 
+usage="-w work_dir
+             The working directory to run the test. Default will be the current directory.
+       -t single_test
+             Run single test from input. Default will run the test case that relevant from bugs. Format for pytest: <test_file_path>::<test_method>. Format for unittest: <test_file_path_without.py>.<test_class>.<test_method> . Use bugsinpy-info to get the information about the project.
+       -a
+             Run all test case in the project. Default will run the test case that relevant from bugs
+       -r
+             Run the test case that relevant from bugs (Default)
+"
+
+
+run_all="0"
+relevant="0"
+case $1 in
+ -[h?] | --help)
+    cat <<-____HALP
+        Usage: ${0##*/} [ --help ]
+        $usage
+____HALP
+        exit 0;;
+ -a) run_all="1";;
+ -r) relevant="1";;
+esac
+
+single_test=""
 ###Read the flag of checkout
-while getopts p:i:v:w: flag
+while getopts t:w: flag
 do
     case "${flag}" in
         w) work_dir=${OPTARG};;
+        t) single_test=${OPTARG};;
     esac
 done
 
@@ -23,9 +49,15 @@ if [[ ! -e "$work_dir/bugsinpy_compile_flag" ]]; then
    exit
 fi
 
+if [[ "$relevant" == "1" ]]; then
+   run_all="0"
+   single_test=""
+fi
+
 ###Activate environment
 source env/bin/activate
 
+pytest="0"
 #read file run_test.sh
 run_command_all=""
 DONE=false
@@ -33,6 +65,9 @@ until $DONE ;do
 read || DONE=true
 if [ "$REPLY" != "" ]; then
    run_command_all+="$REPLY;"
+   if [[ "$REPLY" == *"pytest"* || "$REPLY" == *"py.test"* ]]; then
+       pytest="1"
+   fi
    echo $REPLY
 fi
 done < "$work_dir/bugsinpy_run_test.sh"
@@ -40,27 +75,95 @@ IFS=';' read -r -a run_command <<< "$run_command_all"
 
 rm -f "$work_dir/bugsinpy_fail.txt"
 
-#run every command on the run_test.sh
-run_command_filter=""
-for index in "${!run_command[@]}"
-do
-  run_command_trail=${run_command[index]} 
+if [[ "$run_all" == "0" && "$single_test" == "" ]]; then
+   #run every command on the run_test.sh
+   run_command_filter=""
+   for index in "${!run_command[@]}"
+   do
+     run_command_trail=${run_command[index]} 
   
-  echo "RUN EVERY COMMAND"
-  echo "$index"
-  echo "$run_command_now"
-  echo "$test_file_now"
-  run_command_now=$(echo $run_command_trail | sed -e 's/\r//g')
+     echo "RUN EVERY COMMAND"
+     echo "$index"
+     echo "$run_command_now"
+     echo "$test_file_now"
+     run_command_now=$(echo $run_command_trail | sed -e 's/\r//g')
   
-  res_first=$($run_command_now 2>&1)
-  echo "$res_first"
-  if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* || $res_first == *"passed"* || $res_first == *"OK "* ]]; then
-     run_command_filter+="$run_command_now;"
+     res_first=$($run_command_now 2>&1)
+     echo "$res_first"
+     if [[ ${res_first##*$'\n'} == *"OK"* || ${res_first##*$'\n'} == *"pass"* || $res_first == *"passed"* || $res_first == *"OK "* ]]; then
+        run_command_filter+="$run_command_now;"
+     else
+        echo "$run_command_now" &>>"$work_dir/bugsinpy_fail.txt"
+        echo "$res_first" &>>"$work_dir/bugsinpy_fail.txt"
+     fi
+   done
+
+elif [[ "$run_all" == "1" ]]; then
+  if [[ "$pytest" == "1" ]]; then
+     res_first=$(pytest 2>&1)
+     echo "$res_first"
+     echo "pytest" &>>"$work_dir/bugsinpy_alltest.txt"
+     echo "$res_first" &>>"$work_dir/bugsinpy_alltest.txt"
   else
-     fail_list+=("$temp_location ($run_command_now)")
-     fail_number=$(($fail_number + 1))
-     echo "OUTPUT AT COMMIT ID" &>>"$work_dir/bugsinpy_fail.txt"
-     echo "$run_command_now" &>>"$work_dir/bugsinpy_fail.txt"
-     echo "$res_first" &>>"$work_dir/bugsinpy_fail.txt"
+     echo "Run Unittest" 
+     ###Read bug.info file
+     DONE=false
+     until $DONE ;do
+     read || DONE=true
+     if [[ "$REPLY" == "test_file"* ]]; then
+        test_file_all="$(cut -d'"' -f 2 <<< $REPLY)"
+        IFS=';' read -r -a test_file <<< "$test_file_all"
+        test_file_now=${test_file[0]}
+     fi
+     done < "$work_dir/bugsinpy_bug.info"
+
+     echo "$test_file_now"
+     stop_loop_test="0"
+     access_test=""
+     if [[ "$test_file_now" != "" ]]; then
+        IFS='/' read -r -a test_file_ex <<< "$test_file_now"
+     fi
+     
+     
+
+     for index in "${!test_file_ex[@]}"
+     do
+     test_file_temp=${test_file_ex[index]}
+     if [[ "$stop_loop_test" == "0" ]]; then
+        if [[ "$test_file_temp" == *".py"* ]]; then
+           stop_loop_test="1"
+        else
+           if [[ "$test_file_temp" == "test" || "$test_file_temp" == "tests" ]]; then
+              stop_loop_test="1"
+           fi 
+           access_test+="$test_file_temp/"
+        fi
+     fi
+     done
+
+     echo "$access_test"
+     echo "python -m unittest discover $access_test"
+     res_first=$(python -m unittest discover $access_test 2>&1)
+     #python -m unittest
+     echo "$res_first"
+     echo "python -m unittest discover $access_test" &>>"$work_dir/bugsinpy_alltest.txt"
+     echo "$res_first" &>>"$work_dir/bugsinpy_alltest.txt"
+
   fi
-done
+
+elif [ "$single_test" != "" ]; then
+  if [[ "$pytest" == "1" ]]; then
+     res_first=$(pytest $single_test 2>&1)
+     echo "$res_first"
+     echo "pytest $single_test" &>>"$work_dir/bugsinpy_singletest.txt"
+     echo "$res_first" &>>"$work_dir/bugsinpy_singletest.txt"
+  else
+     res_first=$(python -m unittest -q $single_test 2>&1)
+     echo "$res_first"
+     echo "python -m unittest -q $single_test" &>>"$work_dir/bugsinpy_singletest.txt"
+     echo "$res_first" &>>"$work_dir/bugsinpy_singletest.txt"
+  fi
+fi
+
+###Deactivate the environment
+deactivate
