@@ -23,6 +23,9 @@ if [[ ! -e "$work_dir/bugsinpy_compile_flag" ]]; then
    exit
 fi
 
+###Activate environment
+source env/bin/activate
+
 #read file run_test.sh
 run_command_all=""
 DONE=false
