@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="0a6a3db65d2fc480c5b2f1135137f34c9f06b742"
+fixed_commit_id="280751b36e715b006c631ba6c08de99ccc74f6d2"
+test_file="tests/rules/test_dirty_unzip.py"

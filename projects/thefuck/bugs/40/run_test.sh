@@ -1,0 +1,1 @@
+pytest tests/rules/test_dirty_unzip.py::test_get_new_command

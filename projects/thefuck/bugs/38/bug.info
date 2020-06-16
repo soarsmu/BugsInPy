@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="b65a9a0a4fd9bef394b45a1d367d29aa1e1c403e"
+fixed_commit_id="c3b1ba763708b8faaaf55717c436c4cd4c57a7ea"
+test_file="tests/rules/test_sudo.py"
