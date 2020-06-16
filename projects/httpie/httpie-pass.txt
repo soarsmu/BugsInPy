@@ -1,0 +1,10 @@
+/d/Research/BugsInPy/projects/httpie/bugs/1 (pytest tests/test_config.py::test_config_dir_not_writeable)
+/d/Research/BugsInPy/projects/httpie/bugs/2 (pytest tests/test_downloads.py::TestDownloadUtils::test_unique_filename)
+/d/Research/BugsInPy/projects/httpie/bugs/3 (pytest tests/test_redirects.py::TestRedirects::test_max_redirects)
+/d/Research/BugsInPy/projects/httpie/bugs/4 (pytest tests/test_sessions.py::TestSession::test_download_in_session)
+/d/Research/BugsInPy/projects/httpie/bugs/5 (pytest tests/test_regressions.py::test_Host_header_overwrite)
+/d/Research/BugsInPy/projects/httpie/bugs/6 (pytest tests/test_uploads.py::TestMultipartFormDataFileUpload::test_upload_multiple_fields_with_the_same_name)
+/d/Research/BugsInPy/projects/httpie/bugs/7 (pytest tests/test_auth.py::TestAuth::test_only_username_in_url)
+/d/Research/BugsInPy/projects/httpie/bugs/8 (pytest tests/tests.py::ItemParsingTest::test_valid_items)
+/d/Research/BugsInPy/projects/httpie/bugs/9 (pytest tests/tests.py::TestItemParsing::test_escape_longsep)
+PASS: 9
