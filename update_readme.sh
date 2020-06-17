@@ -30,12 +30,12 @@ my_function () {
      fi
      only_name="${check_name_all#*	}"
      if [[ $only_name != "" ]]; then
-       echo "PRINT NAME"
-       echo $only_name
+       #echo "PRINT NAME"
+       #echo $only_name
        all_bugs=$((all_bugs + add))
        if [[ ${count_all[only_name]+abc} == "abc" ]]; then
           temp=count_all[$only_name]
-          echo "$temp"
+          #echo "$temp"
           num=$((temp + add))
           count_all[$only_name]=$num
        else
@@ -57,11 +57,11 @@ my_function () {
      fi
      only_name="${check_name_all_week#*	}"
      if [[ $only_name != "" ]]; then
-       echo "PRINT NAME WEEK"
-       echo $only_name
+       #echo "PRINT NAME WEEK"
+       #echo $only_name
        if [[ ${count_all_week[only_name]+abc} == "abc" ]]; then
           temp=count_all_week[$only_name]
-          echo "$temp"
+          #echo "$temp"
           num=$((temp + add))
           count_all_week[$only_name]=$num
        else
@@ -76,6 +76,7 @@ my_function () {
   if [[ -f "$var-pass.txt" ]]; then
     pass=0
     pass_all=0
+    check=0
     logAll=""
     DONE=false
     until $DONE ;do
@@ -83,16 +84,24 @@ my_function () {
        if [[ "$REPLY" != "PASS:"* && "$REPLY" != "" ]]; then
            echo "$REPLY"
            folder="$(cut -d'(' -f 1 <<< $REPLY)"
+           echo "$folder"
            string2="${folder##*/}"
            string3="$(cut -d' ' -f 1 <<< $string2)"
-           if [[ $logAll != *"$string3"* ]]; then 
+           if [[ $logAll != *";$string3;"* ]]; then 
+               if [[ $logAll != "$string3;" ]]; then
                logAll+="$string3;"
+               check=$((check+add))
+               echo "$string3"
+               fi
            fi
        fi
     done < "$var-pass.txt"
+
+    echo "$check"
     IFS=';' read -r -a log <<< "$logAll"
     for index in "${log[@]}"
     do
+       echo "$index"
        check_name=$(git shortlog -sn "bugs/$index/run_test.sh" 2>&1 | head -n 1)
        if [[ $check_name == "fatal: "* ]]; then
            check_name=$(git shortlog -sn "bugs/$index/requirements.txt" 2>&1 | head -n 1)
@@ -103,14 +112,16 @@ my_function () {
        if [[ $check_name == "fatal: "* ]]; then
            check_name=""
        fi
-       echo "$check_name"
        if [[ $check_name != "" ]]; then
            only_name="${check_name#*	}"
+           #echo "$only_name"
            temp=count[$only_name]
-           echo "$temp"
+           #echo "$temp"
            num=$((temp + add))
            count[$only_name]=$num
            pass_all=$((pass_all + add))
+           #echo "$num"
+           #echo "$pass_all"
        fi
 
        check_name=$(git shortlog -sn --since="$lastweek" "bugs/$index/run_test.sh" 2>&1 | head -n 1)
@@ -123,11 +134,11 @@ my_function () {
        if [[ $check_name == "fatal: "* ]]; then
            check_name=""
        fi
-       echo "$check_name"
+       #echo "$check_name"
        if [[ $check_name != "" ]]; then
            only_name="${check_name#*	}"
            temp=count_week[$only_name]
-           echo "$temp"
+           #echo "$temp"
            num=$((temp + add))
            count_week[$only_name]=$num
            pass=$((pass + add))
@@ -190,10 +201,8 @@ do
   if [[ $now != $maxNumber ]]; then
   string1="$(cut -d':' -f 1 <<< $index)"
   string2="${index#*:}"
-  string3="0"
-  if [[ ${count[string2]+abc} == "abc" ]]; then
-     string3="${count[$string2]}"
-  fi
+  string3="${count[$string2]}"
+  string3=$((string3 + 0))
   echo "$string1"
   echo "$string2"
   echo "$string3"
@@ -214,10 +223,8 @@ do
   string2="${index#*:}"
   echo "$string1"
   echo "$string2"
-  string3="0"
-  if [[ ${count_week[string2]+abc} == "abc" ]]; then
-     string3="${count_week[$string2]}"
-  fi
+  string3="${count_week[$string2]}"
+  string3=$((string3 + 0))
   echo "$string2 | $string1 | $string3" >> README.md
   now=$((now+add))
   fi
