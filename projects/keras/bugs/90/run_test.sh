@@ -1,0 +1,1 @@
+pytest tests/keras/test_callbacks.py::test_EarlyStopping_patience

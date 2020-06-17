@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="ce4947cbaf380589a63def4cc6eb3e460c41254f"
+fixed_commit_id="eec5da20be0eddb926a74f2c8ef6e690ccf98336"
+test_file="tests/keras/losses_test.py"

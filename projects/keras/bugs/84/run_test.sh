@@ -1,0 +1,2 @@
+pytest tests/keras/losses_test.py::test_serializing_model_with_loss_class
+pytest tests/keras/losses_test.py::test_serializing_loss_class

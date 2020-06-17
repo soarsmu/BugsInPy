@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="3c69f986f7e3d5fe5cb5dda34329a67e3ec187d1"
+fixed_commit_id="3f148e40e1dd9b95c4cd2dd0d182b8729729a5c0"
+test_file="tests/keras/layers/recurrent_test.py"
