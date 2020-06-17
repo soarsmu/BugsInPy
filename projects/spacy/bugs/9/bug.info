@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="fa95c030a511337935d1a2e930cb954c7a4cd376"
+fixed_commit_id="5efae495f18f37316bd641a05ca26e62cb78e242"
+test_file="spacy/tests/matcher/test_matcher_logic.py"

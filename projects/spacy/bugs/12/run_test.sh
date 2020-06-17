@@ -1,0 +1,1 @@
+py.test spacy/tests/pipeline/test_pipe_methods.py::test_pipe_labels

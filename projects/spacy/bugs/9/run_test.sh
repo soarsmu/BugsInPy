@@ -1,0 +1,1 @@
+py.test spacy/tests/matcher/test_matcher_logic.py::test_matcher_remove

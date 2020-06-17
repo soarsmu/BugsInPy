@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="38de08c7a99d5d8c490223126071afe7dd4f4b67"
+fixed_commit_id="52904b72700a3f301a26563d3f94493bad96a446"
+test_file="spacy/tests/matcher/test_matcher_api.py"

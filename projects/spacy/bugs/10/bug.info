@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="bc7e7db208d351fae2982afbcdff7633f9636779"
+fixed_commit_id="3297a19545027c8d8550b1ae793ce290567eff32"
+test_file="spacy/tests/pipeline/test_tagger.py"
