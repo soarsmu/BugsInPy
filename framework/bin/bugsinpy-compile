@@ -49,6 +49,7 @@ source env/bin/activate
 
 ###Add pythonpath
 pythonpath_set=""
+pythonpath_without_folder=""
 buggy_commit=""
 fix_commit=""
 
