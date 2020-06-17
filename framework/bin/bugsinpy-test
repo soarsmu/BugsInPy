@@ -74,6 +74,8 @@ done < "$work_dir/bugsinpy_run_test.sh"
 IFS=';' read -r -a run_command <<< "$run_command_all"
 
 rm -f "$work_dir/bugsinpy_fail.txt"
+rm -f "$work_dir/bugsinpy_alltest.txt"
+rm -f "$work_dir/bugsinpy_singletest.txt"
 
 if [[ "$run_all" == "0" && "$single_test" == "" ]]; then
    #run every command on the run_test.sh

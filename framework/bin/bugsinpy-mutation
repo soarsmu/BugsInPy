@@ -84,11 +84,13 @@ fi
 done < "$work_dir/bugsinpy_run_test.sh"
 IFS=';' read -r -a run_command <<< "$run_command_all"
 
+rm -f "$work_dir/bugsinpy_mutation.txt"
+
 if [[ "$relevant" == "0" ]]; then
    mutation=$(python mut_bugsinpy.py --target $target --unit-test $unit --runner $pytest -m 2>&1)
    echo "$mutation"
-   echo "python mut_bugsinpy.py --target $target --unit-test $unit --runner $pytest -m" &>>"$work_dir/mutation_bugsinpy.txt"
-   echo "$mutation" &>>"$work_dir/mutation_bugsinpy.txt"
+   echo "python mut_bugsinpy.py --target $target --unit-test $unit --runner $pytest -m" &>>"$work_dir/bugsinpy_mutation.txt"
+   echo "$mutation" &>>"$work_dir/bugsinpy_mutation.txt"
 else
    ###Read bug.info file
    DONE=false
@@ -127,8 +129,8 @@ else
          echo "$test_now"
          mutation=$(python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m 2>&1)
          echo "$mutation"
-         echo "python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m" &>>"$work_dir/mutation_bugsinpy.txt"
-         echo "$mutation" &>>"$work_dir/mutation_bugsinpy.txt"
+         echo "python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m" &>>"$work_dir/bugsinpy_mutation.txt"
+         echo "$mutation" &>>"$work_dir/bugsinpy_mutation.txt"
       done
    done
    

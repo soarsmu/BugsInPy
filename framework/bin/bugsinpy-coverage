@@ -53,6 +53,10 @@ if [[ "$relevant" == "1" ]]; then
    single_test=""
 fi
 
+rm -f "$work_dir/coverage_bugsinpy.txt"
+rm -f "$work_dir/coverage_singletest_bugsinpy.txt"
+rm -f "$work_dir/coverage_alltest_bugsinpy.txt"
+
 ###Activate environment
 source env/bin/activate
 
@@ -226,7 +230,6 @@ elif [ "$single_test" != "" ]; then
      printf "\n\n" &>>"$work_dir/coverage_singletest_bugsinpy.txt"
   fi
 fi
-
 
 ###Deactivate the environment
 deactivate
