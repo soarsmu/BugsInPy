@@ -97,11 +97,18 @@ else
    for index in "${!patch_file[@]}"
    do
       patch_trail=${patch_file[index]} 
-      patch_now=$(echo $patch_trail | sed -e 's/\r//g')
+      patch_temp=$(echo $patch_trail | sed -e 's/\r//g')
+      suffix=".py"
+      patch_py=${patch_temp%"$suffix"}
+      patch_now=$(echo $patch_py | tr '/' '.')
       for index_test in "${!test_file[@]}"
       do
          test_trail=${test_file[index_test]} 
-         test_now=$(echo $test_trail | sed -e 's/\r//g')
+         test_temp=$(echo $test_trail | sed -e 's/\r//g')
+         test_py=${test_temp%"$suffix"}
+         test_now=$(echo $test_py | tr '/' '.')
+         echo "$patch_now"
+         echo "$test_now"
          mutation=$(mut.py --target $patch_now --unit-test $test_now --runner $pytest -m 2>&1)
          echo "$mutation"
          echo "mut.py --target $patch_now --unit-test $test_now --runner $pytest -m" &>>"$work_dir/mutation_bugsinpy.txt"
