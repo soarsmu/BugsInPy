@@ -84,9 +84,9 @@ if [[ "$pytest" == "1" ]]; then
      echo "$test_file_now"
      run_command_now=$(echo $run_command_trail | sed -e 's/\r//g')
   
-     coverage=$(coverage run -m "$run_command_now" 2>&1)
-     echo "coverage run -m $run_command_now" &>>"$work_dir/coverage.txt"
-     echo "$coverage" &>>"$work_dir/coverage.txt"
+     coverage=$(coverage run -m $run_command_now 2>&1)
+     echo "coverage run -m $run_command_now" &>>"$work_dir/coverage_bugsinpy.txt"
+     echo "$coverage" &>>"$work_dir/coverage_bugsinpy.txt"
   
      coverage_report=$(coverage report -m 2>&1)
      echo "$coverage_report"
