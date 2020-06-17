@@ -39,7 +39,7 @@ fi
 
 ###Remove environment if exist
 deactivate
-rm -r env/
+rm -r -f env/
 
 ###Add environment
 python -m venv env
