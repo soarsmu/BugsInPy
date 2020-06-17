@@ -1,0 +1,31 @@
+#!/bin/bash
+
+usage="bugsinpy-fuzz <project source directory> <bug directory>"
+if [ $# -eq 0 ]
+  then
+    echo $usage
+    exit -1
+fi
+
+
+if [ ! -f $2/fuzz_target.py ]; then
+
+    echo "Did not find any fuzzing script that execises the function containing the fix for this bug."
+
+else
+	source env/bin/activate
+
+    pip install pythonfuzz==1.0.3
+
+    # move the fuzz_target.py file into the project's source directory as it needs to use functions from the project
+    cp $2/fuzz_target.py $1
+
+    # run the fuzzer for just 1 minutes! 
+    # For a real project, the fuzzer may be run for days but here, we run just an example.
+    timeout 1m python $1/fuzz_target.py
+
+    rm $1/fuzz_target.py
+
+    deactivate
+fi
+
