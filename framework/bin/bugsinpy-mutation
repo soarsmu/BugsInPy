@@ -1,4 +1,25 @@
 #!/bin/bash
+usage="-w work_dir
+             The working directory to run the test. Default will be the current directory.
+       -t target
+             Target module or package to mutate. Default will be run mutation from test case and target that relevant from bugs.
+       -u unit_test
+             Test class, test method, module or package with unit tests. Default will be run mutation from test case and target that relevant from bugs.
+       -r
+             Run mutation from test case and target that relevant from bugs (Default)
+"
+
+
+relevant="0"
+case $1 in
+ -[h?] | --help)
+    cat <<-____HALP
+        Usage: ${0##*/} [ --help ]
+        $usage
+____HALP
+        exit 0;;
+ -r) relevant="1";;
+esac
 
 ###Read the flag of checkout
 while getopts t:u:w: flag
