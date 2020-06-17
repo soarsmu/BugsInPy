@@ -29,9 +29,14 @@
 /c/Fiona/youtube-dl/youtube-dl/bugs/35 (python test/test_utils.py TestUtil.test_js_to_json_realworld)
 /c/Fiona/youtube-dl/youtube-dl/bugs/36 (python test/test_utils.py TestUtil.test_js_to_json_realworld)
 /c/Fiona/youtube-dl/youtube-dl/bugs/37 (python test/test_utils.py TestUtil.test_js_to_json_edgecases)
+/c/Fiona/youtube-dl/youtube-dl/bugs/38 (python test/test_utils.py TestUtil.test_parse_dfxp_time_expr)
+/c/Fiona/youtube-dl/youtube-dl/bugs/39 (python test/test_utils.py TestUtil.test_unescape_html)
 /c/Fiona/youtube-dl/youtube-dl/bugs/4 (python test/test_jsinterp.py TestJSInterpreter.test_call)
+/c/Fiona/youtube-dl/youtube-dl/bugs/40 (python test/test_utils.py TestUtil.test_unified_dates)
+/c/Fiona/youtube-dl/youtube-dl/bugs/41 (python test/test_YoutubeDL.py TestFormatSelection.test_format_filtering)
+/c/Fiona/youtube-dl/youtube-dl/bugs/42 (python test/test_utils.py TestUtil.test_parse_duration)
 /c/Fiona/youtube-dl/youtube-dl/bugs/6 (python test/test_utils.py TestUtil.test_unified_timestamps)
 /c/Fiona/youtube-dl/youtube-dl/bugs/7 (python test/test_YoutubeDL.py TestFormatSelection.test_format_not_available)
 /c/Fiona/youtube-dl/youtube-dl/bugs/8 (python test/test_utils.py TestUtil.test_parse_dfxp_time_expr)
 /c/Fiona/youtube-dl/youtube-dl/bugs/9 (python test/test_utils.py TestUtil.test_js_to_json_realworld)
-PASS: 36
+PASS: 41

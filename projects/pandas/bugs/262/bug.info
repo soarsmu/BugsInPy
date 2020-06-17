@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="4056ded" 
+fixed_commit_id="d44fb07063e9a8bd8a209ddce35b40d8a56c8d02"  
+test_file="pandas/tests/frame/test_join.py" 

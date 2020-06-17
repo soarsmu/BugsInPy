@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="3b96ada" 
+fixed_commit_id="ba31de37d48f4627de7ac4eba27f73bda5879194"  
+test_file="pandas/tests/io/formats/test_format.py" 
