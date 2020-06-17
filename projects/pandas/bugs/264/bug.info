@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="6af6d51" 
+fixed_commit_id="226398224d260d908a1f3d0f23c16fa9ffc8f9b0"  
+test_file="pandas/tests/indexes/datetimes/test_partial_slicing.py" 
