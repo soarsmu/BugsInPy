@@ -1,14 +1,73 @@
 #!/bin/bash
+usage="-p project_name
+             The name of the project from bugsinpy.
+        -i bug_id
+             The bug number from project in bugsinpy.
+        -w work_dir
+             The working directory that the project has been checked out. Default will be the current directory.
+"
 
-usage="bugsinpy-fuzz <project source directory> <bug directory>"
-if [ $# -eq 0 ]
-  then
-    echo $usage
-    exit -1
+case $1 in
+ -[h?] | --help)
+    cat <<-____HALP
+        Usage: ${0##*/} [ --help ]
+        $usage
+____HALP
+        exit 0;;
+esac
+
+###Read the flag of checkout
+while getopts p:i:w: flag
+do
+    case "${flag}" in
+        p) project_name=${OPTARG};;
+        i) bug_id=${OPTARG};;
+        w) work_dir=${OPTARG};;
+    esac
+done
+
+###Project name and bug id are mandatory
+if [ "$project_name" == "" ]; then 
+   echo "Please input project name"
+   exit
 fi
 
+if [ "$bug_id" == "" ]; then 
+   echo "Please input bug id"
+   exit
+fi
 
-if [ ! -f $2/fuzz_target.py ]; then
+if [ "$work_dir" == "" ]; then 
+   work_dir=$(pwd)
+fi
+
+###Get the location of dataset
+framework_location="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$framework_location"
+cd ..
+cd ..
+bugsinpy_location=$(pwd)
+project_location="$bugsinpy_location/projects/$project_name"
+
+###Check if project exist
+project_location="$bugsinpy_location/projects/$project_name"
+if [ ! -d "$project_location" ]; then
+  echo "Project $project_name does not exist, please check the project name"
+  exit
+fi
+
+###Check if bug exist
+if [ ! -d "$project_location/bugs/$bug_id" ]; then
+  echo "Bug number $bug_id does not exist, please check the bug id"
+  exit
+fi
+
+bug_location="$project_location/bugs/$bug_id"
+
+cd "$work_dir"
+pwd
+
+if [ ! -f $bug_location/fuzz_target.py ]; then
 
     echo "Did not find any fuzzing script that execises the function containing the fix for this bug."
 
@@ -18,14 +77,13 @@ else
     pip install pythonfuzz==1.0.3
 
     # move the fuzz_target.py file into the project's source directory as it needs to use functions from the project
-    cp $2/fuzz_target.py $1
+    cp $bug_location/fuzz_target.py $work_dir
 
     # run the fuzzer for just 1 minutes! 
     # For a real project, the fuzzer may be run for days but here, we run just an example.
-    timeout 1m python $1/fuzz_target.py
+    timeout 1m python $work_dir/fuzz_target.py
 
-    rm $1/fuzz_target.py
+    rm $work_dir/fuzz_target.py
 
     deactivate
 fi
-
