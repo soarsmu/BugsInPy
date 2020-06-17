@@ -138,19 +138,20 @@ done < bug.info
 cd "$work_dir/$project_name"
 git reset --hard "$fix_commit"
 
-if [ $version_id == 1 ]; then
-   check_file=$(git show --name-only 2>&1)
-   change_file_all=""
-   while IFS= read -r line; do
-       if [ "$line" != "" ]; then
-           if [[ -e "$work_dir/$project_name/$line" ]]; then
-               change_file_all+="$line;"
-               cp -v "$work_dir/$project_name/$line" "$project_location/bugs/$bug_id"
-           fi
-       fi
-   done <<< "$check_file"
-   IFS=';' read -r -a change_file <<< "$change_file_all"
-fi
+check_file=$(git show --name-only 2>&1)
+change_file_all=""
+while IFS= read -r line; do
+   if [ "$line" != "" ]; then
+      if [[ -e "$work_dir/$project_name/$line" ]]; then
+            change_file_all+="$line;"
+            if [ $version_id == 1 ]; then
+                cp -v "$work_dir/$project_name/$line" "$project_location/bugs/$bug_id"
+            fi
+      fi
+   fi
+done <<< "$check_file"
+IFS=';' read -r -a change_file <<< "$change_file_all"
+
 
 ###copy test file from project to temp
 for index in "${!test_file[@]}"
@@ -172,20 +173,23 @@ do
    mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
 done
 
+patch_fix_all=""
 ###Copy other change file from fixed to buggy if version is fixed commit
-if [ $version_id == 1 ]; then
-   ###Copy change file from fixed to buggy
-   for index in "${!change_file[@]}"
-   do
-      change_file_now=${change_file[index]}
-      string1="${change_file_now%/*}"
-      string2="${change_file_now##*/}"
-      if [[ -e "$project_location/bugs/$bug_id/$string2" ]]; then
-          mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
-      fi
-   done
-fi
+for index in "${!change_file[@]}"
+do
+   change_file_now=${change_file[index]}
+   string1="${change_file_now%/*}"
+   string2="${change_file_now##*/}"
+   if [[ -e "$project_location/bugs/$bug_id/$string2" ]]; then
+       patch_fix_all+="$change_file_now;"
+       if [ $version_id == 1 ]; then
+           mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
+       fi
+   fi
+done
 
+rm -f "$work_dir/$project_name/bugsinpy_patchfile.info"
+echo "$patch_fix_all" > "$work_dir/$project_name/bugsinpy_patchfile.info"
 
 ###Move information about bug to clone project folder
 cp -f "$project_location/bugs/$bug_id/bug.info" "$work_dir/$project_name/bugsinpy_bug.info"
