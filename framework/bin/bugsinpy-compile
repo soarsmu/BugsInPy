@@ -25,6 +25,11 @@ if [ "$work_dir" == "" ]; then
    work_dir=$(pwd)
 fi
 
+if [[ $work_dir == */ ]]; then 
+   temp_work_dir="$work_dir"
+   work_dir=${temp_work_dir::-1}
+fi
+
 ###Check work directory 
 if [[ ! -e "$work_dir/bugsinpy_bug.info" ]]; then
    echo "This is not a checkout project folder"
@@ -38,7 +43,6 @@ elif [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
 fi
 
 ###Remove environment if exist
-deactivate
 rm -r -f env/
 
 ###Add environment
@@ -67,12 +71,51 @@ elif [[ "$REPLY" == "test_file"* ]]; then
 elif [[ "$REPLY" == "pythonpath"* ]]; then
    pythonpath_all="$(cut -d'"' -f 2 <<< $REPLY)"
    if [ "$pythonpath_all" != "" ]; then
-       temp_folder=":${folder_location}/"
-       pythonpath_set=${pythonpath_all//;/$temp_folder}
-       pythonpath_set="${folder_location}/${pythonpath_set}"
+       if [[ $work_dir != /* ]]; then
+           work_dir_py=${work_dir:1}
+           temp_folder=":${work_dir_py}/"
+       else
+           temp_folder=":${work_dir}/"
+       fi
+       check_py="$(cut -d';' -f 1 <<< $pythonpath_all; )"
+       string2="$(cut -d'/' -f 1 <<< $check_py/ )"
+       temp_change_py=";$pythonpath_all"
+       deli=";$string2"
+       pythonpath_set=${temp_change_py//$deli/$temp_folder}
+       pythonpath_set="${pythonpath_set:1}"
+       pythonpath_set=$(echo "$pythonpath_set" | sed s#//*#/#g)
    fi
 fi
 done < "$work_dir/bugsinpy_bug.info"
+
+
+###Read setup.sh
+  run_setup_all=""
+  if [[ -f "$work_dir/bugsinpy_setup.sh" ]]; then
+    DONE=false
+    until $DONE ;do
+    read || DONE=true
+       run_setup_all+="$REPLY;"
+       echo $REPLY
+    done < "$work_dir/bugsinpy_setup.sh"
+  fi
+  
+  IFS=';' read -r -a run_setup <<< "$run_setup_all"
+
+###Run setup.sh
+pip install -r "$work_dir/bugsinpy_requirements.txt"
+for index in "${!run_setup[@]}"
+do
+   run_setup_trail=${run_setup[index]} 
+   run_setup_now=$(echo $run_setup_trail | sed -e 's/\r//g')
+   #$run_setup_now
+done
+  
+###Install requirement
+#pip install -r "$work_dir/bugsinpy_requirements.txt"
+
+deactivate
+
 
 ###Add pythonpath
   if [ "$pythonpath_set" != "" ]; then
@@ -120,6 +163,8 @@ done < "$work_dir/bugsinpy_bug.info"
             if [[ "$pythonpath_exist" == "YES1" ]]; then
                 sed -i.bak '/export PYTHONPATH/d' ~/.bashrc
             fi
+
+           
             string1="${saveReply%:*}"
             string2="${saveReply##*:}"
             if [[ "$string2" == *"PYTHONPATH"* ]]; then
@@ -136,30 +181,6 @@ done < "$work_dir/bugsinpy_bug.info"
       fi
   fi
 
-###Read setup.sh
-  run_setup_all=""
-  if [[ -f "$work_dir/bugsinpy_setup.sh" ]]; then
-    DONE=false
-    until $DONE ;do
-    read || DONE=true
-       run_setup_all+="$REPLY;"
-       echo $REPLY
-    done < "$work_dir/bugsinpy_setup.sh"
-  fi
-  
-  IFS=';' read -r -a run_setup <<< "$run_setup_all"
-
-###Run setup.sh
-pip install -r "$work_dir/bugsinpy_requirements.txt"
-for index in "${!run_setup[@]}"
-do
-   run_setup_trail=${run_setup[index]} 
-   run_setup_now=$(echo $run_setup_trail | sed -e 's/\r//g')
-   $run_setup_now
-done
-  
-###Install requirement
-pip install -r "$work_dir/bugsinpy_requirements.txt"
 
 ###Add compile flag
 echo "1" > "$work_dir/bugsinpy_compile_flag"
