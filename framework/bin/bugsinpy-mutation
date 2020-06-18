@@ -138,10 +138,11 @@ else
          echo "$patch_now"
          echo "$test_now"
          echo "python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest"
-         mutation=$(python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m 2>&1)
-         echo "$mutation"
          echo "python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m" &>>"$work_dir/bugsinpy_mutation.txt"
-         echo "$mutation" &>>"$work_dir/bugsinpy_mutation.txt"
+python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m 2>&1 | tee $work_dir/bugsinpy_mutation.txt
+         #mutation=$(python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m 2>&1)
+         #echo "$mutation"
+         #echo "$mutation" &>>"$work_dir/bugsinpy_mutation.txt"
       done
    done
    
@@ -164,10 +165,11 @@ else
          test_now=$(echo $test_py | tr '/' '.')
          echo "$patch_now"
          echo "$test_now"
-         mutation=$(python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m 2>&1)
-         echo "$mutation"
-         echo "python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m" &>>"$work_dir/bugsinpy_mutation.txt"
-         echo "$mutation" &>>"$work_dir/bugsinpy_mutation.txt"
+python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m 2>&1 | tee $work_dir/bugsinpy_mutation.txt
+         #mutation=$(python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m 2>&1)
+         #echo "$mutation"
+         #echo "python mut_bugsinpy.py --target $patch_now --unit-test $test_now --runner $pytest -m" &>>"$work_dir/bugsinpy_mutation.txt"
+         #echo "$mutation" &>>"$work_dir/bugsinpy_mutation.txt"
       done
    done
    fi
