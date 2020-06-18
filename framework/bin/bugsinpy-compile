@@ -42,6 +42,13 @@ elif [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
    exit
 fi
 
+###Check dos2unix
+check_dos2unix=$(dos2unix --version 2>&1)
+if [ "$check_dos2unix" == *"not found"* ]; then
+   echo "Please install dos2unix (sudo apt-get dos2unix)"
+   exit
+fi
+
 ###Remove environment if exist
 rm -r -f env/
 
@@ -103,7 +110,9 @@ done < "$work_dir/bugsinpy_bug.info"
   IFS=';' read -r -a run_setup <<< "$run_setup_all"
 
 ###Run setup.sh
-pip install -r "$work_dir/bugsinpy_requirements.txt"
+dos2unix $work_dir/bugsinpy_requirements.txt
+#pip install -r "$work_dir/bugsinpy_requirements.txt"
+tes=$(cat "$work_dir/bugsinpy_requirements.txt" | sed -e '/^\s*#.*$/d' -e '/^\s*$/d' | xargs -n 1 pip install)
 for index in "${!run_setup[@]}"
 do
    run_setup_trail=${run_setup[index]} 
@@ -112,7 +121,8 @@ do
 done
   
 ###Install requirement
-pip install -r "$work_dir/bugsinpy_requirements.txt"
+#pip install -r "$work_dir/bugsinpy_requirements.txt"
+tes=$(cat "$work_dir/bugsinpy_requirements.txt" | sed -e '/^\s*#.*$/d' -e '/^\s*$/d' | xargs -n 1 pip install)
 
 deactivate
 
