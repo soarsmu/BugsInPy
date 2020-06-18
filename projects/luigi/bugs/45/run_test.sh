@@ -1,0 +1,7 @@
+pytest test/date_parameter_test.py::DateMinuteParameterTest::test_parse
+pytest test/date_parameter_test.py::DateMinuteParameterTest::test_parse_padding_zero
+pytest test/date_parameter_test.py::DateMinuteParameterTest::test_serialize
+pytest test/date_parameter_test.py::DateMinuteParameterTest::test_serialize_padding_zero
+pytest test/date_parameter_test.py::DateMinuteParameterTest::test_parse_interface
+pytest test/date_parameter_test.py::DateMinuteParameterTest::test_serialize_task
+pytest test/parameter_test.py::TestParamWithDefaultFromConfig::testDateMinute

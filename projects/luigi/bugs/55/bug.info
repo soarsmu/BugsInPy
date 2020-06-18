@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="07efdd9136966ffe143ea57e15b1a57b5698fd5a"
+fixed_commit_id="2898a2d2d178499435892d7a69bb1dfc90c70b29"
+test_file="test/task_test.py"

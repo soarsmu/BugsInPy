@@ -1,0 +1,1 @@
+pytest test/central_planner_test.py::CentralPlannerTest::test_no_automatic_re_enable_after_auto_then_manual_disable

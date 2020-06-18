@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="e37cb0ea1d97e6340840128a68c8d59bd05c28c3"
+fixed_commit_id="e2be971226c34a193d7029c51206e488b6a037cd"
+test_file="test/contrib/hive_test.py"

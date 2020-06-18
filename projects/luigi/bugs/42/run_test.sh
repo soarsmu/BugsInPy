@@ -1,0 +1,1 @@
+pytest test/central_planner_test.py::CentralPlannerTest::test_fail_job_from_dead_worker_with_live_assistant

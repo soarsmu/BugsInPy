@@ -1,0 +1,1 @@
+pytest test/contrib/hive_test.py::HiveCommandClientTest::test_partition_spec

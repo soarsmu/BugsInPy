@@ -1,0 +1,1 @@
+pytest test/worker_external_task_test.py::WorkerExternalTaskTest::test_external_dependency_completes_later

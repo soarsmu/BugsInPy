@@ -1,0 +1,1 @@
+pytest test/execution_summary_test.py::ExecutionSummaryTest::test_with_uncomparable_parameters

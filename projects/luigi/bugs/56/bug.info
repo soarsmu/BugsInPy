@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="97fa4afea3748f0d714482d2c97990bb467bc9d1"
+fixed_commit_id="f1e3fb48fe9877e511a2d079636fd75eaaba4573"
+test_file="test/test_event_callbacks.py"

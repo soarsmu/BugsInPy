@@ -1,0 +1,1 @@
+pytest test/scheduler_test.py::SchedulerTest::test_local_scheduler_task_history_status

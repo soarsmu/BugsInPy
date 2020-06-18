@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="572fce617a3b8133983cdee2b2cc336a65af5abe"
+fixed_commit_id="8a4f73296f237fcf8182c342e62c2cb201c717df"
+test_file="test/contrib/spark_test.py"

@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="ed351ca3c3baf3657de584db08dfe0414fa000a3"
+fixed_commit_id="13673fd488c25325db633b1d49e664fb937fabc2"
+test_file="test/contrib/hadoop_jar_test.py"

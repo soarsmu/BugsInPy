@@ -1,0 +1,1 @@
+pytest test/instance_test.py::InstanceTest::test_unhashable_type

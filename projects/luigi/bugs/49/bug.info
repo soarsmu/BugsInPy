@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="c707253572deb795a900c3e07d21eee591a55fca"
+fixed_commit_id="dc41727f4de88f86f4e77aa45be51eff4ee6b3be"
+test_file="test/worker_external_task_test.py"
