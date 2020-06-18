@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="926c572d5b8187fb2af719cd28329b3393bd3aa1"
+fixed_commit_id="7f1eb421c90424203a67a805ff5223be4c76d9e9"
+test_file="lib/matplotlib/tests/test_fontconfig_pattern.py"

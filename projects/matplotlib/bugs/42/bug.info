@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="3b26ee6f6b31bc0cca4be0407dbb40f44756030d"
+fixed_commit_id="d4de838fe7b38abb02f061540fd93962cc063fc4"
+test_file="lib/matplotlib/tests/test_colors.py"

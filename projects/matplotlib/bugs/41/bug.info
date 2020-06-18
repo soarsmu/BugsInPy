@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="a8018e8d57ba94f0fe912afcd9746994469aa023"
+fixed_commit_id="c948ea599d3947e47f625d758afbdd0dab0c4b3c"
+test_file="lib/matplotlib/tests/test_scale.py"

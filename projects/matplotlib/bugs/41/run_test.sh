@@ -1,0 +1,1 @@
+pytest lib/matplotlib/tests/test_scale.py::test_symlog_mask_nan
