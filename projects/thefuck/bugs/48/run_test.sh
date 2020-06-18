@@ -1,0 +1,1 @@
+pytest tests/rules/test_open.py::test_get_new_command

@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="66e2ec7e3f0d3f848c01d87bb3503b0ff90fc78a"
+fixed_commit_id="1285303363bc420bd7606bd5f808e3f2b4f0e83f"
+test_file="tests/rules/test_git_diff_staged.py"

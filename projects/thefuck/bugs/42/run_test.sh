@@ -1,0 +1,1 @@
+pytest tests/test_types.py::TestSortedCorrectedCommandsSequence::test_with_blank

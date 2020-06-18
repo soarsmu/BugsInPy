@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="7cb0388ed0845545e878b29783bbf8e901a02745"
+fixed_commit_id="feb3eee2a08f0cba4552373d728509bc90b561ab"
+test_file="tests/rules/test_vagrant_up.py"

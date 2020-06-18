@@ -1,0 +1,1 @@
+pytest tests/rules/test_mkdir_p.py::test_get_new_command

@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="42a8b4f639269886e468762e6d100b6f01aad8ab"
+fixed_commit_id="298c04f89c081dc16c8653aa017ca85dd14bfad6"
+test_file="tests/rules/test_mkdir_p.py"

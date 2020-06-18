@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="12394ca8423a438915fed996383b44471fc1139d"
+fixed_commit_id="5d74344994da89ed01afd448f1c9d86b85e85351"
+test_file="tests/test_types.py"

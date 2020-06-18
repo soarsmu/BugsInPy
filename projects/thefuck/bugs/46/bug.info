@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="abbbd1f8eb8e87a942180edf8b13ad757b1cf68a"
+fixed_commit_id="42a8b4f639269886e468762e6d100b6f01aad8ab"
+test_file="tests/rules/test_rm_dir.py"

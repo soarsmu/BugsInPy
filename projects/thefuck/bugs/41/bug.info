@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="71dc2666ccf62e653291d9a7a08e2c6c3320425b"
+fixed_commit_id="213791d3c2af379ffa37a140735998736b41912e"
+test_file="tests/rules/test_git_fix_stash.py"

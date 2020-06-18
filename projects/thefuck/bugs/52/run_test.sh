@@ -1,0 +1,1 @@
+pytest tests/rules/test_apt_get.py::test_get_new_command_mocked
