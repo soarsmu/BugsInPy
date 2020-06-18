@@ -42,11 +42,10 @@ if [ "$bug_id" == "" ]; then
    echo "Please input bug id"
    exit
 fi
-
 if [ "$version_id" == "" ]; then 
-   version_id=1
-elif [[ "$version_id" != "1" || "$version_id" != "0" ]]; then 
-   version_id=1
+   version_id="1"
+elif [[ "$version_id" != "1" && "$version_id" != "0" ]]; then
+   version_id="1"
 fi
 
 if [ "$work_dir" == "" ]; then 
@@ -148,7 +147,7 @@ while IFS= read -r line; do
    if [ "$line" != "" ]; then
       if [[ -e "$work_dir/$project_name/$line" ]]; then
             change_file_all+="$line;"
-            if [ $version_id == 1 ]; then
+            if [ $version_id == "1" ]; then
                 cp -v "$work_dir/$project_name/$line" "$project_location/bugs/$bug_id"
             fi
       fi
@@ -186,7 +185,7 @@ do
    string2="${change_file_now##*/}"
    if [[ -e "$project_location/bugs/$bug_id/$string2" ]]; then
        patch_fix_all+="$change_file_now;"
-       if [ $version_id == 1 ]; then
+       if [ $version_id == "1" ]; then
            mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
        fi
    fi
