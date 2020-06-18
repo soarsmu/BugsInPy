@@ -124,25 +124,6 @@ echo "--------------------------------------------------------------------------
 echo "Buggy id"
 echo "	$buggy_commit"
 echo "--------------------------------------------------------------------------------"
-pytest="0"
-#read file run_test.sh
-DONE=false
-until $DONE ;do
-read || DONE=true
-if [ "$REPLY" != "" ]; then
-   if [[ "$REPLY" == *"pytest"* || "$REPLY" == *"py.test"* ]]; then
-       pytest="1"
-   fi
-fi
-done < run_test.sh
-
-echo "Test framework"
-if [ "$pytest" == "0" ]; then
-   echo "	unittest"
-else
-   echo "	pytest"
-fi
-echo "--------------------------------------------------------------------------------"
 echo "Triggering test file"
 for index in "${!test_file[@]}"
 do
