@@ -38,6 +38,11 @@ if [ "$work_dir" == "" ]; then
    work_dir=$(pwd)
 fi
 
+if [[ $work_dir == */ ]]; then 
+   temp_work_dir="$work_dir"
+   work_dir=${temp_work_dir::-1}
+fi
+
 if [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
    echo "This is not a checkout project folder"
    exit
