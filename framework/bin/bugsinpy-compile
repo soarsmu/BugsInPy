@@ -163,7 +163,8 @@ deactivate
         done <  ~/.bashrc 
         if [[ "$pythonpath_exist" == "NO" ]]; then
             should_change="NO"
-            echo 'PYTHONPATH="$pythonpath_set:$PYTHONPATH"' >> ~/.bashrc 
+            temp_path_not_exist='PYTHONPATH="$pythonpath_set:$PYTHONPATH"'
+            echo "$temp_path_not_exist" >> ~/.bashrc 
             echo "export PYTHONPATH" >> ~/.bashrc 
             source ~/.bashrc
         fi
@@ -174,11 +175,16 @@ deactivate
                 sed -i.bak '/export PYTHONPATH/d' ~/.bashrc
             fi
 
-           
+            
             string1="${saveReply%:*}"
             string2="${saveReply##*:}"
             if [[ "$string2" == *"PYTHONPATH"* ]]; then
-               echo "$string1:$pythonpath_set:$string2" >> ~/.bashrc
+               string1="${saveReply%%/*}"
+               string2="$(cut -d'"' -f 2 <<< $saveReply)"
+               delimeter='"'
+               echo "$pythonpath_set"
+               echo "$string1"
+               echo "$string1$pythonpath_set:$string2$delimeter" >> ~/.bashrc
             else
                temp="$"
                temp_py="PYTHONPATH"
