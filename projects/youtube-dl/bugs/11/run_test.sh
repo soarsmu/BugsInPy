@@ -1,1 +1,1 @@
-python test/test_YoutubeDL.py TestFormatSelection.test_youtube_format_selection
+python -m unittest -q test.test_YoutubeDL.TestFormatSelection.test_youtube_format_selection

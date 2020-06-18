@@ -1,1 +1,1 @@
-python test/test_utils.py TestUtil.test_match_str
+python -m unittest -q test.test_utils.TestUtil.test_match_str

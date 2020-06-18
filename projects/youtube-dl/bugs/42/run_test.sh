@@ -1,1 +1,1 @@
-python test/test_utils.py TestUtil.test_parse_duration
+python -m unittest -q test.test_utils.TestUtil.test_parse_duration

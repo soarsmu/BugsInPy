@@ -1,1 +1,1 @@
-python test/test_jsinterp.py TestJSInterpreter.test_call
+python -m unittest -q test.test_jsinterp.TestJSInterpreter.test_call

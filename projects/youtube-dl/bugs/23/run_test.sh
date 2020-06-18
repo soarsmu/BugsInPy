@@ -1,1 +1,1 @@
-python test/test_utils.py TestUtil.test_js_to_json_edgecases TestUtil.test_js_to_json_realworld
+python -m unittest -q test.test_utils.TestUtil.test_js_to_json_edgecases test.test_utils.TestUtil.test_js_to_json_realworld

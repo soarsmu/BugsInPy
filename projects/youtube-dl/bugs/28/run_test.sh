@@ -1,1 +1,1 @@
-python test/test_YoutubeDL.py TestYoutubeDL.test_prepare_filename
+python -m unittest -q test.test_YoutubeDL.TestYoutubeDL.test_prepare_filename
