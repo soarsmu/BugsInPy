@@ -1,0 +1,1 @@
+pytest lib/matplotlib/tests/test_colorbar.py::test_colorbar_int

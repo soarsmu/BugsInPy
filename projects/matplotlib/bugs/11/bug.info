@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="8673167d4c44dc2ede02fedd718dadf7f88e102d"
+fixed_commit_id="c01f9d3eff9b6239446c1bb2d205eccd69054aeb"
+test_file="lib/matplotlib/tests/test_polar.py"

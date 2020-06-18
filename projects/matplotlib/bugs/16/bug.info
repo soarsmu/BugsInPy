@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="f8459a513c3f67447ceb1a07c29760d504517ff2"
+fixed_commit_id="af745264376a10782bd0d8b96d255f958c2950f3"
+test_file="lib/matplotlib/tests/test_text.py"

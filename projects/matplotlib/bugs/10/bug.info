@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="54bd6f19b23dc940a4d572583c449613b6b1ae3c"
+fixed_commit_id="2f41868de465b86d2fc357f7ed58ff323d58030f"
+test_file="lib/matplotlib/tests/test_axes.py"

@@ -1,0 +1,1 @@
+pytest lib/matplotlib/tests/test_backend_svg.py::test_savefig_tight

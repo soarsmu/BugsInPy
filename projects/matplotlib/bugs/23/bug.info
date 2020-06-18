@@ -1,0 +1,4 @@
+python_version="3.8.1"
+buggy_commit_id="58c66982d98851c56b045137ced803fd62c6c5e8"
+fixed_commit_id="05a5db0fec2eced55076736f0b9520641b279ad6"
+test_file="lib/matplotlib/tests/test_colorbar.py"
