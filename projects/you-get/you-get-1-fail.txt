@@ -1,0 +1,39 @@
+OUTPUT AT BUGGY COMMIT ID
+python tests/test.py YouGetTests.test_xinpianchang
+{'src': ['https://tencent-xpc13.xpccdn.com/5e46568ed7394.mp4'], 'size': 8730005, 'container': 'mp4', 'quality': '高清 1080P'}
+{'src': ['https://tencent-xpc13.xpccdn.com/5e46568ee93b7.mp4'], 'size': 4108878, 'container': 'mp4', 'quality': '高清 720P'}
+{'src': ['https://tencent-xpc13.xpccdn.com/5e46568f0e12b.mp4'], 'size': 2634093, 'container': 'mp4', 'quality': '清晰 540P'}
+{'src': ['https://tencent-xpc13.xpccdn.com/5e46568f3e0f8.mp4'], 'size': 537062, 'container': 'mp4', 'quality': '流畅 360P'}
+site:                xinpianchang
+title:               疫情
+streams:             # Available quality and codecs
+    [ DEFAULT ] _________________________________
+    - format:        [7m1080[0m
+      container:     mp4
+      quality:       高清 1080P
+      size:          8.3 MiB (8730005 bytes)
+    # download-with: [4myou-get --format=1080 [URL][0m
+
+    - format:        [7m720[0m
+      container:     mp4
+      quality:       高清 720P
+      size:          3.9 MiB (4108878 bytes)
+    # download-with: [4myou-get --format=720 [URL][0m
+
+    - format:        [7m540[0m
+      container:     mp4
+      quality:       清晰 540P
+      size:          2.5 MiB (2634093 bytes)
+    # download-with: [4myou-get --format=540 [URL][0m
+
+    - format:        [7m360[0m
+      container:     mp4
+      quality:       流畅 360P
+      size:          0.5 MiB (537062 bytes)
+    # download-with: [4myou-get --format=360 [URL][0m
+
+.
+----------------------------------------------------------------------
+Ran 1 test in 1.160s
+
+OK

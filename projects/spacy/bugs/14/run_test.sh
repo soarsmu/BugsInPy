@@ -1,0 +1,1 @@
+py.test spacy/tests/regression/test_issue3447.py::test_decaying

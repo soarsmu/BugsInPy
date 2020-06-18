@@ -1,0 +1,201 @@
+OUTPUT AT BUGGY COMMIT ID
+python tests/test.py YouGetTests.test_youtube
+site:                YouTube
+title:               Ninja Mort
+streams:             # Available quality and codecs
+    [ DASH ] ____________________________________
+    - itag:          [7m135[0m
+      container:     mp4
+      quality:       640x480 (480p)
+      size:          2.0 MiB (2149022 bytes)
+    # download-with: [4myou-get --itag=135 [URL][0m
+
+    - itag:          [7m244[0m
+      container:     webm
+      quality:       640x480 (480p)
+      size:          1.6 MiB (1631452 bytes)
+    # download-with: [4myou-get --itag=244 [URL][0m
+
+    - itag:          [7m134[0m
+      container:     mp4
+      quality:       480x360 (360p)
+      size:          1.4 MiB (1476197 bytes)
+    # download-with: [4myou-get --itag=134 [URL][0m
+
+    - itag:          [7m243[0m
+      container:     webm
+      quality:       480x360 (360p)
+      size:          1.2 MiB (1261934 bytes)
+    # download-with: [4myou-get --itag=243 [URL][0m
+
+    - itag:          [7m133[0m
+      container:     mp4
+      quality:       320x240 (240p)
+      size:          1.0 MiB (1053608 bytes)
+    # download-with: [4myou-get --itag=133 [URL][0m
+
+    - itag:          [7m242[0m
+      container:     webm
+      quality:       320x240 (240p)
+      size:          1.0 MiB (1016446 bytes)
+    # download-with: [4myou-get --itag=242 [URL][0m
+
+    - itag:          [7m278[0m
+      container:     webm
+      quality:       192x144 (144p)
+      size:          0.8 MiB (816145 bytes)
+    # download-with: [4myou-get --itag=278 [URL][0m
+
+    - itag:          [7m160[0m
+      container:     mp4
+      quality:       192x144 (144p)
+      size:          0.7 MiB (753554 bytes)
+    # download-with: [4myou-get --itag=160 [URL][0m
+
+    [ DEFAULT ] _________________________________
+    - itag:          [7m18[0m
+      container:     mp4
+      quality:       medium
+      size:          1.3 MiB (1332735 bytes)
+    # download-with: [4myou-get --itag=18 [URL][0m
+
+site:                YouTube
+title:               Ninja Mort
+streams:             # Available quality and codecs
+    [ DASH ] ____________________________________
+    - itag:          [7m135[0m
+      container:     mp4
+      quality:       640x480 (480p)
+      size:          2.0 MiB (2149022 bytes)
+    # download-with: [4myou-get --itag=135 [URL][0m
+
+    - itag:          [7m244[0m
+      container:     webm
+      quality:       640x480 (480p)
+      size:          1.6 MiB (1631452 bytes)
+    # download-with: [4myou-get --itag=244 [URL][0m
+
+    - itag:          [7m134[0m
+      container:     mp4
+      quality:       480x360 (360p)
+      size:          1.4 MiB (1476197 bytes)
+    # download-with: [4myou-get --itag=134 [URL][0m
+
+    - itag:          [7m243[0m
+      container:     webm
+      quality:       480x360 (360p)
+      size:          1.2 MiB (1261934 bytes)
+    # download-with: [4myou-get --itag=243 [URL][0m
+
+    - itag:          [7m133[0m
+      container:     mp4
+      quality:       320x240 (240p)
+      size:          1.0 MiB (1053608 bytes)
+    # download-with: [4myou-get --itag=133 [URL][0m
+
+    - itag:          [7m242[0m
+      container:     webm
+      quality:       320x240 (240p)
+      size:          1.0 MiB (1016446 bytes)
+    # download-with: [4myou-get --itag=242 [URL][0m
+
+    - itag:          [7m278[0m
+      container:     webm
+      quality:       192x144 (144p)
+      size:          0.8 MiB (816145 bytes)
+    # download-with: [4myou-get --itag=278 [URL][0m
+
+    - itag:          [7m160[0m
+      container:     mp4
+      quality:       192x144 (144p)
+      size:          0.7 MiB (753554 bytes)
+    # download-with: [4myou-get --itag=160 [URL][0m
+
+    [ DEFAULT ] _________________________________
+    - itag:          [7m18[0m
+      container:     mp4
+      quality:       medium
+      size:          1.3 MiB (1332735 bytes)
+    # download-with: [4myou-get --itag=18 [URL][0m
+
+site:                YouTube
+title:               3 minutes to a proper British accent with U of A Prof David Ley
+streams:             # Available quality and codecs
+    [ DASH ] ____________________________________
+    - itag:          [7m136[0m
+      container:     mp4
+      quality:       1280x720 (720p)
+      size:          18.7 MiB (19652357 bytes)
+    # download-with: [4myou-get --itag=136 [URL][0m
+
+    - itag:          [7m247[0m
+      container:     webm
+      quality:       1280x720 (720p)
+      size:          17.8 MiB (18628673 bytes)
+    # download-with: [4myou-get --itag=247 [URL][0m
+
+    - itag:          [7m244[0m
+      container:     webm
+      quality:       854x480 (480p)
+      size:          10.3 MiB (10793086 bytes)
+    # download-with: [4myou-get --itag=244 [URL][0m
+
+    - itag:          [7m135[0m
+      container:     mp4
+      quality:       854x480 (480p)
+      size:          10.1 MiB (10630455 bytes)
+    # download-with: [4myou-get --itag=135 [URL][0m
+
+    - itag:          [7m243[0m
+      container:     webm
+      quality:       640x360 (360p)
+      size:          7.3 MiB (7639656 bytes)
+    # download-with: [4myou-get --itag=243 [URL][0m
+
+    - itag:          [7m134[0m
+      container:     mp4
+      quality:       640x360 (360p)
+      size:          6.7 MiB (7021864 bytes)
+    # download-with: [4myou-get --itag=134 [URL][0m
+
+    - itag:          [7m242[0m
+      container:     webm
+      quality:       426x240 (240p)
+      size:          5.1 MiB (5378649 bytes)
+    # download-with: [4myou-get --itag=242 [URL][0m
+
+    - itag:          [7m278[0m
+      container:     webm
+      quality:       256x144 (144p)
+      size:          5.1 MiB (5336399 bytes)
+    # download-with: [4myou-get --itag=278 [URL][0m
+
+    - itag:          [7m133[0m
+      container:     mp4
+      quality:       426x240 (240p)
+      size:          4.7 MiB (4921482 bytes)
+    # download-with: [4myou-get --itag=133 [URL][0m
+
+    - itag:          [7m160[0m
+      container:     mp4
+      quality:       256x144 (144p)
+      size:          4.1 MiB (4334622 bytes)
+    # download-with: [4myou-get --itag=160 [URL][0m
+
+    [ DEFAULT ] _________________________________
+    - itag:          [7m22[0m
+      container:     mp4
+      quality:       hd720
+      size:          18.7 MiB (19645444 bytes)
+    # download-with: [4myou-get --itag=22 [URL][0m
+
+    - itag:          [7m18[0m
+      container:     mp4
+      quality:       medium
+    # download-with: [4myou-get --itag=18 [URL][0m
+
+.
+----------------------------------------------------------------------
+Ran 1 test in 4.772s
+
+OK

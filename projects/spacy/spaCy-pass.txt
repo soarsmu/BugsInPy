@@ -1,4 +1,8 @@
 /c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/1 (py.test spacy/tests/test_errors.py::test_add_codes)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/10 (py.test spacy/tests/pipeline/test_tagger.py::test_tagger_warns_no_lemma_lookups)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/11 (py.test spacy/tests/matcher/test_matcher_api.py::test_matcher_valid_callback)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/12 (py.test spacy/tests/pipeline/test_pipe_methods.py::test_pipe_labels)
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/14 (py.test spacy/tests/regression/test_issue3447.py::test_decaying)
 /c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/2 (py.test spacy/tests/regression/test_issue5137.py::test_issue5137)
 /c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/3 (py.test spacy/tests/regression/test_issue5314.py::test_issue5314)
 /c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/4 (py.test spacy/tests/regression/test_issue4665.py::test_issue4665)
@@ -6,4 +10,5 @@
 /c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/6 (py.test spacy/tests/lang/lb/test_text.py::test_lb_tokenizer_handles_long_text)
 /c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/7 (py.test spacy/tests/pipeline/test_analysis.py::test_analysis_validate_attrs_remove_pipe)
 /c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/8 (py.test spacy/tests/doc/test_span.py::test_filter_spans)
-PASS: 8
+/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/spacy/bugs/9 (py.test spacy/tests/matcher/test_matcher_logic.py::test_matcher_remove)
+PASS: 13

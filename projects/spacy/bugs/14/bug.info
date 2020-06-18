@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="5a7bc6b39deba2ead3ea9d0d6b9af3c88f9f483b"
+fixed_commit_id="06a18463795f4c3244e1d88623277fea9b7a26fc"
+test_file="spacy/tests/regression/test_issue3447.py"
