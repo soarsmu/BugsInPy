@@ -1,0 +1,20 @@
+diff --git a/pandas/plotting/_matplotlib/core.py b/pandas/plotting/_matplotlib/core.py
+index 3c9256e62..82c5ba7f0 100644
+--- a/pandas/plotting/_matplotlib/core.py
++++ b/pandas/plotting/_matplotlib/core.py
+@@ -1435,8 +1435,13 @@ class BarPlot(MPLPlot):
+ 
+     def _decorate_ticks(self, ax, name, ticklabels, start_edge, end_edge):
+         ax.set_xlim((start_edge, end_edge))
+-        ax.set_xticks(self.tick_pos)
+-        ax.set_xticklabels(ticklabels)
++
++        if self.xticks is not None:
++            ax.set_xticks(np.array(self.xticks))
++        else:
++            ax.set_xticks(self.tick_pos)
++            ax.set_xticklabels(ticklabels)
++
+         if name is not None and self.use_index:
+             ax.set_xlabel(name)
+ 

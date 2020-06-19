@@ -1,0 +1,66 @@
+diff --git a/pysnooper/pycompat.py b/pysnooper/pycompat.py
+index 63dd3db..de0a472 100644
+--- a/pysnooper/pycompat.py
++++ b/pysnooper/pycompat.py
+@@ -8,6 +8,7 @@ import inspect
+ import sys
+ 
+ PY3 = (sys.version_info[0] == 3)
++PY2 = not PY3
+ 
+ if hasattr(abc, 'ABC'):
+     ABC = abc.ABC
+diff --git a/pysnooper/tracer.py b/pysnooper/tracer.py
+index 089b817..480d60a 100644
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -14,6 +14,8 @@ import traceback
+ 
+ from .variables import CommonVariable, Exploding, BaseVariable
+ from . import utils, pycompat
++if pycompat.PY2:
++    from io import open
+ 
+ 
+ ipython_filename_pattern = re.compile('^<ipython-input-([0-9]+)-.*>$')
+@@ -84,7 +86,7 @@ def get_source_from_frame(frame):
+     # apply tokenize.detect_encoding to decode the source into a
+     # string, then we should do that ourselves.
+     if isinstance(source[0], bytes):
+-        encoding = 'ascii'
++        encoding = 'utf-8'
+         for line in source[:2]:
+             # File coding may be specified. Match pattern from PEP-263
+             # (https://www.python.org/dev/peps/pep-0263/)
+@@ -130,7 +132,8 @@ class FileWriter(object):
+         self.overwrite = overwrite
+ 
+     def write(self, s):
+-        with open(self.path, 'w' if self.overwrite else 'a') as output_file:
++        with open(self.path, 'w' if self.overwrite else 'a',
++                  encoding='utf-8') as output_file:
+             output_file.write(s)
+         self.overwrite = False
+ 
+diff --git a/tests/utils.py b/tests/utils.py
+index b77e1f6..05185f0 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -254,7 +254,7 @@ def assert_output(output, expected_entries, prefix=None):
+ 
+     any_mismatch = False
+     result = ''
+-    template = '\n{line!s:%s}   {expected_entry}  {arrow}' % max(map(len, lines))
++    template = u'\n{line!s:%s}   {expected_entry}  {arrow}' % max(map(len, lines))
+     for expected_entry, line in zip_longest(expected_entries, lines, fillvalue=""):
+         mismatch = not (expected_entry and expected_entry.check(line))
+         any_mismatch |= mismatch
+@@ -273,7 +273,7 @@ def assert_sample_output(module):
+     with sys_tools.OutputCapturer(stdout=False,
+                                   stderr=True) as output_capturer:
+         module.main()
+-        
++
+     time = '21:10:42.298924'
+     time_pattern = re.sub(r'\d', r'\\d', time)
+ 

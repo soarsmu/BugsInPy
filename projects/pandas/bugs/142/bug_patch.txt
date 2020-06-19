@@ -1,0 +1,15 @@
+diff --git a/pandas/core/indexes/multi.py b/pandas/core/indexes/multi.py
+index 8682af6ab..b684908c2 100644
+--- a/pandas/core/indexes/multi.py
++++ b/pandas/core/indexes/multi.py
+@@ -1256,6 +1256,10 @@ class MultiIndex(Index):
+         if len(uniques) < len(level_index):
+             # Remove unobserved levels from level_index
+             level_index = level_index.take(uniques)
++        else:
++            # break references back to us so that setting the name
++            # on the output of a groupby doesn't reflect back here.
++            level_index = level_index.copy()
+ 
+         if len(level_index):
+             grouper = level_index.take(codes)

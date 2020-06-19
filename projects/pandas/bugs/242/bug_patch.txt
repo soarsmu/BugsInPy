@@ -1,0 +1,16 @@
+diff --git a/pandas/core/window/rolling.py b/pandas/core/window/rolling.py
+index a7e122fa3..29ef2e917 100644
+--- a/pandas/core/window/rolling.py
++++ b/pandas/core/window/rolling.py
+@@ -1653,7 +1653,10 @@ class Rolling(_Rolling_and_Expanding):
+     def _on(self):
+ 
+         if self.on is None:
+-            return self.obj.index
++            if self.axis == 0:
++                return self.obj.index
++            elif self.axis == 1:
++                return self.obj.columns
+         elif isinstance(self.obj, ABCDataFrame) and self.on in self.obj.columns:
+             return Index(self.obj[self.on])
+         else:

@@ -1,0 +1,147 @@
+diff --git a/keras/backend/tensorflow_backend.py b/keras/backend/tensorflow_backend.py
+index 3deb30cb..9f8354b0 100644
+--- a/keras/backend/tensorflow_backend.py
++++ b/keras/backend/tensorflow_backend.py
+@@ -4,6 +4,7 @@ from __future__ import print_function
+ 
+ import tensorflow as tf
+ from tensorflow.python.eager import context
++from tensorflow.python.framework import device as tfdev
+ from tensorflow.python.framework import ops as tf_ops
+ from tensorflow.python.ops import image_ops as tf_image_ops
+ from tensorflow.python.ops import math_ops as tf_math_ops
+@@ -437,12 +438,18 @@ class _TfDeviceCaptureOp(object):
+     """Class for capturing the TF device scope."""
+ 
+     def __init__(self):
++        # NOTE(robieta): This differs from tf.keras in that self.device is a
++        # DeviceSpec rather than a string. This is done for compatibility
++        # with a range of TensorFlow versions.
+         self.device = None
+ 
+     def _set_device(self, device):
+         """This method captures TF's explicit device scope setting."""
+         self.device = device
+ 
++    def _set_device_from_string(self, device_str):
++        self.device = tfdev.DeviceSpec.from_string(device_str)
++
+ 
+ def _get_current_tf_device():
+     """Return explicit device of current context, otherwise returns `None`.
+diff --git a/keras/engine/training_generator.py b/keras/engine/training_generator.py
+index 6533501e..50bd1a3d 100644
+--- a/keras/engine/training_generator.py
++++ b/keras/engine/training_generator.py
+@@ -50,6 +50,11 @@ def fit_generator(model,
+                         ' and multiple workers may duplicate your data.'
+                         ' Please consider using the `keras.utils.Sequence'
+                         ' class.'))
++
++    # if generator is instance of Sequence and steps_per_epoch are not provided -
++    # recompute steps_per_epoch after each epoch
++    recompute_steps_per_epoch = use_sequence_api and steps_per_epoch is None
++
+     if steps_per_epoch is None:
+         if use_sequence_api:
+             steps_per_epoch = len(generator)
+@@ -257,6 +262,25 @@ def fit_generator(model,
+             if callbacks.model.stop_training:
+                 break
+ 
++            if use_sequence_api and workers == 0:
++                generator.on_epoch_end()
++
++            if recompute_steps_per_epoch:
++                if workers > 0:
++                    enqueuer.join_end_of_epoch()
++
++                # recomute steps per epochs in case if Sequence changes it's length
++                steps_per_epoch = len(generator)
++
++                # update callbacks to make sure params are valid each epoch
++                callbacks.set_params({
++                    'epochs': epochs,
++                    'steps': steps_per_epoch,
++                    'verbose': verbose,
++                    'do_validation': do_validation,
++                    'metrics': callback_metrics,
++                })
++
+     finally:
+         try:
+             if enqueuer is not None:
+diff --git a/keras/preprocessing/image.py b/keras/preprocessing/image.py
+index 57b1f2ad..7a700471 100644
+--- a/keras/preprocessing/image.py
++++ b/keras/preprocessing/image.py
+@@ -23,6 +23,25 @@ load_img = image.load_img
+ 
+ 
+ def array_to_img(x, data_format=None, scale=True, dtype=None):
++    """Converts a 3D Numpy array to a PIL Image instance.
++
++    # Arguments
++        x: Input Numpy array.
++        data_format: Image data format.
++            either "channels_first" or "channels_last".
++            If omitted (`None`), then `backend.image_data_format()` is used.
++        scale: Whether to rescale image values
++            to be within `[0, 255]`.
++        dtype: Dtype to use.
++            If omitted (`None`), then `backend.floatx()` or `float32` are used.
++
++    # Returns
++        A PIL Image instance.
++
++    # Raises
++        ImportError: if PIL is not available.
++        ValueError: if invalid `x` or `data_format` is passed.
++    """
+     if data_format is None:
+         data_format = backend.image_data_format()
+     if dtype is None:
+@@ -34,6 +53,21 @@ def array_to_img(x, data_format=None, scale=True, dtype=None):
+ 
+ 
+ def img_to_array(img, data_format=None, dtype=None):
++    """Converts a PIL Image instance to a Numpy array.
++
++    # Arguments
++        img: PIL Image instance.
++        data_format: Image data format, either "channels_first" or "channels_last".
++            If omitted (`None`), then `backend.image_data_format()` is used.
++        dtype: Dtype to use for the returned array.
++            If omitted (`None`), then `backend.floatx()` or `float32` are used.
++
++    # Returns
++        A 3D Numpy array.
++
++    # Raises
++        ValueError: if invalid `img` or `data_format` is passed.
++    """
+     if data_format is None:
+         data_format = backend.image_data_format()
+     if dtype is None:
+@@ -46,6 +80,21 @@ def save_img(path,
+              data_format=None,
+              file_format=None,
+              scale=True, **kwargs):
++    """Saves an image stored as a Numpy array to a path or file object.
++
++    # Arguments
++        path: Path or file object.
++        x: Numpy array.
++        data_format: Image data format,
++            either "channels_first" or "channels_last".
++            If omitted (`None`), then `backend.image_data_format()` is used.
++        file_format: Optional file format override. If omitted, the
++            format to use is determined from the filename extension.
++            If a file object was used instead of a filename, this
++            parameter should always be used.
++        scale: Whether to rescale image values to be within `[0, 255]`.
++        **kwargs: Additional keyword arguments passed to `PIL.Image.save()`.
++    """
+     if data_format is None:
+         data_format = backend.image_data_format()
+     return image.save_img(path,

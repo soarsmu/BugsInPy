@@ -1,0 +1,49 @@
+diff --git a/pandas/tseries/frequencies.py b/pandas/tseries/frequencies.py
+index dfe91b514..4491e6ad9 100644
+--- a/pandas/tseries/frequencies.py
++++ b/pandas/tseries/frequencies.py
+@@ -138,7 +138,7 @@ def to_offset(freq):
+                         delta = offset
+                     else:
+                         delta = delta + offset
+-        except Exception:
++        except ValueError:
+             raise ValueError(libfreqs.INVALID_FREQ_ERR_MSG.format(freq))
+ 
+     else:
+@@ -170,7 +170,7 @@ def to_offset(freq):
+                     delta = offset
+                 else:
+                     delta = delta + offset
+-        except Exception:
++        except (ValueError, TypeError):
+             raise ValueError(libfreqs.INVALID_FREQ_ERR_MSG.format(freq))
+ 
+     if delta is None:
+diff --git a/pandas/tseries/offsets.py b/pandas/tseries/offsets.py
+index edf58ba38..82cbfa831 100644
+--- a/pandas/tseries/offsets.py
++++ b/pandas/tseries/offsets.py
+@@ -605,7 +605,7 @@ class BusinessDay(BusinessMixin, SingleConstructorOffset):
+             return BDay(self.n, offset=self.offset + other, normalize=self.normalize)
+         else:
+             raise ApplyTypeError(
+-                "Only know how to combine business day with " "datetime or timedelta."
++                "Only know how to combine business day with datetime or timedelta."
+             )
+ 
+     @apply_index_wraps
+@@ -1545,6 +1545,13 @@ class Week(DateOffset):
+         if self.weekday is None:
+             return other + self.n * self._inc
+ 
++        if not isinstance(other, datetime):
++            raise TypeError(
++                "Cannot add {typ} to {cls}".format(
++                    typ=type(other).__name__, cls=type(self).__name__
++                )
++            )
++
+         k = self.n
+         otherDay = other.weekday()
+         if otherDay != self.weekday:

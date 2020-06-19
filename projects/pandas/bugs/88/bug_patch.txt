@@ -1,0 +1,13 @@
+diff --git a/pandas/core/groupby/generic.py b/pandas/core/groupby/generic.py
+index b7ac30486..a9a608e6f 100644
+--- a/pandas/core/groupby/generic.py
++++ b/pandas/core/groupby/generic.py
+@@ -1083,7 +1083,7 @@ class DataFrameGroupBy(GroupBy):
+                         result = type(block.values)._from_sequence(
+                             result.ravel(), dtype=block.values.dtype
+                         )
+-                    except ValueError:
++                    except (ValueError, TypeError):
+                         # reshape to be valid for non-Extension Block
+                         result = result.reshape(1, -1)
+ 

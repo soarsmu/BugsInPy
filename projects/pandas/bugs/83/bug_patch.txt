@@ -1,0 +1,79 @@
+diff --git a/pandas/core/indexes/multi.py b/pandas/core/indexes/multi.py
+index 122097f44..5bffc4ec5 100644
+--- a/pandas/core/indexes/multi.py
++++ b/pandas/core/indexes/multi.py
+@@ -565,6 +565,7 @@ class MultiIndex(Index):
+         if names is lib.no_default:
+             names = [getattr(it, "name", None) for it in iterables]
+ 
++        # codes are all ndarrays, so cartesian_product is lossless
+         codes = cartesian_product(codes)
+         return MultiIndex(levels, codes, sortorder=sortorder, names=names)
+ 
+diff --git a/pandas/core/reshape/util.py b/pandas/core/reshape/util.py
+index d8652c9b4..7abb14303 100644
+--- a/pandas/core/reshape/util.py
++++ b/pandas/core/reshape/util.py
+@@ -2,8 +2,6 @@ import numpy as np
+ 
+ from pandas.core.dtypes.common import is_list_like
+ 
+-import pandas.core.common as com
+-
+ 
+ def cartesian_product(X):
+     """
+@@ -51,9 +49,20 @@ def cartesian_product(X):
+         # if any factor is empty, the cartesian product is empty
+         b = np.zeros_like(cumprodX)
+ 
+-    return [
+-        np.tile(
+-            np.repeat(np.asarray(com.values_from_object(x)), b[i]), np.product(a[i])
+-        )
+-        for i, x in enumerate(X)
+-    ]
++    return [_tile_compat(np.repeat(x, b[i]), np.product(a[i])) for i, x in enumerate(X)]
++
++
++def _tile_compat(arr, num: int):
++    """
++    Index compat for np.tile.
++
++    Notes
++    -----
++    Does not support multi-dimensional `num`.
++    """
++    if isinstance(arr, np.ndarray):
++        return np.tile(arr, num)
++
++    # Otherwise we have an Index
++    taker = np.tile(np.arange(len(arr)), num)
++    return arr.take(taker)
+diff --git a/pandas/tests/reshape/test_util.py b/pandas/tests/reshape/test_util.py
+index cd518dda4..9d074b5ad 100644
+--- a/pandas/tests/reshape/test_util.py
++++ b/pandas/tests/reshape/test_util.py
+@@ -25,6 +25,22 @@ class TestCartesianProduct:
+         tm.assert_index_equal(result1, expected1)
+         tm.assert_index_equal(result2, expected2)
+ 
++    def test_tzaware_retained(self):
++        x = date_range("2000-01-01", periods=2, tz="US/Pacific")
++        y = np.array([3, 4])
++        result1, result2 = cartesian_product([x, y])
++
++        expected = x.repeat(2)
++        tm.assert_index_equal(result1, expected)
++
++    def test_tzaware_retained_categorical(self):
++        x = date_range("2000-01-01", periods=2, tz="US/Pacific").astype("category")
++        y = np.array([3, 4])
++        result1, result2 = cartesian_product([x, y])
++
++        expected = x.repeat(2)
++        tm.assert_index_equal(result1, expected)
++
+     def test_empty(self):
+         # product of empty factors
+         X = [[], [0, 1], []]

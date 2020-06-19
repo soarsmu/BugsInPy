@@ -1,0 +1,17 @@
+diff --git a/pandas/core/window.py b/pandas/core/window.py
+index a7425bc14..3e3f17369 100644
+--- a/pandas/core/window.py
++++ b/pandas/core/window.py
+@@ -246,8 +246,10 @@ class _Window(PandasObject, SelectionMixin):
+             except (ValueError, TypeError):
+                 raise TypeError("cannot handle this type -> {0}".format(values.dtype))
+ 
+-        # Always convert inf to nan
+-        values[np.isinf(values)] = np.NaN
++        # Convert inf to nan for C funcs
++        inf = np.isinf(values)
++        if inf.any():
++            values = np.where(inf, np.nan, values)
+ 
+         return values
+ 

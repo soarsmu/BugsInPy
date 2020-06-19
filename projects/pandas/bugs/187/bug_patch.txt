@@ -1,0 +1,54 @@
+diff --git a/pandas/conftest.py b/pandas/conftest.py
+index 3553a411a..6b43bf58b 100644
+--- a/pandas/conftest.py
++++ b/pandas/conftest.py
+@@ -654,6 +654,24 @@ def any_int_dtype(request):
+     return request.param
+ 
+ 
++@pytest.fixture(params=ALL_EA_INT_DTYPES)
++def any_nullable_int_dtype(request):
++    """
++    Parameterized fixture for any nullable integer dtype.
++
++    * 'UInt8'
++    * 'Int8'
++    * 'UInt16'
++    * 'Int16'
++    * 'UInt32'
++    * 'Int32'
++    * 'UInt64'
++    * 'Int64'
++    """
++
++    return request.param
++
++
+ @pytest.fixture(params=ALL_REAL_DTYPES)
+ def any_real_dtype(request):
+     """
+diff --git a/pandas/core/arrays/integer.py b/pandas/core/arrays/integer.py
+index 2bfb53aa1..08a3eca1e 100644
+--- a/pandas/core/arrays/integer.py
++++ b/pandas/core/arrays/integer.py
+@@ -26,6 +26,7 @@ from pandas.core.dtypes.missing import isna, notna
+ from pandas.core import nanops, ops
+ from pandas.core.algorithms import take
+ from pandas.core.arrays import ExtensionArray, ExtensionOpsMixin
++from pandas.core.ops import invalid_comparison
+ from pandas.core.ops.common import unpack_zerodim_and_defer
+ from pandas.core.tools.numeric import to_numeric
+ 
+@@ -646,7 +647,11 @@ class IntegerArray(ExtensionArray, ExtensionOpsMixin):
+             with warnings.catch_warnings():
+                 warnings.filterwarnings("ignore", "elementwise", FutureWarning)
+                 with np.errstate(all="ignore"):
+-                    result = op(self._data, other)
++                    method = getattr(self._data, f"__{op_name}__")
++                    result = method(other)
++
++                    if result is NotImplemented:
++                        result = invalid_comparison(self._data, other, op)
+ 
+             # nans propagate
+             if mask is None:

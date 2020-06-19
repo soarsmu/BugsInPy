@@ -1,0 +1,22 @@
+diff --git a/blib2to3/pgen2/tokenize.py b/blib2to3/pgen2/tokenize.py
+index 9a7664b..1f51ff0 100644
+--- a/blib2to3/pgen2/tokenize.py
++++ b/blib2to3/pgen2/tokenize.py
+@@ -516,13 +516,14 @@ def generate_tokens(readline):
+                         stashed = tok
+                         continue
+ 
+-                    if token == 'def':
++                    if token in ('def', 'for'):
+                         if (stashed
+                                 and stashed[0] == NAME
+                                 and stashed[1] == 'async'):
+ 
+-                            async_def = True
+-                            async_def_indent = indents[-1]
++                            if token == 'def':
++                                async_def = True
++                                async_def_indent = indents[-1]
+ 
+                             yield (ASYNC, stashed[1],
+                                    stashed[2], stashed[3],

@@ -1,0 +1,16 @@
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index ee20c3d9b..5b396ede8 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -1982,9 +1982,9 @@ def parse_dfxp_time_expr(time_expr):
+     if mobj:
+         return float(mobj.group('time_offset'))
+ 
+-    mobj = re.match(r'^(\d+):(\d\d):(\d\d(?:\.\d+)?)$', time_expr)
++    mobj = re.match(r'^(\d+):(\d\d):(\d\d(?:(?:\.|:)\d+)?)$', time_expr)
+     if mobj:
+-        return 3600 * int(mobj.group(1)) + 60 * int(mobj.group(2)) + float(mobj.group(3))
++        return 3600 * int(mobj.group(1)) + 60 * int(mobj.group(2)) + float(mobj.group(3).replace(':', '.'))
+ 
+ 
+ def srt_subtitles_timecode(seconds):

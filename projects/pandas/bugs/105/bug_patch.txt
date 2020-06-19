@@ -1,0 +1,69 @@
+diff --git a/pandas/core/indexers.py b/pandas/core/indexers.py
+index 4fb42fce2..cb48d4be7 100644
+--- a/pandas/core/indexers.py
++++ b/pandas/core/indexers.py
+@@ -219,7 +219,7 @@ def maybe_convert_indices(indices, n: int):
+ 
+ def length_of_indexer(indexer, target=None) -> int:
+     """
+-    Return the length of a single non-tuple indexer which could be a slice.
++    Return the expected length of target[indexer]
+ 
+     Returns
+     -------
+@@ -245,6 +245,12 @@ def length_of_indexer(indexer, target=None) -> int:
+             step = -step
+         return (stop - start + step - 1) // step
+     elif isinstance(indexer, (ABCSeries, ABCIndexClass, np.ndarray, list)):
++        if isinstance(indexer, list):
++            indexer = np.array(indexer)
++
++        if indexer.dtype == bool:
++            # GH#25774
++            return indexer.sum()
+         return len(indexer)
+     elif not is_list_like_indexer(indexer):
+         return 1
+diff --git a/pandas/core/indexing.py b/pandas/core/indexing.py
+index 36140d321..d3e75d43c 100755
+--- a/pandas/core/indexing.py
++++ b/pandas/core/indexing.py
+@@ -1690,31 +1690,17 @@ class _iLocIndexer(_LocationIndexer):
+ 
+                 plane_indexer = tuple([idx]) + indexer[info_axis + 1 :]
+                 lplane_indexer = length_of_indexer(plane_indexer[0], index)
++                # lplane_indexer gives the expected length of obj[idx]
+ 
+                 # require that we are setting the right number of values that
+                 # we are indexing
+-                if (
+-                    is_list_like_indexer(value)
+-                    and np.iterable(value)
+-                    and lplane_indexer != len(value)
+-                ):
+-
+-                    if len(obj[idx]) != len(value):
+-                        raise ValueError(
+-                            "cannot set using a multi-index "
+-                            "selection indexer with a different "
+-                            "length than the value"
+-                        )
+-
+-                    # make sure we have an ndarray
+-                    value = getattr(value, "values", value).ravel()
++                if is_list_like_indexer(value) and lplane_indexer != len(value):
+ 
+-                    # we can directly set the series here
+-                    obj._consolidate_inplace()
+-                    obj = obj.copy()
+-                    obj._data = obj._data.setitem(indexer=tuple([idx]), value=value)
+-                    self.obj[item] = obj
+-                    return
++                    raise ValueError(
++                        "cannot set using a multi-index "
++                        "selection indexer with a different "
++                        "length than the value"
++                    )
+ 
+             # non-mi
+             else:

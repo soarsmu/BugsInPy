@@ -1,0 +1,49 @@
+diff --git a/pandas/core/dtypes/cast.py b/pandas/core/dtypes/cast.py
+index 223cc43d1..7dda6850b 100644
+--- a/pandas/core/dtypes/cast.py
++++ b/pandas/core/dtypes/cast.py
+@@ -33,6 +33,7 @@ from pandas.core.dtypes.common import (
+     ensure_str,
+     is_bool,
+     is_bool_dtype,
++    is_categorical_dtype,
+     is_complex,
+     is_complex_dtype,
+     is_datetime64_dtype,
+@@ -279,12 +280,15 @@ def maybe_cast_result(result, obj: "Series", numeric_only: bool = False, how: st
+     dtype = maybe_cast_result_dtype(dtype, how)
+ 
+     if not is_scalar(result):
+-        if is_extension_array_dtype(dtype) and dtype.kind != "M":
+-            # The result may be of any type, cast back to original
+-            # type if it's compatible.
+-            if len(result) and isinstance(result[0], dtype.type):
+-                cls = dtype.construct_array_type()
+-                result = maybe_cast_to_extension_array(cls, result, dtype=dtype)
++        if (
++            is_extension_array_dtype(dtype)
++            and not is_categorical_dtype(dtype)
++            and dtype.kind != "M"
++        ):
++            # We have to special case categorical so as not to upcast
++            # things like counts back to categorical
++            cls = dtype.construct_array_type()
++            result = maybe_cast_to_extension_array(cls, result, dtype=dtype)
+ 
+         elif numeric_only and is_numeric_dtype(dtype) or not numeric_only:
+             result = maybe_downcast_to_dtype(result, dtype)
+diff --git a/pandas/tests/resample/test_datetime_index.py b/pandas/tests/resample/test_datetime_index.py
+index bbb294bc1..f15d39e9e 100644
+--- a/pandas/tests/resample/test_datetime_index.py
++++ b/pandas/tests/resample/test_datetime_index.py
+@@ -122,9 +122,7 @@ def test_resample_integerarray():
+ 
+     result = ts.resample("3T").mean()
+     expected = Series(
+-        [1, 4, 7],
+-        index=pd.date_range("1/1/2000", periods=3, freq="3T"),
+-        dtype="float64",
++        [1, 4, 7], index=pd.date_range("1/1/2000", periods=3, freq="3T"), dtype="Int64",
+     )
+     tm.assert_series_equal(result, expected)
+ 

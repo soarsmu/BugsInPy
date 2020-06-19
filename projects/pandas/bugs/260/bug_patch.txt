@@ -1,0 +1,14 @@
+diff --git a/pandas/core/tools/datetimes.py b/pandas/core/tools/datetimes.py
+index 172084e97..b07647cf5 100644
+--- a/pandas/core/tools/datetimes.py
++++ b/pandas/core/tools/datetimes.py
+@@ -334,6 +334,9 @@ def _convert_listlike_datetimes(
+                 return DatetimeIndex(arg, tz=tz, name=name)
+             except ValueError:
+                 pass
++        elif tz:
++            # DatetimeArray, DatetimeIndex
++            return arg.tz_localize(tz)
+ 
+         return arg
+ 

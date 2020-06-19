@@ -1,0 +1,81 @@
+diff --git a/pandas/core/indexes/base.py b/pandas/core/indexes/base.py
+index 54e49eaf6..89ff1493a 100644
+--- a/pandas/core/indexes/base.py
++++ b/pandas/core/indexes/base.py
+@@ -4568,10 +4568,7 @@ class Index(IndexOpsMixin, PandasObject):
+         -------
+         scalar or Series
+         """
+-        if not is_scalar(key):
+-            # if key is not a scalar, directly raise an error (the code below
+-            # would convert to numpy arrays and raise later any way) - GH29926
+-            raise InvalidIndexError(key)
++        self._check_indexing_error(key)
+ 
+         try:
+             # GH 20882, 21257
+@@ -4592,6 +4589,12 @@ class Index(IndexOpsMixin, PandasObject):
+ 
+         return self._get_values_for_loc(series, loc, key)
+ 
++    def _check_indexing_error(self, key):
++        if not is_scalar(key):
++            # if key is not a scalar, directly raise an error (the code below
++            # would convert to numpy arrays and raise later any way) - GH29926
++            raise InvalidIndexError(key)
++
+     def _should_fallback_to_positional(self) -> bool:
+         """
+         If an integer key is not found, should we fall back to positional indexing?
+diff --git a/pandas/core/indexes/multi.py b/pandas/core/indexes/multi.py
+index 7aa145684..6e3602944 100644
+--- a/pandas/core/indexes/multi.py
++++ b/pandas/core/indexes/multi.py
+@@ -2333,23 +2333,21 @@ class MultiIndex(Index):
+     # --------------------------------------------------------------------
+     # Indexing Methods
+ 
+-    def get_value(self, series, key):
+-        # Label-based
++    def _check_indexing_error(self, key):
+         if not is_hashable(key) or is_iterator(key):
+             # We allow tuples if they are hashable, whereas other Index
+             #  subclasses require scalar.
+             # We have to explicitly exclude generators, as these are hashable.
+             raise InvalidIndexError(key)
+ 
+-        try:
+-            loc = self.get_loc(key)
+-        except KeyError:
+-            if is_integer(key):
+-                loc = key
+-            else:
+-                raise
+-
+-        return self._get_values_for_loc(series, loc, key)
++    def _should_fallback_to_positional(self) -> bool:
++        """
++        If an integer key is not found, should we fall back to positional indexing?
++        """
++        if not self.nlevels:
++            return False
++        # GH#33355
++        return self.levels[0]._should_fallback_to_positional()
+ 
+     def _get_values_for_loc(self, series: "Series", loc, key):
+         """
+diff --git a/pandas/tests/indexing/multiindex/test_getitem.py b/pandas/tests/indexing/multiindex/test_getitem.py
+index 7e75b5324..54b22dbc5 100644
+--- a/pandas/tests/indexing/multiindex/test_getitem.py
++++ b/pandas/tests/indexing/multiindex/test_getitem.py
+@@ -87,8 +87,8 @@ def test_series_getitem_returns_scalar(
+         (lambda s: s[(2000, 3, 4)], KeyError, r"^\(2000, 3, 4\)$"),
+         (lambda s: s.loc[(2000, 3, 4)], KeyError, r"^\(2000, 3, 4\)$"),
+         (lambda s: s.loc[(2000, 3, 4, 5)], IndexingError, "Too many indexers"),
+-        (lambda s: s.__getitem__(len(s)), IndexError, "is out of bounds"),
+-        (lambda s: s[len(s)], IndexError, "is out of bounds"),
++        (lambda s: s.__getitem__(len(s)), KeyError, ""),  # match should include len(s)
++        (lambda s: s[len(s)], KeyError, ""),  # match should include len(s)
+         (
+             lambda s: s.iloc[len(s)],
+             IndexError,

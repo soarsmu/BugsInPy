@@ -1,0 +1,185 @@
+diff --git a/thefuck/conf.py b/thefuck/conf.py
+index 7d25ce3..32e051a 100644
+--- a/thefuck/conf.py
++++ b/thefuck/conf.py
+@@ -14,7 +14,7 @@ class Settings(dict):
+     def __setattr__(self, key, value):
+         self[key] = value
+ 
+-    def init(self):
++    def init(self, args=None):
+         """Fills `settings` with values from `settings.py` and env."""
+         from .logs import exception
+ 
+@@ -31,6 +31,8 @@ class Settings(dict):
+         except Exception:
+             exception("Can't load settings from env", sys.exc_info())
+ 
++        self.update(self._settings_from_args(args))
++
+     def _init_settings_file(self):
+         settings_path = self.user_dir.joinpath('settings.py')
+         if not settings_path.is_file():
+@@ -109,5 +111,12 @@ class Settings(dict):
+                 for env, attr in const.ENV_TO_ATTR.items()
+                 if env in os.environ}
+ 
++    def _settings_from_args(self, args):
++        """Loads settings from args."""
++        if args and args.yes:
++            return {'require_confirmation': False}
++        else:
++            return {}
++
+ 
+ settings = Settings(const.DEFAULT_SETTINGS)
+diff --git a/thefuck/const.py b/thefuck/const.py
+index e6fbf38..e57ce96 100644
+--- a/thefuck/const.py
++++ b/thefuck/const.py
+@@ -59,3 +59,5 @@ SETTINGS_HEADER = u"""# The Fuck settings file
+ #
+ 
+ """
++
++ARGUMENT_PLACEHOLDER = 'THEFUCK_ARGUMENT_PLACEHOLDER'
+diff --git a/thefuck/logs.py b/thefuck/logs.py
+index cb96e57..b141f17 100644
+--- a/thefuck/logs.py
++++ b/thefuck/logs.py
+@@ -121,3 +121,9 @@ def configured_successfully(configuration_details):
+             bold=color(colorama.Style.BRIGHT),
+             reset=color(colorama.Style.RESET_ALL),
+             reload=configuration_details.reload))
++
++
++def version(thefuck_version, python_version):
++    print(u'The Fuck {} using Python {}'.format(thefuck_version,
++                                                python_version),
++          file=sys.stderr)
+diff --git a/thefuck/main.py b/thefuck/main.py
+index 565ef38..d39fff1 100644
+--- a/thefuck/main.py
++++ b/thefuck/main.py
+@@ -3,7 +3,6 @@ from .system import init_output
+ 
+ init_output()
+ 
+-from argparse import ArgumentParser  # noqa: E402
+ from pprint import pformat  # noqa: E402
+ import sys  # noqa: E402
+ from . import logs, types  # noqa: E402
+@@ -11,18 +10,19 @@ from .shells import shell  # noqa: E402
+ from .conf import settings  # noqa: E402
+ from .corrector import get_corrected_commands  # noqa: E402
+ from .exceptions import EmptyCommand  # noqa: E402
+-from .utils import get_installation_info, get_alias  # noqa: E402
+ from .ui import select_command  # noqa: E402
++from .argument_parser import Parser  # noqa: E402
++from .utils import get_installation_info  # noqa: E402
+ 
+ 
+-def fix_command():
++def fix_command(known_args):
+     """Fixes previous command. Used when `thefuck` called without arguments."""
+-    settings.init()
++    settings.init(known_args)
+     with logs.debug_time('Total'):
+         logs.debug(u'Run with settings: {}'.format(pformat(settings)))
+ 
+         try:
+-            command = types.Command.from_raw_script(sys.argv[1:])
++            command = types.Command.from_raw_script(known_args.command)
+         except EmptyCommand:
+             logs.debug('Empty command, nothing to do')
+             return
+@@ -36,34 +36,18 @@ def fix_command():
+             sys.exit(1)
+ 
+ 
+-def print_alias():
+-    """Prints alias for current shell."""
+-    try:
+-        alias = sys.argv[2]
+-    except IndexError:
+-        alias = get_alias()
+-
+-    print(shell.app_alias(alias))
+-
+-
+ def main():
+-    parser = ArgumentParser(prog='thefuck')
+-    version = get_installation_info().version
+-    parser.add_argument('-v', '--version',
+-                        action='version',
+-                        version='The Fuck {} using Python {}'.format(
+-                            version, sys.version.split()[0]))
+-    parser.add_argument('-a', '--alias',
+-                        action='store_true',
+-                        help='[custom-alias-name] prints alias for current shell')
+-    parser.add_argument('command',
+-                        nargs='*',
+-                        help='command that should be fixed')
+-    known_args = parser.parse_args(sys.argv[1:2])
+-
+-    if known_args.alias:
+-        print_alias()
++    parser = Parser()
++    known_args = parser.parse(sys.argv)
++
++    if known_args.help:
++        parser.print_help()
++    elif known_args.version:
++        logs.version(get_installation_info().version,
++                     sys.version.split()[0])
+     elif known_args.command:
+-        fix_command()
++        fix_command(known_args)
++    elif known_args.alias:
++        print(shell.app_alias(known_args.alias))
+     else:
+         parser.print_usage()
+diff --git a/thefuck/shells/zsh.py b/thefuck/shells/zsh.py
+index 5bfd2be..219d2fd 100644
+--- a/thefuck/shells/zsh.py
++++ b/thefuck/shells/zsh.py
+@@ -1,23 +1,28 @@
+ from time import time
+ import os
+ from ..conf import settings
++from ..const import ARGUMENT_PLACEHOLDER
+ from ..utils import memoize
+ from .generic import Generic
+ 
+ 
+ class Zsh(Generic):
+     def app_alias(self, alias_name):
+-        # It is VERY important to have the variables declared WITHIN the alias
+-        alias = "alias {0}='TF_CMD=$(TF_ALIAS={0}" \
+-                " PYTHONIOENCODING=utf-8" \
+-                " TF_SHELL_ALIASES=$(alias)" \
+-                " thefuck $(fc -ln -1 | tail -n 1)) &&" \
+-                " eval $TF_CMD".format(alias_name)
+-
+-        if settings.alter_history:
+-            return alias + " ; test -n \"$TF_CMD\" && print -s $TF_CMD'"
+-        else:
+-            return alias + "'"
++        # It is VERY important to have the variables declared WITHIN the function
++        return '''
++            {name} () {{
++                TF_ALIAS={name};
++                PYTHONIOENCODING=utf-8;
++                TF_SHELL_ALIASES=$(alias);
++                TF_PREVIOUS=$(fc -ln -1 | tail -n 1);
++                TF_CMD=$(thefuck $TF_PREVIOUS {argument_placeholder} $*) && eval $TF_CMD;
++                {alter_history}
++            }}
++        '''.format(
++            name=alias_name,
++            argument_placeholder=ARGUMENT_PLACEHOLDER,
++            alter_history=('test -n "$TF_CMD" && print -s $TF_CMD'
++                           if settings.alter_history else ''))
+ 
+     def _parse_alias(self, alias):
+         name, value = alias.split('=', 1)

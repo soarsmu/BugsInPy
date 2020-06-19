@@ -1,0 +1,13 @@
+diff --git a/black.py b/black.py
+index d9348a3..26a2915 100644
+--- a/black.py
++++ b/black.py
+@@ -394,7 +394,7 @@ def target_version_option_callback(
+ @click.option(
+     "--config",
+     type=click.Path(
+-        exists=False, file_okay=True, dir_okay=False, readable=True, allow_dash=False
++        exists=True, file_okay=True, dir_okay=False, readable=True, allow_dash=False
+     ),
+     is_eager=True,
+     callback=read_pyproject_toml,

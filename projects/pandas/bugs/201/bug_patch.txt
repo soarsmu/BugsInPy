@@ -1,0 +1,91 @@
+diff --git a/pandas/core/arrays/categorical.py b/pandas/core/arrays/categorical.py
+index 53689b6bc..c6e2a7b7a 100644
+--- a/pandas/core/arrays/categorical.py
++++ b/pandas/core/arrays/categorical.py
+@@ -2470,6 +2470,51 @@ class Categorical(ExtensionArray, PandasObject):
+         code_values = code_values[null_mask | (code_values >= 0)]
+         return algorithms.isin(self.codes, code_values)
+ 
++    def replace(self, to_replace, value, inplace: bool = False):
++        """
++        Replaces all instances of one value with another
++
++        Parameters
++        ----------
++        to_replace: object
++            The value to be replaced
++
++        value: object
++            The value to replace it with
++
++        inplace: bool
++            Whether the operation is done in-place
++
++        Returns
++        -------
++        None if inplace is True, otherwise the new Categorical after replacement
++
++
++        Examples
++        --------
++        >>> s = pd.Categorical([1, 2, 1, 3])
++        >>> s.replace(1, 3)
++        [3, 3, 2, 3]
++        Categories (2, int64): [2, 3]
++        """
++        inplace = validate_bool_kwarg(inplace, "inplace")
++        cat = self if inplace else self.copy()
++        if to_replace in cat.categories:
++            if isna(value):
++                cat.remove_categories(to_replace, inplace=True)
++            else:
++                categories = cat.categories.tolist()
++                index = categories.index(to_replace)
++                if value in cat.categories:
++                    value_index = categories.index(value)
++                    cat._codes[cat._codes == index] = value_index
++                    cat.remove_categories(to_replace, inplace=True)
++                else:
++                    categories[index] = value
++                    cat.rename_categories(categories, inplace=True)
++        if not inplace:
++            return cat
++
+ 
+ # The Series.cat accessor
+ 
+diff --git a/pandas/core/internals/blocks.py b/pandas/core/internals/blocks.py
+index 38e1f241c..7ace80415 100644
+--- a/pandas/core/internals/blocks.py
++++ b/pandas/core/internals/blocks.py
+@@ -2924,6 +2924,30 @@ class CategoricalBlock(ExtensionBlock):
+             )
+         return result
+ 
++    def replace(
++        self,
++        to_replace,
++        value,
++        inplace: bool = False,
++        filter=None,
++        regex: bool = False,
++        convert: bool = True,
++    ):
++        inplace = validate_bool_kwarg(inplace, "inplace")
++        result = self if inplace else self.copy()
++        if filter is None:  # replace was called on a series
++            result.values.replace(to_replace, value, inplace=True)
++            if convert:
++                return result.convert(numeric=False, copy=not inplace)
++            else:
++                return result
++        else:  # replace was called on a DataFrame
++            if not isna(value):
++                result.values.add_categories(value, inplace=True)
++            return super(CategoricalBlock, result).replace(
++                to_replace, value, inplace, filter, regex, convert
++            )
++
+ 
+ # -----------------------------------------------------------------
+ # Constructor Helpers

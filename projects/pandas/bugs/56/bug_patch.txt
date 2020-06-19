@@ -1,0 +1,13 @@
+diff --git a/pandas/io/json/_json.py b/pandas/io/json/_json.py
+index 886387a7a..20724a498 100644
+--- a/pandas/io/json/_json.py
++++ b/pandas/io/json/_json.py
+@@ -982,7 +982,7 @@ class Parser:
+         for date_unit in date_units:
+             try:
+                 new_data = to_datetime(new_data, errors="raise", unit=date_unit)
+-            except (ValueError, OverflowError):
++            except (ValueError, OverflowError, TypeError):
+                 continue
+             return new_data, True
+         return data, False

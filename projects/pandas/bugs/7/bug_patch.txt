@@ -1,0 +1,87 @@
+diff --git a/pandas/core/arrays/sparse/array.py b/pandas/core/arrays/sparse/array.py
+index 2720c831b..3cfd92d77 100644
+--- a/pandas/core/arrays/sparse/array.py
++++ b/pandas/core/arrays/sparse/array.py
+@@ -13,6 +13,7 @@ from pandas._libs import lib
+ import pandas._libs.sparse as splib
+ from pandas._libs.sparse import BlockIndex, IntIndex, SparseIndex
+ from pandas._libs.tslibs import NaT
++from pandas._typing import Scalar
+ import pandas.compat as compat
+ from pandas.compat.numpy import function as nv
+ from pandas.errors import PerformanceWarning
+@@ -46,6 +47,7 @@ import pandas.core.common as com
+ from pandas.core.construction import extract_array, sanitize_array
+ from pandas.core.indexers import check_array_indexer
+ from pandas.core.missing import interpolate_2d
++from pandas.core.nanops import check_below_min_count
+ import pandas.core.ops as ops
+ from pandas.core.ops.common import unpack_zerodim_and_defer
+ 
+@@ -1220,21 +1222,36 @@ class SparseArray(PandasObject, ExtensionArray, ExtensionOpsMixin):
+ 
+         return values.any().item()
+ 
+-    def sum(self, axis=0, *args, **kwargs):
++    def sum(self, axis: int = 0, min_count: int = 0, *args, **kwargs) -> Scalar:
+         """
+         Sum of non-NA/null values
+ 
++        Parameters
++        ----------
++        axis : int, default 0
++            Not Used. NumPy compatibility.
++        min_count : int, default 0
++            The required number of valid values to perform the summation. If fewer
++            than ``min_count`` valid values are present, the result will be the missing
++            value indicator for subarray type.
++        *args, **kwargs
++            Not Used. NumPy compatibility.
++
+         Returns
+         -------
+-        sum : float
++        scalar
+         """
+         nv.validate_sum(args, kwargs)
+         valid_vals = self._valid_sp_values
+         sp_sum = valid_vals.sum()
+         if self._null_fill_value:
++            if check_below_min_count(valid_vals.shape, None, min_count):
++                return na_value_for_dtype(self.dtype.subtype, compat=False)
+             return sp_sum
+         else:
+             nsparse = self.sp_index.ngaps
++            if check_below_min_count(valid_vals.shape, None, min_count - nsparse):
++                return na_value_for_dtype(self.dtype.subtype, compat=False)
+             return sp_sum + self.fill_value * nsparse
+ 
+     def cumsum(self, axis=0, *args, **kwargs):
+diff --git a/pandas/core/dtypes/missing.py b/pandas/core/dtypes/missing.py
+index 443206754..75188ad5b 100644
+--- a/pandas/core/dtypes/missing.py
++++ b/pandas/core/dtypes/missing.py
+@@ -520,7 +520,9 @@ def na_value_for_dtype(dtype, compat: bool = True):
+             return 0
+         return np.nan
+     elif is_bool_dtype(dtype):
+-        return False
++        if compat:
++            return False
++        return np.nan
+     return np.nan
+ 
+ 
+diff --git a/pandas/core/nanops.py b/pandas/core/nanops.py
+index 0a9d6f217..6b8518d8a 100644
+--- a/pandas/core/nanops.py
++++ b/pandas/core/nanops.py
+@@ -1283,7 +1283,7 @@ def _maybe_null_out(
+ 
+ def check_below_min_count(
+     shape: Tuple[int, ...], mask: Optional[np.ndarray], min_count: int
+-):
++) -> bool:
+     """
+     Check for the `min_count` keyword. Returns True if below `min_count` (when
+     missing value should be returned from the reduction).

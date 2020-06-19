@@ -1,0 +1,13 @@
+diff --git a/youtube_dl/extractor/facebook.py b/youtube_dl/extractor/facebook.py
+index f0cd8f156..f7cf700b5 100644
+--- a/youtube_dl/extractor/facebook.py
++++ b/youtube_dl/extractor/facebook.py
+@@ -20,7 +20,7 @@ from ..utils import (
+ class FacebookIE(InfoExtractor):
+     _VALID_URL = r'''(?x)
+         https?://(?:\w+\.)?facebook\.com/
+-        (?:[^#?]*\#!/)?
++        (?:[^#]*?\#!/)?
+         (?:video/video\.php|photo\.php|video/embed)\?(?:.*?)
+         (?:v|video_id)=(?P<id>[0-9]+)
+         (?:.*)'''

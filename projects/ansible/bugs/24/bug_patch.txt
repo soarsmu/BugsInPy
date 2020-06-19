@@ -1,0 +1,44 @@
+diff --git a/lib/ansible/module_utils/facts/hardware/linux.py b/lib/ansible/module_utils/facts/hardware/linux.py
+index befc2fb5e7..503a6e3b73 100644
+--- a/lib/ansible/module_utils/facts/hardware/linux.py
++++ b/lib/ansible/module_utils/facts/hardware/linux.py
+@@ -242,8 +242,9 @@ class LinuxHardware(Hardware):
+ 
+         # The fields for ARM CPUs do not always include 'vendor_id' or 'model name',
+         # and sometimes includes both 'processor' and 'Processor'.
+-        # Always use 'processor' count for ARM systems
+-        if collected_facts.get('ansible_architecture', '').startswith(('armv', 'aarch')):
++        # The fields for Power CPUs include 'processor' and 'cpu'.
++        # Always use 'processor' count for ARM and Power systems
++        if collected_facts.get('ansible_architecture', '').startswith(('armv', 'aarch', 'ppc')):
+             i = processor_occurence
+ 
+         # FIXME
+diff --git a/test/units/module_utils/facts/hardware/linux_data.py b/test/units/module_utils/facts/hardware/linux_data.py
+index ba2e528d7a..05dc0e6513 100644
+--- a/test/units/module_utils/facts/hardware/linux_data.py
++++ b/test/units/module_utils/facts/hardware/linux_data.py
+@@ -495,9 +495,9 @@ CPU_INFO_TEST_SCENARIOS = [
+                 '7', 'POWER7 (architected), altivec supported'
+             ],
+             'processor_cores': 1,
+-            'processor_count': 16,
++            'processor_count': 8,
+             'processor_threads_per_core': 1,
+-            'processor_vcpus': 16
++            'processor_vcpus': 8
+         },
+     },
+     {
+@@ -531,9 +531,9 @@ CPU_INFO_TEST_SCENARIOS = [
+                 '23', 'POWER8 (architected), altivec supported',
+             ],
+             'processor_cores': 1,
+-            'processor_count': 48,
++            'processor_count': 24,
+             'processor_threads_per_core': 1,
+-            'processor_vcpus': 48
++            'processor_vcpus': 24
+         },
+     },
+     {

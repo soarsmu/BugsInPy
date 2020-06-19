@@ -1,0 +1,15 @@
+diff --git a/pandas/core/groupby/grouper.py b/pandas/core/groupby/grouper.py
+index 9660fb9c2..39892d87b 100644
+--- a/pandas/core/groupby/grouper.py
++++ b/pandas/core/groupby/grouper.py
+@@ -754,7 +754,9 @@ def get_grouper(
+             return False
+         try:
+             return gpr is obj[gpr.name]
+-        except (KeyError, IndexError):
++        except (KeyError, IndexError, ValueError):
++            # TODO: ValueError: Given date string not likely a datetime.
++            # should be KeyError?
+             return False
+ 
+     for i, (gpr, level) in enumerate(zip(keys, levels)):

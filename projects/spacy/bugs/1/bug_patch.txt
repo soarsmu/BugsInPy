@@ -1,0 +1,18 @@
+diff --git a/spacy/errors.py b/spacy/errors.py
+index 32ccd3df7..b97ef3a8e 100644
+--- a/spacy/errors.py
++++ b/spacy/errors.py
+@@ -7,8 +7,11 @@ def add_codes(err_cls):
+ 
+     class ErrorsWithCodes(object):
+         def __getattribute__(self, code):
+-            msg = getattr(err_cls, code)
+-            return "[{code}] {msg}".format(code=code, msg=msg)
++            if not code.startswith('__'):
++                msg = getattr(err_cls, code)
++                return "[{code}] {msg}".format(code=code, msg=msg)
++            else:
++                return super().__getattribute__(code)
+ 
+     return ErrorsWithCodes()
+ 

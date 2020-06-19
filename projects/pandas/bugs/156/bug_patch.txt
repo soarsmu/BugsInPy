@@ -1,0 +1,182 @@
+diff --git a/pandas/io/common.py b/pandas/io/common.py
+index 43cd7d81a..771a302d6 100644
+--- a/pandas/io/common.py
++++ b/pandas/io/common.py
+@@ -1,25 +1,13 @@
+ """Common IO api utilities"""
+ 
+ import bz2
+-import codecs
+ from collections import abc
+ import gzip
+ from io import BufferedIOBase, BytesIO
+ import mmap
+ import os
+ import pathlib
+-from typing import (
+-    IO,
+-    Any,
+-    AnyStr,
+-    BinaryIO,
+-    Dict,
+-    List,
+-    Mapping,
+-    Optional,
+-    Tuple,
+-    Union,
+-)
++from typing import IO, Any, AnyStr, Dict, List, Mapping, Optional, Tuple, Union
+ from urllib.parse import (  # noqa
+     urlencode,
+     urljoin,
+@@ -538,24 +526,3 @@ class _MMapWrapper(abc.Iterator):
+         if newline == "":
+             raise StopIteration
+         return newline
+-
+-
+-class UTF8Recoder(abc.Iterator):
+-    """
+-    Iterator that reads an encoded stream and re-encodes the input to UTF-8
+-    """
+-
+-    def __init__(self, f: BinaryIO, encoding: str):
+-        self.reader = codecs.getreader(encoding)(f)
+-
+-    def read(self, bytes: int = -1) -> bytes:
+-        return self.reader.read(bytes).encode("utf-8")
+-
+-    def readline(self) -> bytes:
+-        return self.reader.readline().encode("utf-8")
+-
+-    def __next__(self) -> bytes:
+-        return next(self.reader).encode("utf-8")
+-
+-    def close(self):
+-        self.reader.close()
+diff --git a/pandas/io/parsers.py b/pandas/io/parsers.py
+index 21e1ef98f..b4eb2fb14 100755
+--- a/pandas/io/parsers.py
++++ b/pandas/io/parsers.py
+@@ -5,7 +5,7 @@ Module contains tools for processing files into DataFrames or other objects
+ from collections import abc, defaultdict
+ import csv
+ import datetime
+-from io import StringIO
++from io import BufferedIOBase, StringIO, TextIOWrapper
+ import re
+ import sys
+ from textwrap import fill
+@@ -62,7 +62,6 @@ from pandas.core.series import Series
+ from pandas.core.tools import datetimes as tools
+ 
+ from pandas.io.common import (
+-    UTF8Recoder,
+     get_filepath_or_buffer,
+     get_handle,
+     infer_compression,
+@@ -1868,12 +1867,18 @@ class CParserWrapper(ParserBase):
+ 
+         ParserBase.__init__(self, kwds)
+ 
+-        if kwds.get("compression") is None and "utf-16" in (kwds.get("encoding") or ""):
+-            # if source is utf-16 plain text, convert source to utf-8
++        encoding = kwds.get("encoding")
++
++        if kwds.get("compression") is None and encoding:
+             if isinstance(src, str):
+                 src = open(src, "rb")
+                 self.handles.append(src)
+-            src = UTF8Recoder(src, kwds["encoding"])
++
++            # Handle the file object with universal line mode enabled.
++            # We will handle the newline character ourselves later on.
++            if isinstance(src, BufferedIOBase):
++                src = TextIOWrapper(src, encoding=encoding, newline="")
++
+             kwds["encoding"] = "utf-8"
+ 
+         # #2442
+diff --git a/pandas/tests/io/parser/conftest.py b/pandas/tests/io/parser/conftest.py
+index 1b9edd1f6..15967e3be 100644
+--- a/pandas/tests/io/parser/conftest.py
++++ b/pandas/tests/io/parser/conftest.py
+@@ -95,3 +95,29 @@ def python_parser_only(request):
+     Fixture all of the CSV parsers using the Python engine.
+     """
+     return request.param
++
++
++_utf_values = [8, 16, 32]
++
++_encoding_seps = ["", "-", "_"]
++_encoding_prefixes = ["utf", "UTF"]
++
++_encoding_fmts = [
++    f"{prefix}{sep}" + "{0}" for sep in _encoding_seps for prefix in _encoding_prefixes
++]
++
++
++@pytest.fixture(params=_utf_values)
++def utf_value(request):
++    """
++    Fixture for all possible integer values for a UTF encoding.
++    """
++    return request.param
++
++
++@pytest.fixture(params=_encoding_fmts)
++def encoding_fmt(request):
++    """
++    Fixture for all possible string formats of a UTF encoding.
++    """
++    return request.param
+diff --git a/pandas/tests/io/parser/test_encoding.py b/pandas/tests/io/parser/test_encoding.py
+index 2540dd9b1..33abf4bb7 100644
+--- a/pandas/tests/io/parser/test_encoding.py
++++ b/pandas/tests/io/parser/test_encoding.py
+@@ -5,6 +5,7 @@ for all of the parsers defined in parsers.py
+ 
+ from io import BytesIO
+ import os
++import tempfile
+ 
+ import numpy as np
+ import pytest
+@@ -119,14 +120,12 @@ def test_utf8_bom(all_parsers, data, kwargs, expected):
+     tm.assert_frame_equal(result, expected)
+ 
+ 
+-@pytest.mark.parametrize("byte", [8, 16])
+-@pytest.mark.parametrize("fmt", ["utf-{0}", "utf_{0}", "UTF-{0}", "UTF_{0}"])
+-def test_read_csv_utf_aliases(all_parsers, byte, fmt):
++def test_read_csv_utf_aliases(all_parsers, utf_value, encoding_fmt):
+     # see gh-13549
+     expected = DataFrame({"mb_num": [4.8], "multibyte": ["test"]})
+     parser = all_parsers
+ 
+-    encoding = fmt.format(byte)
++    encoding = encoding_fmt.format(utf_value)
+     data = "mb_num,multibyte\n4.8,test".encode(encoding)
+ 
+     result = parser.read_csv(BytesIO(data), encoding=encoding)
+@@ -155,3 +154,19 @@ def test_binary_mode_file_buffers(all_parsers, csv_dir_path, fname, encoding):
+     with open(fpath, mode="rb") as fb:
+         result = parser.read_csv(fb, encoding=encoding)
+     tm.assert_frame_equal(expected, result)
++
++
++@pytest.mark.parametrize("pass_encoding", [True, False])
++def test_encoding_temp_file(all_parsers, utf_value, encoding_fmt, pass_encoding):
++    # see gh-24130
++    parser = all_parsers
++    encoding = encoding_fmt.format(utf_value)
++
++    expected = DataFrame({"foo": ["bar"]})
++
++    with tempfile.TemporaryFile(mode="w+", encoding=encoding) as f:
++        f.write("foo\nbar")
++        f.seek(0)
++
++        result = parser.read_csv(f, encoding=encoding if pass_encoding else None)
++        tm.assert_frame_equal(result, expected)

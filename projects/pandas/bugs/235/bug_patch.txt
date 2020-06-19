@@ -1,0 +1,14 @@
+diff --git a/pandas/core/series.py b/pandas/core/series.py
+index 10d50e89c..922977bc0 100644
+--- a/pandas/core/series.py
++++ b/pandas/core/series.py
+@@ -2730,7 +2730,8 @@ class Series(base.IndexOpsMixin, generic.NDFrame):
+         from pandas.core.reshape.concat import concat
+ 
+         if isinstance(to_append, (list, tuple)):
+-            to_concat = [self] + to_append
++            to_concat = [self]
++            to_concat.extend(to_append)
+         else:
+             to_concat = [self, to_append]
+         return concat(

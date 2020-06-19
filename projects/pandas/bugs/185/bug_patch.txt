@@ -1,0 +1,37 @@
+diff --git a/pandas/core/indexes/base.py b/pandas/core/indexes/base.py
+index 803c29c32..ba0f771e1 100644
+--- a/pandas/core/indexes/base.py
++++ b/pandas/core/indexes/base.py
+@@ -2939,11 +2939,11 @@ class Index(IndexOpsMixin, PandasObject):
+                     "unicode",
+                     "mixed",
+                 ]:
+-                    return self._invalid_indexer("label", key)
++                    self._invalid_indexer("label", key)
+ 
+             elif kind in ["loc"] and is_integer(key):
+                 if not self.holds_integer():
+-                    return self._invalid_indexer("label", key)
++                    self._invalid_indexer("label", key)
+ 
+         return key
+ 
+diff --git a/pandas/core/indexes/category.py b/pandas/core/indexes/category.py
+index d061f61ef..2cc853ecf 100644
+--- a/pandas/core/indexes/category.py
++++ b/pandas/core/indexes/category.py
+@@ -696,9 +696,11 @@ class CategoricalIndex(Index, accessor.PandasDelegate):
+ 
+     @Appender(_index_shared_docs["_convert_scalar_indexer"])
+     def _convert_scalar_indexer(self, key, kind=None):
+-        if self.categories._defer_to_indexing:
+-            return self.categories._convert_scalar_indexer(key, kind=kind)
+-
++        if kind == "loc":
++            try:
++                return self.categories._convert_scalar_indexer(key, kind=kind)
++            except TypeError:
++                self._invalid_indexer("label", key)
+         return super()._convert_scalar_indexer(key, kind=kind)
+ 
+     @Appender(_index_shared_docs["_convert_list_indexer"])

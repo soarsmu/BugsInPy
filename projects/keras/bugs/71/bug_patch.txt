@@ -1,0 +1,13 @@
+diff --git a/keras/utils/generic_utils.py b/keras/utils/generic_utils.py
+index 667e93f9..56e329e5 100644
+--- a/keras/utils/generic_utils.py
++++ b/keras/utils/generic_utils.py
+@@ -327,7 +327,7 @@ class Progbar(object):
+         info = ' - %.0fs' % (now - self.start)
+         if self.verbose == 1:
+             if (not force and (now - self.last_update) < self.interval and
+-                    current < self.target):
++                    (self.target is not None and current < self.target)):
+                 return
+ 
+             prev_total_width = self.total_width

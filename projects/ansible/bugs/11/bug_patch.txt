@@ -1,0 +1,60 @@
+diff --git a/lib/ansible/module_utils/basic.py b/lib/ansible/module_utils/basic.py
+index e55ac189db..2dad5f4983 100644
+--- a/lib/ansible/module_utils/basic.py
++++ b/lib/ansible/module_utils/basic.py
+@@ -1428,8 +1428,8 @@ class AnsibleModule(object):
+             self.fail_json(msg="Failure when processing no_log parameters. Module invocation will be hidden. "
+                                "%s" % to_native(te), invocation={'module_args': 'HIDDEN DUE TO FAILURE'})
+ 
+-        for msg, version in list_deprecations(spec, param):
+-            deprecate(msg, version)
++        for message in list_deprecations(spec, param):
++            deprecate(message['msg'], message['version'])
+ 
+     def _check_arguments(self, spec=None, param=None, legal_inputs=None):
+         self._syslog_facility = 'LOG_USER'
+diff --git a/lib/ansible/module_utils/common/parameters.py b/lib/ansible/module_utils/common/parameters.py
+index 9b41bc724a..f9991391aa 100644
+--- a/lib/ansible/module_utils/common/parameters.py
++++ b/lib/ansible/module_utils/common/parameters.py
+@@ -115,7 +115,7 @@ def list_no_log_values(argument_spec, params):
+     return no_log_values
+ 
+ 
+-def list_deprecations(argument_spec, params):
++def list_deprecations(argument_spec, params, prefix=''):
+     """Return a list of deprecations
+ 
+     :arg argument_spec: An argument spec dictionary from a module
+@@ -129,11 +129,26 @@ def list_deprecations(argument_spec, params):
+ 
+     deprecations = []
+     for arg_name, arg_opts in argument_spec.items():
+-        if arg_opts.get('removed_in_version') is not None and arg_name in params:
+-            deprecations.append({
+-                'msg': "Param '%s' is deprecated. See the module docs for more information" % arg_name,
+-                'version': arg_opts.get('removed_in_version')
+-            })
++        if arg_name in params:
++            if prefix:
++                sub_prefix = '%s["%s"]' % (prefix, arg_name)
++            else:
++                sub_prefix = arg_name
++            if arg_opts.get('removed_in_version') is not None:
++                deprecations.append({
++                    'msg': "Param '%s' is deprecated. See the module docs for more information" % sub_prefix,
++                    'version': arg_opts.get('removed_in_version')
++                })
++            # Check sub-argument spec
++            sub_argument_spec = arg_opts.get('options')
++            if sub_argument_spec is not None:
++                sub_arguments = params[arg_name]
++                if isinstance(sub_arguments, Mapping):
++                    sub_arguments = [sub_arguments]
++                if isinstance(sub_arguments, list):
++                    for sub_params in sub_arguments:
++                        if isinstance(sub_params, Mapping):
++                            deprecations.extend(list_deprecations(sub_argument_spec, sub_params, prefix=sub_prefix))
+ 
+     return deprecations
+ 

@@ -1,0 +1,27 @@
+diff --git a/tornado/http1connection.py b/tornado/http1connection.py
+index 71f0790d..76322145 100644
+--- a/tornado/http1connection.py
++++ b/tornado/http1connection.py
+@@ -481,7 +481,9 @@ class HTTP1Connection(httputil.HTTPConnection):
+             return connection_header != "close"
+         elif ("Content-Length" in headers
+               or headers.get("Transfer-Encoding", "").lower() == "chunked"
+-              or start_line.method in ("HEAD", "GET")):
++              or getattr(start_line, 'method', None) in ("HEAD", "GET")):
++            # start_line may be a request or reponse start line; only
++            # the former has a method attribute.
+             return connection_header == "keep-alive"
+         return False
+ 
+diff --git a/tornado/test/runtests.py b/tornado/test/runtests.py
+index ad9b0b83..3b22d396 100644
+--- a/tornado/test/runtests.py
++++ b/tornado/test/runtests.py
+@@ -29,6 +29,7 @@ TEST_MODULES = [
+     'tornado.test.curl_httpclient_test',
+     'tornado.test.escape_test',
+     'tornado.test.gen_test',
++    'tornado.test.http1connection_test',
+     'tornado.test.httpclient_test',
+     'tornado.test.httpserver_test',
+     'tornado.test.httputil_test',

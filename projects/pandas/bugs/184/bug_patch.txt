@@ -1,0 +1,33 @@
+diff --git a/pandas/core/indexes/base.py b/pandas/core/indexes/base.py
+index ba0f771e1..fc2412cea 100644
+--- a/pandas/core/indexes/base.py
++++ b/pandas/core/indexes/base.py
+@@ -2982,7 +2982,9 @@ class Index(IndexOpsMixin, PandasObject):
+ 
+         is_null_slicer = start is None and stop is None
+         is_index_slice = is_int(start) and is_int(stop)
+-        is_positional = is_index_slice and not self.is_integer()
++        is_positional = is_index_slice and not (
++            self.is_integer() or self.is_categorical()
++        )
+ 
+         if kind == "getitem":
+             """
+diff --git a/pandas/core/indexes/category.py b/pandas/core/indexes/category.py
+index 2cc853ecf..dc1cbb601 100644
+--- a/pandas/core/indexes/category.py
++++ b/pandas/core/indexes/category.py
+@@ -753,6 +753,13 @@ class CategoricalIndex(Index, accessor.PandasDelegate):
+ 
+     take_nd = take
+ 
++    @Appender(_index_shared_docs["_maybe_cast_slice_bound"])
++    def _maybe_cast_slice_bound(self, label, side, kind):
++        if kind == "loc":
++            return label
++
++        return super()._maybe_cast_slice_bound(label, side, kind)
++
+     def map(self, mapper):
+         """
+         Map values using input correspondence (a dict, Series, or function).

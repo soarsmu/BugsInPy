@@ -1,0 +1,9 @@
+diff --git a/keras/applications/__init__.py b/keras/applications/__init__.py
+index a29671e5..5b494587 100644
+--- a/keras/applications/__init__.py
++++ b/keras/applications/__init__.py
+@@ -5,3 +5,4 @@ from .inception_v3 import InceptionV3
+ from .inception_resnet_v2 import InceptionResNetV2
+ from .xception import Xception
+ from .mobilenet import MobileNet
++from .nasnet import NASNetMobile, NASNetLarge

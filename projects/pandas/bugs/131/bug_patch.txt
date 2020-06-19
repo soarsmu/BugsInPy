@@ -1,0 +1,13 @@
+diff --git a/pandas/io/json/_json.py b/pandas/io/json/_json.py
+index ae6ae70cb..204807b55 100644
+--- a/pandas/io/json/_json.py
++++ b/pandas/io/json/_json.py
+@@ -942,7 +942,7 @@ class Parser:
+                 if (new_data == data).all():
+                     data = new_data
+                     result = True
+-            except (TypeError, ValueError):
++            except (TypeError, ValueError, OverflowError):
+                 pass
+ 
+         # coerce ints to 64

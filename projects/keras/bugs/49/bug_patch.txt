@@ -1,0 +1,13 @@
+diff --git a/keras/applications/imagenet_utils.py b/keras/applications/imagenet_utils.py
+index cfdd1098..d6a3c23d 100644
+--- a/keras/applications/imagenet_utils.py
++++ b/keras/applications/imagenet_utils.py
+@@ -38,6 +38,8 @@ def _preprocess_numpy_input(x, data_format, mode):
+     # Returns
+         Preprocessed Numpy array.
+     """
++    x = x.astype(K.floatx())
++
+     if mode == 'tf':
+         x /= 127.5
+         x -= 1.

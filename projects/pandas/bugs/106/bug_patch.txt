@@ -1,0 +1,81 @@
+diff --git a/pandas/_testing.py b/pandas/_testing.py
+index b19905f1c..7ebf2c282 100644
+--- a/pandas/_testing.py
++++ b/pandas/_testing.py
+@@ -1074,6 +1074,7 @@ def assert_series_equal(
+     check_exact=False,
+     check_datetimelike_compat=False,
+     check_categorical=True,
++    check_category_order=True,
+     obj="Series",
+ ):
+     """
+@@ -1108,6 +1109,10 @@ def assert_series_equal(
+         Compare datetime-like which is comparable ignoring dtype.
+     check_categorical : bool, default True
+         Whether to compare internal Categorical exactly.
++    check_category_order : bool, default True
++        Whether to compare category order of internal Categoricals
++
++        .. versionadded:: 1.0.2
+     obj : str, default 'Series'
+         Specify object name being compared, internally used to show appropriate
+         assertion message.
+@@ -1210,7 +1215,12 @@ def assert_series_equal(
+ 
+     if check_categorical:
+         if is_categorical_dtype(left) or is_categorical_dtype(right):
+-            assert_categorical_equal(left.values, right.values, obj=f"{obj} category")
++            assert_categorical_equal(
++                left.values,
++                right.values,
++                obj=f"{obj} category",
++                check_category_order=check_category_order,
++            )
+ 
+ 
+ # This could be refactored to use the NDFrame.equals method
+diff --git a/pandas/core/arrays/categorical.py b/pandas/core/arrays/categorical.py
+index 19602010f..d469b5748 100644
+--- a/pandas/core/arrays/categorical.py
++++ b/pandas/core/arrays/categorical.py
+@@ -2441,18 +2441,30 @@ class Categorical(ExtensionArray, PandasObject):
+         """
+         inplace = validate_bool_kwarg(inplace, "inplace")
+         cat = self if inplace else self.copy()
+-        if to_replace in cat.categories:
+-            if isna(value):
+-                cat.remove_categories(to_replace, inplace=True)
+-            else:
++
++        # build a dict of (to replace -> value) pairs
++        if is_list_like(to_replace):
++            # if to_replace is list-like and value is scalar
++            replace_dict = {replace_value: value for replace_value in to_replace}
++        else:
++            # if both to_replace and value are scalar
++            replace_dict = {to_replace: value}
++
++        # other cases, like if both to_replace and value are list-like or if
++        # to_replace is a dict, are handled separately in NDFrame
++        for replace_value, new_value in replace_dict.items():
++            if replace_value in cat.categories:
++                if isna(new_value):
++                    cat.remove_categories(replace_value, inplace=True)
++                    continue
+                 categories = cat.categories.tolist()
+-                index = categories.index(to_replace)
+-                if value in cat.categories:
+-                    value_index = categories.index(value)
++                index = categories.index(replace_value)
++                if new_value in cat.categories:
++                    value_index = categories.index(new_value)
+                     cat._codes[cat._codes == index] = value_index
+-                    cat.remove_categories(to_replace, inplace=True)
++                    cat.remove_categories(replace_value, inplace=True)
+                 else:
+-                    categories[index] = value
++                    categories[index] = new_value
+                     cat.rename_categories(categories, inplace=True)
+         if not inplace:
+             return cat

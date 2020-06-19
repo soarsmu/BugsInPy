@@ -1,0 +1,10 @@
+diff --git a/thefuck/rules/git_diff_staged.py b/thefuck/rules/git_diff_staged.py
+index a35234e..c879cf4 100644
+--- a/thefuck/rules/git_diff_staged.py
++++ b/thefuck/rules/git_diff_staged.py
+@@ -10,4 +10,4 @@ def match(command, settings):
+ 
+ @utils.git_support
+ def get_new_command(command, settings):
+-    return '{} --staged'.format(command.script)
++    return command.script.replace(' diff', ' diff --staged')

@@ -1,0 +1,32 @@
+diff --git a/scrapy/pipelines/files.py b/scrapy/pipelines/files.py
+index ea06d2ae..cc3d10b6 100644
+--- a/scrapy/pipelines/files.py
++++ b/scrapy/pipelines/files.py
+@@ -5,6 +5,7 @@ See documentation in topics/media-pipeline.rst
+ """
+ import functools
+ import hashlib
++import mimetypes
+ import os
+ import os.path
+ import time
+@@ -14,6 +15,7 @@ from six.moves.urllib.parse import urlparse
+ from collections import defaultdict
+ import six
+ 
++
+ try:
+     from cStringIO import StringIO as BytesIO
+ except ImportError:
+@@ -473,4 +475,11 @@ class FilesPipeline(MediaPipeline):
+     def file_path(self, request, response=None, info=None):
+         media_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()
+         media_ext = os.path.splitext(request.url)[1]
++        # Handles empty and wild extensions by trying to guess the
++        # mime type then extension or default to empty string otherwise
++        if media_ext not in mimetypes.types_map:
++            media_ext = ''
++            media_type = mimetypes.guess_type(request.url)[0]
++            if media_type:
++                media_ext = mimetypes.guess_extension(media_type)
+         return 'full/%s%s' % (media_guid, media_ext)

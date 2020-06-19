@@ -1,0 +1,27 @@
+diff --git a/pandas/core/dtypes/dtypes.py b/pandas/core/dtypes/dtypes.py
+index d93ad973f..0730de934 100644
+--- a/pandas/core/dtypes/dtypes.py
++++ b/pandas/core/dtypes/dtypes.py
+@@ -324,6 +324,8 @@ class CategoricalDtype(PandasExtensionDtype, ExtensionDtype):
+                 raise ValueError(
+                     "Cannot specify `categories` or `ordered` together with `dtype`."
+                 )
++            elif not isinstance(dtype, CategoricalDtype):
++                raise ValueError(f"Cannot not construct CategoricalDtype from {dtype}")
+         elif is_categorical(values):
+             # If no "dtype" was passed, use the one from "values", but honor
+             # the "ordered" and "categories" arguments
+diff --git a/pandas/tests/indexes/common.py b/pandas/tests/indexes/common.py
+index 2073aa072..c9e762af3 100644
+--- a/pandas/tests/indexes/common.py
++++ b/pandas/tests/indexes/common.py
+@@ -605,7 +605,8 @@ class Base:
+         assert not indices.equals(np.array(indices))
+ 
+         # Cannot pass in non-int64 dtype to RangeIndex
+-        if not isinstance(indices, RangeIndex):
++        if not isinstance(indices, (RangeIndex, CategoricalIndex)):
++            # TODO: CategoricalIndex can be re-allowed following GH#32167
+             same_values = Index(indices, dtype=object)
+             assert indices.equals(same_values)
+             assert same_values.equals(indices)

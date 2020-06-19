@@ -1,0 +1,40 @@
+diff --git a/pandas/core/ops/dispatch.py b/pandas/core/ops/dispatch.py
+index 2463a1f58..637f0fa1d 100644
+--- a/pandas/core/ops/dispatch.py
++++ b/pandas/core/ops/dispatch.py
+@@ -71,8 +71,10 @@ def should_series_dispatch(left, right, op):
+         # numpy integer dtypes as timedelta64 dtypes in this scenario
+         return True
+ 
+-    if is_datetime64_dtype(ldtype) and is_object_dtype(rdtype):
+-        # in particular case where right is an array of DateOffsets
++    if (is_datetime64_dtype(ldtype) and is_object_dtype(rdtype)) or (
++        is_datetime64_dtype(rdtype) and is_object_dtype(ldtype)
++    ):
++        # in particular case where one is an array of DateOffsets
+         return True
+ 
+     return False
+diff --git a/pandas/tests/arithmetic/conftest.py b/pandas/tests/arithmetic/conftest.py
+index 577093c0f..c20a9567e 100644
+--- a/pandas/tests/arithmetic/conftest.py
++++ b/pandas/tests/arithmetic/conftest.py
+@@ -17,6 +17,18 @@ def id_func(x):
+ 
+ 
+ # ------------------------------------------------------------------
++@pytest.fixture(
++    params=[
++        ("foo", None, None),
++        ("Egon", "Venkman", None),
++        ("NCC1701D", "NCC1701D", "NCC1701D"),
++    ]
++)
++def names(request):
++    """
++    A 3-tuple of names, the first two for operands, the last for a result.
++    """
++    return request.param
+ 
+ 
+ @pytest.fixture(params=[1, np.array(1, dtype=np.int64)])

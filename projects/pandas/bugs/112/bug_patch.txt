@@ -1,0 +1,13 @@
+diff --git a/pandas/core/series.py b/pandas/core/series.py
+index c54331f86..94818ab8d 100644
+--- a/pandas/core/series.py
++++ b/pandas/core/series.py
+@@ -919,7 +919,7 @@ class Series(base.IndexOpsMixin, generic.NDFrame):
+                 indexer = self.index.get_indexer_for(key)
+                 return self.iloc[indexer]
+             else:
+-                return self._get_values(key)
++                return self.iloc[key]
+ 
+         if isinstance(key, (list, tuple)):
+             # TODO: de-dup with tuple case handled above?

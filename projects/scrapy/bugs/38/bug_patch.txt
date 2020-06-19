@@ -1,0 +1,65 @@
+diff --git a/scrapy/downloadermiddlewares/httpproxy.py b/scrapy/downloadermiddlewares/httpproxy.py
+index dda6a3d2..8c3514fd 100644
+--- a/scrapy/downloadermiddlewares/httpproxy.py
++++ b/scrapy/downloadermiddlewares/httpproxy.py
+@@ -9,7 +9,7 @@ from six.moves.urllib.parse import urlunparse
+ 
+ from scrapy.utils.httpobj import urlparse_cached
+ from scrapy.exceptions import NotConfigured
+-
++from scrapy.utils.python import to_bytes
+ 
+ class HttpProxyMiddleware(object):
+ 
+@@ -26,7 +26,7 @@ class HttpProxyMiddleware(object):
+         proxy_url = urlunparse((proxy_type or orig_type, hostport, '', '', '', ''))
+ 
+         if user:
+-            user_pass = '%s:%s' % (unquote(user), unquote(password))
++            user_pass = to_bytes('%s:%s' % (unquote(user), unquote(password)))
+             creds = base64.b64encode(user_pass).strip()
+         else:
+             creds = None
+@@ -52,4 +52,4 @@ class HttpProxyMiddleware(object):
+         creds, proxy = self.proxies[scheme]
+         request.meta['proxy'] = proxy
+         if creds:
+-            request.headers['Proxy-Authorization'] = 'Basic ' + creds
++            request.headers['Proxy-Authorization'] = b'Basic ' + creds
+diff --git a/tests/test_downloadermiddleware_retry.py b/tests/test_downloadermiddleware_retry.py
+index 20561e77..3de9399c 100644
+--- a/tests/test_downloadermiddleware_retry.py
++++ b/tests/test_downloadermiddleware_retry.py
+@@ -21,20 +21,20 @@ class RetryTest(unittest.TestCase):
+ 
+     def test_priority_adjust(self):
+         req = Request('http://www.scrapytest.org/503')
+-        rsp = Response('http://www.scrapytest.org/503', body='', status=503)
++        rsp = Response('http://www.scrapytest.org/503', body=b'', status=503)
+         req2 = self.mw.process_response(req, rsp, self.spider)
+         assert req2.priority < req.priority
+ 
+     def test_404(self):
+         req = Request('http://www.scrapytest.org/404')
+-        rsp = Response('http://www.scrapytest.org/404', body='', status=404)
++        rsp = Response('http://www.scrapytest.org/404', body=b'', status=404)
+ 
+         # dont retry 404s
+         assert self.mw.process_response(req, rsp, self.spider) is rsp
+ 
+     def test_dont_retry(self):
+         req = Request('http://www.scrapytest.org/503', meta={'dont_retry': True})
+-        rsp = Response('http://www.scrapytest.org/503', body='', status=503)
++        rsp = Response('http://www.scrapytest.org/503', body=b'', status=503)
+ 
+         # first retry
+         r = self.mw.process_response(req, rsp, self.spider)
+@@ -56,7 +56,7 @@ class RetryTest(unittest.TestCase):
+ 
+     def test_503(self):
+         req = Request('http://www.scrapytest.org/503')
+-        rsp = Response('http://www.scrapytest.org/503', body='', status=503)
++        rsp = Response('http://www.scrapytest.org/503', body=b'', status=503)
+ 
+         # first retry
+         req = self.mw.process_response(req, rsp, self.spider)

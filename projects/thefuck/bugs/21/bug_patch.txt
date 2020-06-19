@@ -1,0 +1,38 @@
+diff --git a/thefuck/argument_parser.py b/thefuck/argument_parser.py
+index d751fae..7e86d4c 100644
+--- a/thefuck/argument_parser.py
++++ b/thefuck/argument_parser.py
+@@ -24,6 +24,10 @@ class Parser(object):
+             '-y', '--yes',
+             action='store_true',
+             help='execute fixed command without confirmation')
++        self._parser.add_argument(
++            '-d', '--debug',
++            action='store_true',
++            help='enable debug output')
+         self._parser.add_argument('command',
+                                   nargs='*',
+                                   help='command that should be fixed')
+diff --git a/thefuck/conf.py b/thefuck/conf.py
+index 32e051a..04f6694 100644
+--- a/thefuck/conf.py
++++ b/thefuck/conf.py
+@@ -113,10 +113,15 @@ class Settings(dict):
+ 
+     def _settings_from_args(self, args):
+         """Loads settings from args."""
+-        if args and args.yes:
+-            return {'require_confirmation': False}
+-        else:
++        if not args:
+             return {}
+ 
++        from_args = {}
++        if args.yes:
++            from_args['require_confirmation'] = not args.yes
++        if args.debug:
++            from_args['debug'] = args.debug
++        return from_args
++
+ 
+ settings = Settings(const.DEFAULT_SETTINGS)

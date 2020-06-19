@@ -1,0 +1,13 @@
+diff --git a/pandas/core/apply.py b/pandas/core/apply.py
+index 70e0a129c..ceb45bc71 100644
+--- a/pandas/core/apply.py
++++ b/pandas/core/apply.py
+@@ -179,7 +179,7 @@ class FrameApply(metaclass=abc.ABCMeta):
+             return self.apply_empty_result()
+ 
+         # raw
+-        elif self.raw and not self.obj._is_mixed_type:
++        elif self.raw:
+             return self.apply_raw()
+ 
+         return self.apply_standard()

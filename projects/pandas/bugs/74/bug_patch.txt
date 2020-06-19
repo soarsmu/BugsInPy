@@ -1,0 +1,39 @@
+diff --git a/pandas/core/series.py b/pandas/core/series.py
+index 8a6839b4f..21477cce4 100644
+--- a/pandas/core/series.py
++++ b/pandas/core/series.py
+@@ -926,6 +926,10 @@ class Series(base.IndexOpsMixin, generic.NDFrame):
+         elif isinstance(key, tuple):
+             return self._get_values_tuple(key)
+ 
++        elif not is_list_like(key):
++            # e.g. scalars that aren't recognized by lib.is_scalar, GH#32684
++            return self.loc[key]
++
+         if not isinstance(key, (list, np.ndarray, ExtensionArray, Series, Index)):
+             key = list(key)
+ 
+diff --git a/pandas/tests/dtypes/test_inference.py b/pandas/tests/dtypes/test_inference.py
+index e0fef833d..ab9916eea 100644
+--- a/pandas/tests/dtypes/test_inference.py
++++ b/pandas/tests/dtypes/test_inference.py
+@@ -1437,6 +1437,7 @@ class TestIsScalar:
+         assert is_scalar(Period("2014-01-01"))
+         assert is_scalar(Interval(left=0, right=1))
+         assert is_scalar(DateOffset(days=1))
++        assert is_scalar(pd.offsets.Minute(3))
+ 
+     def test_is_scalar_pandas_containers(self):
+         assert not is_scalar(Series(dtype=object))
+@@ -1445,6 +1446,11 @@ class TestIsScalar:
+         assert not is_scalar(DataFrame([[1]]))
+         assert not is_scalar(Index([]))
+         assert not is_scalar(Index([1]))
++        assert not is_scalar(Categorical([]))
++        assert not is_scalar(DatetimeIndex([])._data)
++        assert not is_scalar(TimedeltaIndex([])._data)
++        assert not is_scalar(DatetimeIndex([])._data.to_period("D"))
++        assert not is_scalar(pd.array([1, 2, 3]))
+ 
+     def test_is_scalar_number(self):
+         # Number() is not recognied by PyNumber_Check, so by extension

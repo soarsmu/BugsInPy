@@ -1,0 +1,15 @@
+diff --git a/fastapi/openapi/utils.py b/fastapi/openapi/utils.py
+index d53ee6b..91f90ec 100644
+--- a/fastapi/openapi/utils.py
++++ b/fastapi/openapi/utils.py
+@@ -180,7 +180,9 @@ def get_openapi_path(
+             operation_parameters = get_openapi_operation_parameters(all_route_params)
+             parameters.extend(operation_parameters)
+             if parameters:
+-                operation["parameters"] = parameters
++                operation["parameters"] = list(
++                    {param["name"]: param for param in parameters}.values()
++                )
+             if method in METHODS_WITH_BODY:
+                 request_body_oai = get_openapi_operation_request_body(
+                     body_field=route.body_field, model_name_map=model_name_map

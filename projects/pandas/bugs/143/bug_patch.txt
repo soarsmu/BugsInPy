@@ -1,0 +1,78 @@
+diff --git a/asv_bench/benchmarks/reshape.py b/asv_bench/benchmarks/reshape.py
+index 441f4b380..21081ee23 100644
+--- a/asv_bench/benchmarks/reshape.py
++++ b/asv_bench/benchmarks/reshape.py
+@@ -161,6 +161,9 @@ class PivotTable:
+             observed=True,
+         )
+ 
++    def time_pivot_table_margins_only_column(self):
++        self.df.pivot_table(columns=["key2", "key3"], margins=True)
++
+ 
+ class Crosstab:
+     def setup(self):
+diff --git a/pandas/core/reshape/pivot.py b/pandas/core/reshape/pivot.py
+index 930ff5f45..e250a0727 100644
+--- a/pandas/core/reshape/pivot.py
++++ b/pandas/core/reshape/pivot.py
+@@ -226,15 +226,7 @@ def _add_margins(
+ 
+     elif values:
+         marginal_result_set = _generate_marginal_results(
+-            table,
+-            data,
+-            values,
+-            rows,
+-            cols,
+-            aggfunc,
+-            observed,
+-            grand_margin,
+-            margins_name,
++            table, data, values, rows, cols, aggfunc, observed, margins_name,
+         )
+         if not isinstance(marginal_result_set, tuple):
+             return marginal_result_set
+@@ -303,15 +295,7 @@ def _compute_grand_margin(data, values, aggfunc, margins_name: str = "All"):
+ 
+ 
+ def _generate_marginal_results(
+-    table,
+-    data,
+-    values,
+-    rows,
+-    cols,
+-    aggfunc,
+-    observed,
+-    grand_margin,
+-    margins_name: str = "All",
++    table, data, values, rows, cols, aggfunc, observed, margins_name: str = "All",
+ ):
+     if len(cols) > 0:
+         # need to "interleave" the margins
+@@ -345,12 +329,22 @@ def _generate_marginal_results(
+                 table_pieces.append(piece)
+                 margin_keys.append(all_key)
+         else:
+-            margin = grand_margin
++            from pandas import DataFrame
++
+             cat_axis = 0
+             for key, piece in table.groupby(level=0, axis=cat_axis, observed=observed):
+-                all_key = _all_key(key)
++                if len(cols) > 1:
++                    all_key = _all_key(key)
++                else:
++                    all_key = margins_name
+                 table_pieces.append(piece)
+-                table_pieces.append(Series(margin[key], index=[all_key]))
++                # GH31016 this is to calculate margin for each group, and assign
++                # corresponded key as index
++                transformed_piece = DataFrame(piece.apply(aggfunc)).T
++                transformed_piece.index = Index([all_key], name=piece.index.name)
++
++                # append piece for margin into table_piece
++                table_pieces.append(transformed_piece)
+                 margin_keys.append(all_key)
+ 
+         result = concat(table_pieces, axis=cat_axis)

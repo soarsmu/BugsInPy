@@ -1,0 +1,48 @@
+diff --git a/pandas/core/indexes/base.py b/pandas/core/indexes/base.py
+index b30d262f6..8042f71c2 100644
+--- a/pandas/core/indexes/base.py
++++ b/pandas/core/indexes/base.py
+@@ -469,19 +469,15 @@ class Index(IndexOpsMixin, PandasObject):
+                     pass
+                 elif inferred != "string":
+                     if inferred.startswith("datetime"):
+-                        if (
+-                            lib.is_datetime_with_singletz_array(subarr)
+-                            or "tz" in kwargs
+-                        ):
+-                            # only when subarr has the same tz
+-                            from pandas import DatetimeIndex
++                        from pandas import DatetimeIndex
+ 
+-                            try:
+-                                return DatetimeIndex(
+-                                    subarr, copy=copy, name=name, **kwargs
+-                                )
+-                            except OutOfBoundsDatetime:
+-                                pass
++                        try:
++                            return DatetimeIndex(subarr, copy=copy, name=name, **kwargs)
++                        except (ValueError, OutOfBoundsDatetime):
++                            # GH 27011
++                            # If we have mixed timezones, just send it
++                            # down the base constructor
++                            pass
+ 
+                     elif inferred.startswith("timedelta"):
+                         from pandas import TimedeltaIndex
+diff --git a/pandas/tests/arrays/interval/test_interval.py b/pandas/tests/arrays/interval/test_interval.py
+index 82409df5b..6a86289b6 100644
+--- a/pandas/tests/arrays/interval/test_interval.py
++++ b/pandas/tests/arrays/interval/test_interval.py
+@@ -42,10 +42,9 @@ class TestAttributes:
+             (0, 1),
+             (Timedelta("0 days"), Timedelta("1 day")),
+             (Timestamp("2018-01-01"), Timestamp("2018-01-02")),
+-            pytest.param(
++            (
+                 Timestamp("2018-01-01", tz="US/Eastern"),
+                 Timestamp("2018-01-02", tz="US/Eastern"),
+-                marks=pytest.mark.xfail(strict=True, reason="GH 27011"),
+             ),
+         ],
+     )

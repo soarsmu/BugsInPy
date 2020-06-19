@@ -1,0 +1,28 @@
+diff --git a/pandas/core/groupby/generic.py b/pandas/core/groupby/generic.py
+index 6b110a0c8..be94fa548 100644
+--- a/pandas/core/groupby/generic.py
++++ b/pandas/core/groupby/generic.py
+@@ -809,6 +809,9 @@ class SeriesGroupBy(GroupBy):
+                     periods=periods, fill_method=fill_method, limit=limit, freq=freq
+                 )
+             )
++        if fill_method is None:  # GH30463
++            fill_method = "pad"
++            limit = 0
+         filled = getattr(self, fill_method)(limit=limit)
+         fill_grp = filled.groupby(self.grouper.codes)
+         shifted = fill_grp.shift(periods=periods, freq=freq)
+diff --git a/pandas/core/groupby/groupby.py b/pandas/core/groupby/groupby.py
+index 0edf1c957..81a914531 100644
+--- a/pandas/core/groupby/groupby.py
++++ b/pandas/core/groupby/groupby.py
+@@ -2362,6 +2362,9 @@ class GroupBy(_GroupBy):
+                     axis=axis,
+                 )
+             )
++        if fill_method is None:  # GH30463
++            fill_method = "pad"
++            limit = 0
+         filled = getattr(self, fill_method)(limit=limit)
+         fill_grp = filled.groupby(self.grouper.codes)
+         shifted = fill_grp.shift(periods=periods, freq=freq)

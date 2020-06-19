@@ -1,0 +1,14 @@
+diff --git a/thefuck/rules/brew_update_formula.py b/thefuck/rules/brew_update_formula.py
+index 6b4f798..172df6a 100644
+--- a/thefuck/rules/brew_update_formula.py
++++ b/thefuck/rules/brew_update_formula.py
+@@ -5,8 +5,7 @@ from thefuck.utils import for_app
+ def match(command):
+     return ('update' in command.script
+             and "Error: This command updates brew itself" in command.output
+-            and "Use 'brew upgrade" in command.output
+-            and "instead" in command.output)
++            and "Use 'brew upgrade" in command.output)
+ 
+ 
+ def get_new_command(command):

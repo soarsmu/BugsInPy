@@ -1,0 +1,12 @@
+diff --git a/spacy/errors.py b/spacy/errors.py
+index 5d4d4298e..d75b1cec8 100644
+--- a/spacy/errors.py
++++ b/spacy/errors.py
+@@ -498,6 +498,7 @@ class Errors(object):
+             "details: https://spacy.io/api/lemmatizer#init")
+     E174 = ("Architecture '{name}' not found in registry. Available "
+             "names: {names}")
++    E175 = ("Can't remove rule for unknown match pattern ID: {key}")
+ 
+ 
+ @add_codes

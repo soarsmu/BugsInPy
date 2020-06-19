@@ -1,0 +1,13 @@
+diff --git a/keras/utils/np_utils.py b/keras/utils/np_utils.py
+index 7c3bccf4..572d0e5d 100644
+--- a/keras/utils/np_utils.py
++++ b/keras/utils/np_utils.py
+@@ -19,6 +19,8 @@ def to_categorical(y, num_classes=None):
+     """
+     y = np.array(y, dtype='int')
+     input_shape = y.shape
++    if input_shape and input_shape[-1] == 1:
++        input_shape = tuple(input_shape[:-1])
+     y = y.ravel()
+     if not num_classes:
+         num_classes = np.max(y) + 1

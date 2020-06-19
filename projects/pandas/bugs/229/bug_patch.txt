@@ -1,0 +1,29 @@
+diff --git a/pandas/core/apply.py b/pandas/core/apply.py
+index e6766a33a..61d093d19 100644
+--- a/pandas/core/apply.py
++++ b/pandas/core/apply.py
+@@ -204,17 +204,20 @@ class FrameApply:
+         from pandas import Series
+ 
+         if not should_reduce:
+-
+-            EMPTY_SERIES = Series([])
+             try:
+-                r = self.f(EMPTY_SERIES, *self.args, **self.kwds)
++                r = self.f(Series([]))
+             except Exception:
+                 pass
+             else:
+                 should_reduce = not isinstance(r, Series)
+ 
+         if should_reduce:
+-            return self.obj._constructor_sliced(np.nan, index=self.agg_axis)
++            if len(self.agg_axis):
++                r = self.f(Series([]))
++            else:
++                r = np.nan
++
++            return self.obj._constructor_sliced(r, index=self.agg_axis)
+         else:
+             return self.obj.copy()
+ 

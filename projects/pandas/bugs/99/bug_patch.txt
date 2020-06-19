@@ -1,0 +1,13 @@
+diff --git a/pandas/core/indexes/base.py b/pandas/core/indexes/base.py
+index c896e68f7..53c4dfde2 100644
+--- a/pandas/core/indexes/base.py
++++ b/pandas/core/indexes/base.py
+@@ -304,7 +304,7 @@ class Index(IndexOpsMixin, PandasObject):
+             # Delay import for perf. https://github.com/pandas-dev/pandas/pull/31423
+             from pandas.core.indexes.category import CategoricalIndex
+ 
+-            return CategoricalIndex(data, dtype=dtype, copy=copy, name=name, **kwargs)
++            return _maybe_asobject(dtype, CategoricalIndex, data, copy, name, **kwargs)
+ 
+         # interval
+         elif is_interval_dtype(data) or is_interval_dtype(dtype):

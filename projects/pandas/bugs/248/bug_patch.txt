@@ -1,0 +1,58 @@
+diff --git a/pandas/plotting/_matplotlib/core.py b/pandas/plotting/_matplotlib/core.py
+index fbca57206..6ff3f2844 100644
+--- a/pandas/plotting/_matplotlib/core.py
++++ b/pandas/plotting/_matplotlib/core.py
+@@ -33,6 +33,8 @@ from pandas.plotting._matplotlib.compat import _mpl_ge_3_0_0
+ from pandas.plotting._matplotlib.style import _get_standard_colors
+ from pandas.plotting._matplotlib.tools import (
+     _flatten,
++    _get_all_lines,
++    _get_xlim,
+     _handle_shared_axes,
+     _subplots,
+     format_date_labels,
+@@ -1099,8 +1101,13 @@ class LinePlot(MPLPlot):
+             )
+             self._add_legend_handle(newlines[0], label, index=i)
+ 
+-            # GH27686 set_xlim will truncate xaxis to fixed space
+-            ax.relim()
++            if self._is_ts_plot():
++
++                # reset of xlim should be used for ts data
++                # TODO: GH28021, should find a way to change view limit on xaxis
++                lines = _get_all_lines(ax)
++                left, right = _get_xlim(lines)
++                ax.set_xlim(left, right)
+ 
+     @classmethod
+     def _plot(cls, ax, x, y, style=None, column_num=None, stacking_id=None, **kwds):
+diff --git a/pandas/plotting/_matplotlib/tools.py b/pandas/plotting/_matplotlib/tools.py
+index fd2913ca5..67fa79ad5 100644
+--- a/pandas/plotting/_matplotlib/tools.py
++++ b/pandas/plotting/_matplotlib/tools.py
+@@ -356,3 +356,24 @@ def _set_ticks_props(axes, xlabelsize=None, xrot=None, ylabelsize=None, yrot=Non
+         if yrot is not None:
+             plt.setp(ax.get_yticklabels(), rotation=yrot)
+     return axes
++
++
++def _get_all_lines(ax):
++    lines = ax.get_lines()
++
++    if hasattr(ax, "right_ax"):
++        lines += ax.right_ax.get_lines()
++
++    if hasattr(ax, "left_ax"):
++        lines += ax.left_ax.get_lines()
++
++    return lines
++
++
++def _get_xlim(lines):
++    left, right = np.inf, -np.inf
++    for l in lines:
++        x = l.get_xdata(orig=False)
++        left = min(np.nanmin(x), left)
++        right = max(np.nanmax(x), right)
++    return left, right

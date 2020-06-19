@@ -1,0 +1,53 @@
+diff --git a/youtube_dl/extractor/drtv.py b/youtube_dl/extractor/drtv.py
+index 9d6ce1f48..93b3c9f36 100644
+--- a/youtube_dl/extractor/drtv.py
++++ b/youtube_dl/extractor/drtv.py
+@@ -1,7 +1,5 @@
+ from __future__ import unicode_literals
+ 
+-import re
+-
+ from .subtitles import SubtitlesInfoExtractor
+ from .common import ExtractorError
+ from ..utils import parse_iso8601
+@@ -25,8 +23,7 @@ class DRTVIE(SubtitlesInfoExtractor):
+     }
+ 
+     def _real_extract(self, url):
+-        mobj = re.match(self._VALID_URL, url)
+-        video_id = mobj.group('id')
++        video_id = self._match_id(url)
+ 
+         programcard = self._download_json(
+             'http://www.dr.dk/mu/programcard/expanded/%s' % video_id, video_id, 'Downloading video JSON')
+@@ -35,7 +32,7 @@ class DRTVIE(SubtitlesInfoExtractor):
+ 
+         title = data['Title']
+         description = data['Description']
+-        timestamp = parse_iso8601(data['CreatedTime'][:-5])
++        timestamp = parse_iso8601(data['CreatedTime'])
+ 
+         thumbnail = None
+         duration = None
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index 6c0c39ca5..2864e5142 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -925,7 +925,7 @@ def parse_iso8601(date_str, delimiter='T'):
+         return None
+ 
+     m = re.search(
+-        r'Z$| ?(?P<sign>\+|-)(?P<hours>[0-9]{2}):?(?P<minutes>[0-9]{2})$',
++        r'(\.[0-9]+)?(?:Z$| ?(?P<sign>\+|-)(?P<hours>[0-9]{2}):?(?P<minutes>[0-9]{2})$)',
+         date_str)
+     if not m:
+         timezone = datetime.timedelta()
+@@ -938,7 +938,7 @@ def parse_iso8601(date_str, delimiter='T'):
+             timezone = datetime.timedelta(
+                 hours=sign * int(m.group('hours')),
+                 minutes=sign * int(m.group('minutes')))
+-    date_format =  '%Y-%m-%d{0}%H:%M:%S'.format(delimiter)
++    date_format = '%Y-%m-%d{0}%H:%M:%S'.format(delimiter)
+     dt = datetime.datetime.strptime(date_str, date_format) - timezone
+     return calendar.timegm(dt.timetuple())
+ 

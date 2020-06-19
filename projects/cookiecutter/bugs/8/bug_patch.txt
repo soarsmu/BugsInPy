@@ -1,0 +1,85 @@
+diff --git a/cookiecutter/exceptions.py b/cookiecutter/exceptions.py
+index 0ad6b58..415f99e 100755
+--- a/cookiecutter/exceptions.py
++++ b/cookiecutter/exceptions.py
+@@ -81,3 +81,9 @@ class InvalidModeException(CookiecutterException):
+     Raised when cookiecutter is called with both `no_input==True` and
+     `replay==True` at the same time.
+     """
++
++
++class FailedHookException(CookiecutterException):
++    """
++    Raised when a hook script fails
++    """
+diff --git a/cookiecutter/generate.py b/cookiecutter/generate.py
+index a38ef26..d69f1de 100755
+--- a/cookiecutter/generate.py
++++ b/cookiecutter/generate.py
+@@ -24,11 +24,12 @@ from binaryornot.check import is_binary
+ from .exceptions import (
+     NonTemplatedInputDirException,
+     ContextDecodingException,
++    FailedHookException,
+     OutputDirExistsException
+ )
+ from .find import find_template
+ from .utils import make_sure_path_exists, work_in
+-from .hooks import run_hook, EXIT_SUCCESS
++from .hooks import run_hook
+ 
+ 
+ def copy_without_render(path, context):
+@@ -257,7 +258,10 @@ def generate_files(repo_dir, context=None, output_dir='.',
+ 
+     # run pre-gen hook from repo_dir
+     with work_in(repo_dir):
+-        if run_hook('pre_gen_project', project_dir, context) != EXIT_SUCCESS:
++        try:
++            run_hook('pre_gen_project', project_dir, context)
++        except FailedHookException:
++            shutil.rmtree(project_dir, ignore_errors=True)
+             logging.error("Stopping generation because pre_gen_project"
+                           " hook script didn't exit sucessfully")
+             return
+diff --git a/cookiecutter/hooks.py b/cookiecutter/hooks.py
+index 550d6de..81045d1 100755
+--- a/cookiecutter/hooks.py
++++ b/cookiecutter/hooks.py
+@@ -18,6 +18,7 @@ import tempfile
+ from jinja2 import Template
+ 
+ from cookiecutter import utils
++from .exceptions import FailedHookException
+ 
+ 
+ _HOOKS = [
+@@ -69,7 +70,10 @@ def run_script(script_path, cwd='.'):
+         shell=run_thru_shell,
+         cwd=cwd
+     )
+-    return proc.wait()
++    exit_status = proc.wait()
++    if exit_status != EXIT_SUCCESS:
++        raise FailedHookException(
++            "Hook script failed (exit status: %d)" % exit_status)
+ 
+ 
+ def run_script_with_context(script_path, cwd, context):
+@@ -91,7 +95,7 @@ def run_script_with_context(script_path, cwd, context):
+     ) as temp:
+         temp.write(Template(contents).render(**context))
+ 
+-    return run_script(temp.name, cwd)
++    run_script(temp.name, cwd)
+ 
+ 
+ def run_hook(hook_name, project_dir, context):
+@@ -105,5 +109,5 @@ def run_hook(hook_name, project_dir, context):
+     script = find_hooks().get(hook_name)
+     if script is None:
+         logging.debug('No hooks found')
+-        return EXIT_SUCCESS
+-    return run_script_with_context(script, project_dir, context)
++        return
++    run_script_with_context(script, project_dir, context)

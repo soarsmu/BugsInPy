@@ -1,0 +1,84 @@
+diff --git a/pandas/core/arrays/datetimelike.py b/pandas/core/arrays/datetimelike.py
+index 9b516c1b6..2747b1d7d 100644
+--- a/pandas/core/arrays/datetimelike.py
++++ b/pandas/core/arrays/datetimelike.py
+@@ -1207,7 +1207,7 @@ class DatetimeLikeArrayMixin(ExtensionOpsMixin, AttributesMixin, ExtensionArray)
+ 
+     def __add__(self, other):
+         other = lib.item_from_zerodim(other)
+-        if isinstance(other, (ABCSeries, ABCDataFrame)):
++        if isinstance(other, (ABCSeries, ABCDataFrame, ABCIndexClass)):
+             return NotImplemented
+ 
+         # scalar others
+@@ -1273,7 +1273,7 @@ class DatetimeLikeArrayMixin(ExtensionOpsMixin, AttributesMixin, ExtensionArray)
+ 
+     def __sub__(self, other):
+         other = lib.item_from_zerodim(other)
+-        if isinstance(other, (ABCSeries, ABCDataFrame)):
++        if isinstance(other, (ABCSeries, ABCDataFrame, ABCIndexClass)):
+             return NotImplemented
+ 
+         # scalar others
+@@ -1340,7 +1340,7 @@ class DatetimeLikeArrayMixin(ExtensionOpsMixin, AttributesMixin, ExtensionArray)
+         return result
+ 
+     def __rsub__(self, other):
+-        if is_datetime64_dtype(other) and is_timedelta64_dtype(self):
++        if is_datetime64_any_dtype(other) and is_timedelta64_dtype(self):
+             # ndarray[datetime64] cannot be subtracted from self, so
+             # we need to wrap in DatetimeArray/Index and flip the operation
+             if not isinstance(other, DatetimeLikeArrayMixin):
+diff --git a/pandas/tests/arithmetic/test_period.py b/pandas/tests/arithmetic/test_period.py
+index c1b32e8b1..4b58c290c 100644
+--- a/pandas/tests/arithmetic/test_period.py
++++ b/pandas/tests/arithmetic/test_period.py
+@@ -1041,6 +1041,18 @@ class TestPeriodIndexArithmetic:
+         with pytest.raises(TypeError):
+             other - obj
+ 
++    # ---------------------------------------------------------------
++    # Unsorted
++
++    def test_parr_add_sub_index(self):
++        # Check that PeriodArray defers to Index on arithmetic ops
++        pi = pd.period_range("2000-12-31", periods=3)
++        parr = pi.array
++
++        result = parr - pi
++        expected = pi - pi
++        tm.assert_index_equal(result, expected)
++
+ 
+ class TestPeriodSeriesArithmetic:
+     def test_ops_series_timedelta(self):
+diff --git a/pandas/tests/arithmetic/test_timedelta64.py b/pandas/tests/arithmetic/test_timedelta64.py
+index 326c56530..4f5e00bc5 100644
+--- a/pandas/tests/arithmetic/test_timedelta64.py
++++ b/pandas/tests/arithmetic/test_timedelta64.py
+@@ -480,6 +480,25 @@ class TestTimedelta64ArithmeticUnsorted:
+         tm.assert_index_equal(result1, result4)
+         tm.assert_index_equal(result2, result3)
+ 
++    def test_tda_add_sub_index(self):
++        # Check that TimedeltaArray defers to Index on arithmetic ops
++        tdi = TimedeltaIndex(["1 days", pd.NaT, "2 days"])
++        tda = tdi.array
++
++        dti = pd.date_range("1999-12-31", periods=3, freq="D")
++
++        result = tda + dti
++        expected = tdi + dti
++        tm.assert_index_equal(result, expected)
++
++        result = tda + tdi
++        expected = tdi + tdi
++        tm.assert_index_equal(result, expected)
++
++        result = tda - tdi
++        expected = tdi - tdi
++        tm.assert_index_equal(result, expected)
++
+ 
+ class TestAddSubNaTMasking:
+     # TODO: parametrize over boxes

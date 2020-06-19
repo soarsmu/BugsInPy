@@ -1,0 +1,45 @@
+diff --git a/luigi/interface.py b/luigi/interface.py
+index 0a15fc69..860c1596 100644
+--- a/luigi/interface.py
++++ b/luigi/interface.py
+@@ -109,7 +109,7 @@ class core(task.Config):
+ class WorkerSchedulerFactory(object):
+ 
+     def create_local_scheduler(self):
+-        return scheduler.CentralPlannerScheduler()
++        return scheduler.CentralPlannerScheduler(prune_on_get_work=True)
+ 
+     def create_remote_scheduler(self, host, port):
+         return rpc.RemoteScheduler(host=host, port=port)
+diff --git a/luigi/scheduler.py b/luigi/scheduler.py
+index bbd00efa..81dafb15 100644
+--- a/luigi/scheduler.py
++++ b/luigi/scheduler.py
+@@ -101,6 +101,8 @@ class scheduler(Config):
+ 
+     visualization_graph = parameter.Parameter(default="svg", config_path=dict(section='scheduler', name='visualization-graph'))
+ 
++    prune_on_get_work = parameter.BoolParameter(default=False)
++
+ 
+ def fix_time(x):
+     # Backwards compatibility for a fix in Dec 2014. Prior to the fix, pickled state might store datetime objects
+@@ -227,7 +229,7 @@ class Worker(object):
+     def __init__(self, worker_id, last_active=None):
+         self.id = worker_id
+         self.reference = None  # reference to the worker in the real world. (Currently a dict containing just the host)
+-        self.last_active = last_active  # seconds since epoch
++        self.last_active = last_active or time.time()  # seconds since epoch
+         self.started = time.time()  # seconds since epoch
+         self.tasks = set()  # task objects
+         self.info = {}
+@@ -710,6 +712,9 @@ class CentralPlannerScheduler(Scheduler):
+         # TODO: remove tasks that can't be done, figure out if the worker has absolutely
+         # nothing it can wait for
+ 
++        if self._config.prune_on_get_work:
++            self.prune()
++
+         worker_id = kwargs['worker']
+         # Return remaining tasks that have no FAILED descendents
+         self.update(worker_id, {'host': host})

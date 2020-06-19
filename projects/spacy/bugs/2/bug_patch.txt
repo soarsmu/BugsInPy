@@ -1,0 +1,12 @@
+diff --git a/spacy/util.py b/spacy/util.py
+index 609c0b572..d4cdca4e0 100644
+--- a/spacy/util.py
++++ b/spacy/util.py
+@@ -208,6 +208,7 @@ def load_model_from_path(model_path, meta=False, **overrides):
+     for name in pipeline:
+         if name not in disable:
+             config = meta.get("pipeline_args", {}).get(name, {})
++            config.update(overrides)
+             factory = factories.get(name, name)
+             component = nlp.create_pipe(factory, config=config)
+             nlp.add_pipe(component, name=name)

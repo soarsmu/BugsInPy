@@ -1,0 +1,15 @@
+diff --git a/pandas/core/generic.py b/pandas/core/generic.py
+index 313d40b57..35a6643a8 100644
+--- a/pandas/core/generic.py
++++ b/pandas/core/generic.py
+@@ -8360,9 +8360,7 @@ class NDFrame(PandasObject, SelectionMixin, indexing.IndexingMixin):
+             left = self._ensure_type(
+                 left.fillna(method=method, axis=fill_axis, limit=limit)
+             )
+-            right = self._ensure_type(
+-                right.fillna(method=method, axis=fill_axis, limit=limit)
+-            )
++            right = right.fillna(method=method, axis=fill_axis, limit=limit)
+ 
+         # if DatetimeIndex have different tz, convert to UTC
+         if is_datetime64tz_dtype(left.index):

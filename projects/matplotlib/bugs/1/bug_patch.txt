@@ -1,0 +1,114 @@
+diff --git a/lib/matplotlib/backend_bases.py b/lib/matplotlib/backend_bases.py
+index 71eb153f2..8009207dd 100644
+--- a/lib/matplotlib/backend_bases.py
++++ b/lib/matplotlib/backend_bases.py
+@@ -46,6 +46,7 @@ from matplotlib._pylab_helpers import Gcf
+ from matplotlib.backend_managers import ToolManager
+ from matplotlib.transforms import Affine2D
+ from matplotlib.path import Path
++from matplotlib.cbook import _setattr_cm
+ 
+ 
+ _log = logging.getLogger(__name__)
+@@ -1502,15 +1503,14 @@ class KeyEvent(LocationEvent):
+         self.key = key
+ 
+ 
+-def _get_renderer(figure, print_method=None, *, draw_disabled=False):
++def _get_renderer(figure, print_method=None):
+     """
+     Get the renderer that would be used to save a `~.Figure`, and cache it on
+     the figure.
+ 
+-    If *draw_disabled* is True, additionally replace drawing methods on
+-    *renderer* by no-ops.  This is used by the tight-bbox-saving renderer,
+-    which needs to walk through the artist tree to compute the tight-bbox, but
+-    for which the output file may be closed early.
++    If you need a renderer without any active draw methods use
++    cbook._setattr_cm to temporary patch them out at your call site.
++
+     """
+     # This is implemented by triggering a draw, then immediately jumping out of
+     # Figure.draw() by raising an exception.
+@@ -1529,12 +1529,6 @@ def _get_renderer(figure, print_method=None, *, draw_disabled=False):
+         except Done as exc:
+             renderer, = figure._cachedRenderer, = exc.args
+ 
+-    if draw_disabled:
+-        for meth_name in dir(RendererBase):
+-            if (meth_name.startswith("draw_")
+-                    or meth_name in ["open_group", "close_group"]):
+-                setattr(renderer, meth_name, lambda *args, **kwargs: None)
+-
+     return renderer
+ 
+ 
+@@ -2093,9 +2087,18 @@ class FigureCanvasBase:
+                     renderer = _get_renderer(
+                         self.figure,
+                         functools.partial(
+-                            print_method, orientation=orientation),
+-                        draw_disabled=True)
+-                    self.figure.draw(renderer)
++                            print_method, orientation=orientation)
++                    )
++                    no_ops = {
++                        meth_name: lambda *args, **kwargs: None
++                        for meth_name in dir(RendererBase)
++                        if (meth_name.startswith("draw_")
++                            or meth_name in ["open_group", "close_group"])
++                    }
++
++                    with _setattr_cm(renderer, **no_ops):
++                        self.figure.draw(renderer)
++
+                     bbox_inches = self.figure.get_tightbbox(
+                         renderer, bbox_extra_artists=bbox_extra_artists)
+                     if pad_inches is None:
+diff --git a/lib/matplotlib/figure.py b/lib/matplotlib/figure.py
+index 9e7fc4c2d..83577ac92 100644
+--- a/lib/matplotlib/figure.py
++++ b/lib/matplotlib/figure.py
+@@ -2392,6 +2392,8 @@ default: 'top'
+ 
+         from .tight_layout import (
+             get_renderer, get_subplotspec_list, get_tight_layout_figure)
++        from .cbook import _setattr_cm
++        from .backend_bases import RendererBase
+ 
+         subplotspec_list = get_subplotspec_list(self.axes)
+         if None in subplotspec_list:
+@@ -2402,9 +2404,17 @@ default: 'top'
+         if renderer is None:
+             renderer = get_renderer(self)
+ 
+-        kwargs = get_tight_layout_figure(
+-            self, self.axes, subplotspec_list, renderer,
+-            pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
++        no_ops = {
++            meth_name: lambda *args, **kwargs: None
++            for meth_name in dir(RendererBase)
++            if (meth_name.startswith("draw_")
++                or meth_name in ["open_group", "close_group"])
++        }
++
++        with _setattr_cm(renderer, **no_ops):
++            kwargs = get_tight_layout_figure(
++                self, self.axes, subplotspec_list, renderer,
++                pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
+         if kwargs:
+             self.subplots_adjust(**kwargs)
+ 
+diff --git a/lib/matplotlib/tight_layout.py b/lib/matplotlib/tight_layout.py
+index 43b578fef..df5500504 100644
+--- a/lib/matplotlib/tight_layout.py
++++ b/lib/matplotlib/tight_layout.py
+@@ -173,7 +173,7 @@ def get_renderer(fig):
+             return canvas.get_renderer()
+         else:
+             from . import backend_bases
+-            return backend_bases._get_renderer(fig, draw_disabled=True)
++            return backend_bases._get_renderer(fig)
+ 
+ 
+ def get_subplotspec_list(axes_list, grid_spec=None):

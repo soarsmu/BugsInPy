@@ -1,0 +1,329 @@
+diff --git a/keras/backend/tensorflow_backend.py b/keras/backend/tensorflow_backend.py
+index 408a9749..94272215 100644
+--- a/keras/backend/tensorflow_backend.py
++++ b/keras/backend/tensorflow_backend.py
+@@ -14,6 +14,7 @@ from tensorflow.python.ops import functional_ops
+ from tensorflow.python.ops import ctc_ops as ctc
+ from .common import floatx, epsilon, image_data_format
+ 
++import sys
+ import functools
+ import threading
+ 
+@@ -1203,7 +1204,9 @@ def update(x, new_x):
+     # Returns
+         The variable `x` updated.
+     """
+-    return tf_state_ops.assign(x, new_x)
++    op = tf_state_ops.assign(x, new_x)
++    with tf.control_dependencies([op]):
++        return tf.identity(x)
+ 
+ 
+ @symbolic
+@@ -1217,7 +1220,9 @@ def update_add(x, increment):
+     # Returns
+         The variable `x` updated.
+     """
+-    return tf_state_ops.assign_add(x, increment)
++    op = tf_state_ops.assign_add(x, increment)
++    with tf.control_dependencies([op]):
++        return tf.identity(x)
+ 
+ 
+ @symbolic
+@@ -1231,7 +1236,9 @@ def update_sub(x, decrement):
+     # Returns
+         The variable `x` updated.
+     """
+-    return tf_state_ops.assign_sub(x, decrement)
++    op = tf_state_ops.assign_sub(x, decrement)
++    with tf.control_dependencies([op]):
++        return tf.identity(x)
+ 
+ 
+ @symbolic
+@@ -2880,6 +2887,7 @@ def get_variable_shape(x):
+     return int_shape(x)
+ 
+ 
++@symbolic
+ def print_tensor(x, message=''):
+     """Prints `message` and the tensor value when evaluated.
+ 
+@@ -2899,8 +2907,9 @@ def print_tensor(x, message=''):
+     # Returns
+         The same tensor `x`, unchanged.
+     """
+-    # TODO
+-    return tf.Print(x, [x], message)
++    op = tf.print(message, x, output_stream=sys.stdout)
++    with tf.control_dependencies([op]):
++        return tf.identity(x)
+ 
+ 
+ # GRAPH MANIPULATION
+diff --git a/keras/backend/theano_backend.py b/keras/backend/theano_backend.py
+index 141c6b9c..1f2789e9 100644
+--- a/keras/backend/theano_backend.py
++++ b/keras/backend/theano_backend.py
+@@ -1378,8 +1378,7 @@ def get_variable_shape(x):
+ 
+ 
+ def print_tensor(x, message=''):
+-    """Print the message and the tensor when evaluated and return the same
+-    tensor.
++    """Print the message & the tensor when evaluated & return the same tensor.
+     """
+     p_op = Print(message)
+     return p_op(x)
+diff --git a/keras/initializers.py b/keras/initializers.py
+index aea81b5c..eff00482 100644
+--- a/keras/initializers.py
++++ b/keras/initializers.py
+@@ -80,8 +80,11 @@ class RandomNormal(Initializer):
+         self.seed = seed
+ 
+     def __call__(self, shape, dtype=None):
+-        return K.random_normal(shape, self.mean, self.stddev,
+-                               dtype=dtype, seed=self.seed)
++        x = K.random_normal(shape, self.mean, self.stddev,
++                            dtype=dtype, seed=self.seed)
++        if self.seed is not None:
++            self.seed += 1
++        return x
+ 
+     def get_config(self):
+         return {
+@@ -108,8 +111,11 @@ class RandomUniform(Initializer):
+         self.seed = seed
+ 
+     def __call__(self, shape, dtype=None):
+-        return K.random_uniform(shape, self.minval, self.maxval,
+-                                dtype=dtype, seed=self.seed)
++        x = K.random_uniform(shape, self.minval, self.maxval,
++                             dtype=dtype, seed=self.seed)
++        if self.seed is not None:
++            self.seed += 1
++        return x
+ 
+     def get_config(self):
+         return {
+@@ -141,8 +147,11 @@ class TruncatedNormal(Initializer):
+         self.seed = seed
+ 
+     def __call__(self, shape, dtype=None):
+-        return K.truncated_normal(shape, self.mean, self.stddev,
+-                                  dtype=dtype, seed=self.seed)
++        x = K.truncated_normal(shape, self.mean, self.stddev,
++                               dtype=dtype, seed=self.seed)
++        if self.seed is not None:
++            self.seed += 1
++        return x
+ 
+     def get_config(self):
+         return {
+@@ -210,12 +219,15 @@ class VarianceScaling(Initializer):
+         if self.distribution == 'normal':
+             # 0.879... = scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)
+             stddev = np.sqrt(scale) / .87962566103423978
+-            return K.truncated_normal(shape, 0., stddev,
+-                                      dtype=dtype, seed=self.seed)
++            x = K.truncated_normal(shape, 0., stddev,
++                                   dtype=dtype, seed=self.seed)
+         else:
+             limit = np.sqrt(3. * scale)
+-            return K.random_uniform(shape, -limit, limit,
+-                                    dtype=dtype, seed=self.seed)
++            x = K.random_uniform(shape, -limit, limit,
++                                 dtype=dtype, seed=self.seed)
++        if self.seed is not None:
++            self.seed += 1
++        return x
+ 
+     def get_config(self):
+         return {
+@@ -251,6 +263,7 @@ class Orthogonal(Initializer):
+         rng = np.random
+         if self.seed is not None:
+             rng = np.random.RandomState(self.seed)
++            self.seed += 1
+         a = rng.normal(0.0, 1.0, flat_shape)
+         u, _, v = np.linalg.svd(a, full_matrices=False)
+         # Pick the one with the correct shape.
+diff --git a/tests/keras/backend/backend_test.py b/tests/keras/backend/backend_test.py
+index 8d3a35d5..8e0af02e 100644
+--- a/tests/keras/backend/backend_test.py
++++ b/tests/keras/backend/backend_test.py
+@@ -480,11 +480,18 @@ class TestBackend(object):
+         else:
+             assert_list_pairwise(v_list, shape=False, allclose=False, itself=True)
+ 
+-    def test_print_tensor(self):
++    def test_print_tensor(self, capsys):
++        for k in [KTH, KTF]:
++            x = k.placeholder((1, 1))
++            y = k.print_tensor(x, 'msg')
++            fn = k.function([x], [y])
++            _ = fn([np.ones((1, 1))])
++            out, err = capsys.readouterr()
++            # Theano inserts "__str__ = " for no good reason
++            assert out.replace('__str__ = ', '') == 'msg [[1.]]\n'
++
+         check_single_tensor_operation('print_tensor', (), WITH_NP)
+         check_single_tensor_operation('print_tensor', (2,), WITH_NP)
+-        check_single_tensor_operation('print_tensor', (4, 3), WITH_NP)
+-        check_single_tensor_operation('print_tensor', (1, 2, 3), WITH_NP)
+ 
+     def test_elementwise_operations(self):
+         check_single_tensor_operation('max', (4, 2), WITH_NP)
+@@ -579,29 +586,41 @@ class TestBackend(object):
+     def test_log(self):
+         check_single_tensor_operation('log', (4, 2), WITH_NP)
+ 
++    @pytest.mark.skipif(K.backend() == 'theano',
++                        reason='theano returns tuples for update ops')
++    def test_update(self):
++        x = np.ones((3, 4))
++        x_var = K.variable(x)
++        new_x = np.random.random((3, 4))
++
++        op = K.update(x_var, new_x)
++        K.eval(op)
++
++        assert_allclose(new_x, K.eval(x_var), atol=1e-05)
++
+     @pytest.mark.skipif(K.backend() == 'theano',
+                         reason='theano returns tuples for update ops')
+     def test_update_add(self):
+-        x = np.random.randn(3, 4)
++        x = np.ones((3, 4))
+         x_var = K.variable(x)
+-        increment = np.random.randn(3, 4)
++        increment = np.random.random((3, 4))
+ 
+-        x += increment
+-        K.eval(K.update_add(x_var, increment))
++        op = K.update_add(x_var, increment)
++        K.eval(op)
+ 
+-        assert_allclose(x, K.eval(x_var), atol=1e-05)
++        assert_allclose(x + increment, K.eval(x_var), atol=1e-05)
+ 
+     @pytest.mark.skipif(K.backend() == 'theano',
+                         reason='theano returns tuples for update ops')
+     def test_update_sub(self):
+-        x = np.random.randn(3, 4)
++        x = np.ones((3, 4))
+         x_var = K.variable(x)
+-        decrement = np.random.randn(3, 4)
++        decrement = np.random.random((3, 4))
+ 
+-        x -= decrement
+-        K.eval(K.update_sub(x_var, decrement))
++        op = K.update_sub(x_var, decrement)
++        K.eval(op)
+ 
+-        assert_allclose(x, K.eval(x_var), atol=1e-05)
++        assert_allclose(x - decrement, K.eval(x_var), atol=1e-05)
+ 
+     @pytest.mark.skipif(K.backend() == 'cntk',
+                         reason='cntk doesn\'t support gradient in this way.')
+@@ -712,7 +731,7 @@ class TestBackend(object):
+         assert output == [21.]
+         assert K.get_session().run(fetches=[x, y]) == [30., 40.]
+ 
+-    @pytest.mark.skipif(K.backend() != 'tensorflow',
++    @pytest.mark.skipif(K.backend() != 'tensorflow' or not KTF._is_tf_1(),
+                         reason='Uses the `options` and `run_metadata` arguments.')
+     def test_function_tf_run_options_with_run_metadata(self):
+         from tensorflow.core.protobuf import config_pb2
+@@ -1363,58 +1382,41 @@ class TestBackend(object):
+         assert_allclose(y1, y2, atol=1e-05)
+ 
+     def test_random_normal(self):
+-        # test standard normal as well as a normal with a different set of parameters
++        # TODO: make this a parameterized test
+         for mean, std in [(0., 1.), (-10., 5.)]:
+-            rand = K.eval(K.random_normal((300, 200),
+-                                          mean=mean, stddev=std, seed=1337))
+-            assert rand.shape == (300, 200)
++            rand = K.eval(K.random_normal((200, 200),
++                                          mean=mean,
++                                          stddev=std))
++            assert rand.shape == (200, 200)
+             assert np.abs(np.mean(rand) - mean) < std * 0.015
+             assert np.abs(np.std(rand) - std) < std * 0.015
+ 
+-            # test that random_normal also generates different values when used
+-            # within a function
+-            r = K.random_normal((10, 10), mean=mean, stddev=std, seed=1337)
+-            samples = np.array([K.eval(r) for _ in range(200)])
+-            assert np.abs(np.mean(samples) - mean) < std * 0.015
+-            assert np.abs(np.std(samples) - std) < std * 0.015
+-
+     def test_random_uniform(self):
+         min_val = -1.
+         max_val = 1.
+-        rand = K.eval(K.random_uniform((200, 100), min_val, max_val))
+-        assert rand.shape == (200, 100)
++        rand = K.eval(K.random_uniform((200, 200), min_val, max_val))
++        assert rand.shape == (200, 200)
+         assert np.abs(np.mean(rand)) < 0.015
+         assert max_val - 0.015 < np.max(rand) <= max_val
+         assert min_val + 0.015 > np.min(rand) >= min_val
+ 
+-        r = K.random_uniform((10, 10), minval=min_val, maxval=max_val)
+-        samples = np.array([K.eval(r) for _ in range(200)])
+-        assert np.abs(np.mean(samples)) < 0.015
+-        assert max_val - 0.015 < np.max(samples) <= max_val
+-        assert min_val + 0.015 > np.min(samples) >= min_val
+-
+     def test_random_binomial(self):
+         p = 0.5
+-        rand = K.eval(K.random_binomial((200, 100), p))
+-        assert rand.shape == (200, 100)
++        rand = K.eval(K.random_binomial((200, 200), p))
++        assert rand.shape == (200, 200)
+         assert np.abs(np.mean(rand) - p) < 0.015
+         assert np.max(rand) == 1
+         assert np.min(rand) == 0
+ 
+-        r = K.random_binomial((10, 10), p)
+-        samples = np.array([K.eval(r) for _ in range(200)])
+-        assert np.abs(np.mean(samples) - p) < 0.015
+-        assert np.max(samples) == 1
+-        assert np.min(samples) == 0
+-
+     def test_truncated_normal(self):
+         mean = 0.
+         std = 1.
+         min_val = -2.
+         max_val = 2.
+-        rand = K.eval(K.truncated_normal((300, 200),
+-                                         mean=mean, stddev=std, seed=1337))
+-        assert rand.shape == (300, 200)
++        rand = K.eval(K.truncated_normal((200, 200),
++                                         mean=mean,
++                                         stddev=std))
++        assert rand.shape == (200, 200)
+         assert np.abs(np.mean(rand) - mean) < 0.015
+         assert np.max(rand) <= max_val
+         assert np.min(rand) >= min_val
+@@ -2122,16 +2124,6 @@ class TestBackend(object):
+                            np.asarray([-5., -4., 0., 4., 9.],
+                                       dtype=np.float32))
+ 
+-    @pytest.mark.skipif(K.backend() != 'tensorflow' or KTF._is_tf_1(),
+-                        reason='This test is for tensorflow parallelism.')
+-    def test_tensorflow_session_parallelism_settings(self, monkeypatch):
+-        for threads in [1, 2]:
+-            K.clear_session()
+-            monkeypatch.setenv('OMP_NUM_THREADS', str(threads))
+-            cfg = K.get_session()._config
+-            assert cfg.intra_op_parallelism_threads == threads
+-            assert cfg.inter_op_parallelism_threads == threads
+-
+ 
+ if __name__ == '__main__':
+     pytest.main([__file__])

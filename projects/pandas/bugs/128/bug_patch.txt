@@ -1,0 +1,13 @@
+diff --git a/pandas/core/indexes/timedeltas.py b/pandas/core/indexes/timedeltas.py
+index d0a31b682..e78714487 100644
+--- a/pandas/core/indexes/timedeltas.py
++++ b/pandas/core/indexes/timedeltas.py
+@@ -163,7 +163,7 @@ class TimedeltaIndex(
+                 "represent unambiguous timedelta values durations."
+             )
+ 
+-        if isinstance(data, TimedeltaArray):
++        if isinstance(data, TimedeltaArray) and freq is None:
+             if copy:
+                 data = data.copy()
+             return cls._simple_new(data, name=name, freq=freq)

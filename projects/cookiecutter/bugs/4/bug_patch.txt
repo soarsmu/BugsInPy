@@ -1,0 +1,232 @@
+diff --git a/cookiecutter/utils.py b/cookiecutter/utils.py
+index 9f661df..24dcf5f 100644
+--- a/cookiecutter/utils.py
++++ b/cookiecutter/utils.py
+@@ -14,6 +14,9 @@ import logging
+ import os
+ import stat
+ import shutil
++import sys
++
++from .prompt import read_user_yes_no
+ 
+ logger = logging.getLogger(__name__)
+ 
+@@ -79,3 +82,42 @@ def make_executable(script_path):
+     """
+     status = os.stat(script_path)
+     os.chmod(script_path, status.st_mode | stat.S_IEXEC)
++
++
++def prompt_and_delete(path, no_input=False):
++    """Ask the user whether it's okay to delete the previously-downloaded
++    file/directory.
++
++    If yes, deletes it. If no, checks to see if the old version should be
++    reused. If yes, it's reused; otherwise, Cookiecutter exits.
++
++    :param path: Previously downloaded zipfile.
++    :param no_input: Suppress prompt to delete repo and just delete it.
++    :return: True if the content was deleted
++    """
++    # Suppress prompt if called via API
++    if no_input:
++        ok_to_delete = True
++    else:
++        question = (
++            "You've downloaded {} before. "
++            "Is it okay to delete and re-download it?"
++        ).format(path)
++
++        ok_to_delete = read_user_yes_no(question, 'yes')
++
++    if ok_to_delete:
++        if os.path.isdir(path):
++            rmtree(path)
++        else:
++            os.remove(path)
++        return True
++    else:
++        ok_to_reuse = read_user_yes_no(
++            "Do you want to re-use the existing version?", 'yes'
++        )
++
++        if ok_to_reuse:
++            return False
++
++        sys.exit()
+diff --git a/cookiecutter/vcs.py b/cookiecutter/vcs.py
+index 3fb44a6..72c3b07 100644
+--- a/cookiecutter/vcs.py
++++ b/cookiecutter/vcs.py
+@@ -13,8 +13,7 @@ from whichcraft import which
+ from .exceptions import (
+     RepositoryNotFound, RepositoryCloneFailed, UnknownRepoType, VCSNotInstalled
+ )
+-from .prompt import read_user_yes_no
+-from .utils import make_sure_path_exists, rmtree
++from .utils import make_sure_path_exists, prompt_and_delete
+ 
+ logger = logging.getLogger(__name__)
+ 
+@@ -25,31 +24,6 @@ BRANCH_ERRORS = [
+ ]
+ 
+ 
+-def prompt_and_delete_repo(repo_dir, no_input=False):
+-    """Ask the user whether it's okay to delete the previously-cloned repo.
+-
+-    If yes, deletes it. Otherwise, Cookiecutter exits.
+-
+-    :param repo_dir: Directory of previously-cloned repo.
+-    :param no_input: Suppress prompt to delete repo and just delete it.
+-    """
+-    # Suppress prompt if called via API
+-    if no_input:
+-        ok_to_delete = True
+-    else:
+-        question = (
+-            "You've cloned {} before. "
+-            "Is it okay to delete and re-clone it?"
+-        ).format(repo_dir)
+-
+-        ok_to_delete = read_user_yes_no(question, 'yes')
+-
+-    if ok_to_delete:
+-        rmtree(repo_dir)
+-    else:
+-        sys.exit()
+-
+-
+ def identify_repo(repo_url):
+     """Determine if `repo_url` should be treated as a URL to a git or hg repo.
+ 
+@@ -114,32 +88,35 @@ def clone(repo_url, checkout=None, clone_to_dir='.', no_input=False):
+     logger.debug('repo_dir is {0}'.format(repo_dir))
+ 
+     if os.path.isdir(repo_dir):
+-        prompt_and_delete_repo(repo_dir, no_input=no_input)
+-
+-    try:
+-        subprocess.check_output(
+-            [repo_type, 'clone', repo_url],
+-            cwd=clone_to_dir,
+-            stderr=subprocess.STDOUT,
+-        )
+-        if checkout is not None:
++        clone = prompt_and_delete(repo_dir, no_input=no_input)
++    else:
++        clone = True
++
++    if clone:
++        try:
+             subprocess.check_output(
+-                [repo_type, 'checkout', checkout],
+-                cwd=repo_dir,
++                [repo_type, 'clone', repo_url],
++                cwd=clone_to_dir,
+                 stderr=subprocess.STDOUT,
+             )
+-    except subprocess.CalledProcessError as clone_error:
+-        output = clone_error.output.decode('utf-8')
+-        if 'not found' in output.lower():
+-            raise RepositoryNotFound(
+-                'The repository {} could not be found, '
+-                'have you made a typo?'.format(repo_url)
+-            )
+-        if any(error in output for error in BRANCH_ERRORS):
+-            raise RepositoryCloneFailed(
+-                'The {} branch of repository {} could not found, '
+-                'have you made a typo?'.format(checkout, repo_url)
+-            )
+-        raise
++            if checkout is not None:
++                subprocess.check_output(
++                    [repo_type, 'checkout', checkout],
++                    cwd=repo_dir,
++                    stderr=subprocess.STDOUT,
++                )
++        except subprocess.CalledProcessError as clone_error:
++            output = clone_error.output.decode('utf-8')
++            if 'not found' in output.lower():
++                raise RepositoryNotFound(
++                    'The repository {} could not be found, '
++                    'have you made a typo?'.format(repo_url)
++                )
++            if any(error in output for error in BRANCH_ERRORS):
++                raise RepositoryCloneFailed(
++                    'The {} branch of repository {} could not found, '
++                    'have you made a typo?'.format(checkout, repo_url)
++                )
++            raise
+ 
+     return repo_dir
+diff --git a/cookiecutter/zipfile.py b/cookiecutter/zipfile.py
+index 056d5d9..2440362 100644
+--- a/cookiecutter/zipfile.py
++++ b/cookiecutter/zipfile.py
+@@ -11,37 +11,7 @@ except ImportError:
+     from zipfile import BadZipfile as BadZipFile
+ 
+ from .exceptions import InvalidZipRepository
+-from .prompt import read_user_yes_no
+-from .utils import make_sure_path_exists, rmtree
+-
+-
+-def prompt_and_delete(path, no_input=False):
+-    """Ask the user whether it's okay to delete the previously-downloaded
+-    file/directory.
+-
+-    If yes, deletes it. Otherwise, Cookiecutter exits.
+-
+-    :param path: Previously downloaded zipfile.
+-    :param no_input: Suppress prompt to delete repo and just delete it.
+-    """
+-    # Suppress prompt if called via API
+-    if no_input:
+-        ok_to_delete = True
+-    else:
+-        question = (
+-            "You've downloaded {} before. "
+-            "Is it okay to delete and re-download it?"
+-        ).format(path)
+-
+-        ok_to_delete = read_user_yes_no(question, 'yes')
+-
+-    if ok_to_delete:
+-        if os.path.isdir(path):
+-            rmtree(path)
+-        else:
+-            os.remove(path)
+-    else:
+-        sys.exit()
++from .utils import make_sure_path_exists, prompt_and_delete
+ 
+ 
+ def unzip(zip_uri, is_url, clone_to_dir='.', no_input=False):
+@@ -67,14 +37,17 @@ def unzip(zip_uri, is_url, clone_to_dir='.', no_input=False):
+         zip_path = os.path.join(clone_to_dir, identifier)
+ 
+         if os.path.exists(zip_path):
+-            prompt_and_delete(zip_path, no_input=no_input)
+-
+-        # (Re) download the zipfile
+-        r = requests.get(zip_uri, stream=True)
+-        with open(zip_path, 'wb') as f:
+-            for chunk in r.iter_content(chunk_size=1024):
+-                if chunk:  # filter out keep-alive new chunks
+-                    f.write(chunk)
++            download = prompt_and_delete(zip_path, no_input=no_input)
++        else:
++            download = True
++
++        if download:
++            # (Re) download the zipfile
++            r = requests.get(zip_uri, stream=True)
++            with open(zip_path, 'wb') as f:
++                for chunk in r.iter_content(chunk_size=1024):
++                    if chunk:  # filter out keep-alive new chunks
++                        f.write(chunk)
+     else:
+         # Just use the local zipfile as-is.
+         zip_path = os.path.abspath(zip_uri)

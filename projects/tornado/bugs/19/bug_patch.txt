@@ -1,0 +1,33 @@
+diff --git a/setup.py b/setup.py
+index 9b81b2b8..9e5ea7fa 100644
+--- a/setup.py
++++ b/setup.py
+@@ -147,6 +147,7 @@ setup(
+             "options_test.cfg",
+             "static/robots.txt",
+             "static/dir/index.html",
++            "static_foo.txt",
+             "templates/utf8.html",
+             "test.crt",
+             "test.key",
+diff --git a/tornado/web.py b/tornado/web.py
+index 0a50f793..9847bb02 100644
+--- a/tornado/web.py
++++ b/tornado/web.py
+@@ -2376,9 +2376,13 @@ class StaticFileHandler(RequestHandler):
+ 
+         .. versionadded:: 3.1
+         """
+-        root = os.path.abspath(root)
+-        # os.path.abspath strips a trailing /
+-        # it needs to be temporarily added back for requests to root/
++        # os.path.abspath strips a trailing /.
++        # We must add it back to `root` so that we only match files
++        # in a directory named `root` instead of files starting with
++        # that prefix.
++        root = os.path.abspath(root) + os.path.sep
++        # The trailing slash also needs to be temporarily added back
++        # the requested path so a request to root/ will match.
+         if not (absolute_path + os.path.sep).startswith(root):
+             raise HTTPError(403, "%s is not in root static directory",
+                             self.path)

@@ -1,0 +1,13 @@
+diff --git a/scrapy/core/spidermw.py b/scrapy/core/spidermw.py
+index 8607ed62..1b67af13 100644
+--- a/scrapy/core/spidermw.py
++++ b/scrapy/core/spidermw.py
+@@ -66,6 +66,8 @@ class SpiderMiddlewareManager(MiddlewareManager):
+                     if result is not None:
+                         raise _InvalidOutput('Middleware {} must return None or raise an exception, got {}' \
+                                              .format(fname(method), type(result)))
++                except _InvalidOutput:
++                    raise
+                 except:
+                     return scrape_func(Failure(), request, spider)
+             return scrape_func(response, request, spider)

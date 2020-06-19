@@ -1,0 +1,47 @@
+diff --git a/pandas/core/arrays/categorical.py b/pandas/core/arrays/categorical.py
+index 0c9db271e..9cdb5dfc4 100644
+--- a/pandas/core/arrays/categorical.py
++++ b/pandas/core/arrays/categorical.py
+@@ -37,7 +37,7 @@ from pandas.core.dtypes.common import (
+ from pandas.core.dtypes.dtypes import CategoricalDtype
+ from pandas.core.dtypes.generic import ABCIndexClass, ABCSeries
+ from pandas.core.dtypes.inference import is_hashable
+-from pandas.core.dtypes.missing import isna, notna
++from pandas.core.dtypes.missing import is_valid_nat_for_dtype, isna, notna
+ 
+ from pandas.core import ops
+ from pandas.core.accessor import PandasDelegate, delegate_names
+@@ -1834,7 +1834,7 @@ class Categorical(NDArrayBackedExtensionArray, PandasObject):
+         Returns True if `key` is in this Categorical.
+         """
+         # if key is a NaN, check if any NaN is in self.
+-        if is_scalar(key) and isna(key):
++        if is_valid_nat_for_dtype(key, self.categories.dtype):
+             return self.isna().any()
+ 
+         return contains(self, key, container=self._codes)
+diff --git a/pandas/core/indexes/category.py b/pandas/core/indexes/category.py
+index 0cf6698d3..80d3e5c8a 100644
+--- a/pandas/core/indexes/category.py
++++ b/pandas/core/indexes/category.py
+@@ -19,7 +19,7 @@ from pandas.core.dtypes.common import (
+     is_scalar,
+ )
+ from pandas.core.dtypes.dtypes import CategoricalDtype
+-from pandas.core.dtypes.missing import isna
++from pandas.core.dtypes.missing import is_valid_nat_for_dtype, isna
+ 
+ from pandas.core import accessor
+ from pandas.core.algorithms import take_1d
+@@ -365,10 +365,9 @@ class CategoricalIndex(ExtensionIndex, accessor.PandasDelegate):
+     @doc(Index.__contains__)
+     def __contains__(self, key: Any) -> bool:
+         # if key is a NaN, check if any NaN is in self.
+-        if is_scalar(key) and isna(key):
++        if is_valid_nat_for_dtype(key, self.categories.dtype):
+             return self.hasnans
+ 
+-        hash(key)
+         return contains(self, key, container=self._engine)
+ 
+     @doc(Index.astype)

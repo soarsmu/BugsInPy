@@ -1,0 +1,15 @@
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index 3eb6bc6d4..4358137a0 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -1560,8 +1560,8 @@ def js_to_json(code):
+         return '"%s"' % v
+ 
+     res = re.sub(r'''(?x)
+-        "(?:[^"\\]*(?:\\\\|\\")?)*"|
+-        '(?:[^'\\]*(?:\\\\|\\')?)*'|
++        "(?:[^"\\]*(?:\\\\|\\['"nu]))*[^"\\]*"|
++        '(?:[^'\\]*(?:\\\\|\\['"nu]))*[^'\\]*'|
+         [a-zA-Z_][.a-zA-Z_0-9]*
+         ''', fix_kv, code)
+     res = re.sub(r',(\s*\])', lambda m: m.group(1), res)

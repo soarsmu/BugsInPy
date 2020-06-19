@@ -1,0 +1,92 @@
+diff --git a/pandas/core/indexes/datetimes.py b/pandas/core/indexes/datetimes.py
+index ee9b948a7..b1463f523 100644
+--- a/pandas/core/indexes/datetimes.py
++++ b/pandas/core/indexes/datetimes.py
+@@ -18,7 +18,7 @@ from pandas.util._decorators import cache_readonly
+ 
+ from pandas.core.dtypes.common import _NS_DTYPE, is_float, is_integer, is_scalar
+ from pandas.core.dtypes.dtypes import DatetimeTZDtype
+-from pandas.core.dtypes.missing import isna
++from pandas.core.dtypes.missing import is_valid_nat_for_dtype
+ 
+ from pandas.core.accessor import delegate_names
+ from pandas.core.arrays.datetimes import (
+@@ -677,8 +677,8 @@ class DatetimeIndex(DatetimeTimedeltaMixin, DatetimeDelegateMixin):
+         -------
+         loc : int
+         """
+-        if is_scalar(key) and isna(key):
+-            key = NaT  # FIXME: do this systematically
++        if is_valid_nat_for_dtype(key, self.dtype):
++            key = NaT
+ 
+         if tolerance is not None:
+             # try converting tolerance now, so errors don't get swallowed by
+diff --git a/pandas/core/indexes/numeric.py b/pandas/core/indexes/numeric.py
+index 465f21da1..14cb061aa 100644
+--- a/pandas/core/indexes/numeric.py
++++ b/pandas/core/indexes/numeric.py
+@@ -433,11 +433,7 @@ class Float64Index(NumericIndex):
+             raise InvalidIndexError
+ 
+         loc = self.get_loc(key)
+-        if not is_scalar(loc):
+-            return series.iloc[loc]
+-
+-        new_values = series._values[loc]
+-        return new_values
++        return self._get_values_for_loc(series, loc)
+ 
+     def equals(self, other) -> bool:
+         """
+diff --git a/pandas/tests/indexes/test_numeric.py b/pandas/tests/indexes/test_numeric.py
+index 12cc51222..b83ceb1ce 100644
+--- a/pandas/tests/indexes/test_numeric.py
++++ b/pandas/tests/indexes/test_numeric.py
+@@ -393,6 +393,46 @@ class TestFloat64Index(Numeric):
+             # listlike/non-hashable raises TypeError
+             idx.get_loc([np.nan])
+ 
++    @pytest.mark.parametrize(
++        "vals",
++        [
++            pd.date_range("2016-01-01", periods=3),
++            pd.timedelta_range("1 Day", periods=3),
++        ],
++    )
++    def test_lookups_datetimelike_values(self, vals):
++        # If we have datetime64 or timedelta64 values, make sure they are
++        #  wrappped correctly
++        ser = pd.Series(vals, index=range(3, 6))
++        ser.index = ser.index.astype("float64")
++
++        expected = vals[1]
++
++        result = ser.index.get_value(ser, 4.0)
++        assert isinstance(result, type(expected)) and result == expected
++        result = ser.index.get_value(ser, 4)
++        assert isinstance(result, type(expected)) and result == expected
++
++        result = ser[4.0]
++        assert isinstance(result, type(expected)) and result == expected
++        result = ser[4]
++        assert isinstance(result, type(expected)) and result == expected
++
++        result = ser.loc[4.0]
++        assert isinstance(result, type(expected)) and result == expected
++        result = ser.loc[4]
++        assert isinstance(result, type(expected)) and result == expected
++
++        result = ser.at[4.0]
++        assert isinstance(result, type(expected)) and result == expected
++        # Note: ser.at[4] raises ValueError; TODO: should we make this match loc?
++
++        result = ser.iloc[1]
++        assert isinstance(result, type(expected)) and result == expected
++
++        result = ser.iat[1]
++        assert isinstance(result, type(expected)) and result == expected
++
+     def test_contains_nans(self):
+         i = Float64Index([1.0, 2.0, np.nan])
+         assert np.nan in i

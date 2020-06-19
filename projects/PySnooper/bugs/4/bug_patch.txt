@@ -1,0 +1,143 @@
+diff --git a/pysnooper/tracer.py b/pysnooper/tracer.py
+index 089b817..fb6eddc 100644
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -4,6 +4,7 @@
+ import functools
+ import inspect
+ import opcode
++import os
+ import sys
+ import re
+ import collections
+@@ -14,16 +15,18 @@ import traceback
+ 
+ from .variables import CommonVariable, Exploding, BaseVariable
+ from . import utils, pycompat
++if pycompat.PY2:
++    from io import open
+ 
+ 
+ ipython_filename_pattern = re.compile('^<ipython-input-([0-9]+)-.*>$')
+ 
+ 
+-def get_local_reprs(frame, watch=()):
++def get_local_reprs(frame, watch=(), custom_repr=()):
+     code = frame.f_code
+     vars_order = code.co_varnames + code.co_cellvars + code.co_freevars + tuple(frame.f_locals.keys())
+ 
+-    result_items = [(key, utils.get_shortish_repr(value)) for key, value in frame.f_locals.items()]
++    result_items = [(key, utils.get_shortish_repr(value, custom_repr=custom_repr)) for key, value in frame.f_locals.items()]
+     result_items.sort(key=lambda key_value: vars_order.index(key_value[0]))
+     result = collections.OrderedDict(result_items)
+ 
+@@ -84,7 +87,7 @@ def get_source_from_frame(frame):
+     # apply tokenize.detect_encoding to decode the source into a
+     # string, then we should do that ourselves.
+     if isinstance(source[0], bytes):
+-        encoding = 'ascii'
++        encoding = 'utf-8'
+         for line in source[:2]:
+             # File coding may be specified. Match pattern from PEP-263
+             # (https://www.python.org/dev/peps/pep-0263/)
+@@ -130,13 +133,14 @@ class FileWriter(object):
+         self.overwrite = overwrite
+ 
+     def write(self, s):
+-        with open(self.path, 'w' if self.overwrite else 'a') as output_file:
++        with open(self.path, 'w' if self.overwrite else 'a',
++                  encoding='utf-8') as output_file:
+             output_file.write(s)
+         self.overwrite = False
+ 
+ 
+ thread_global = threading.local()
+-
++DISABLED = bool(os.getenv('PYSNOOPER_DISABLED', ''))
+ 
+ class Tracer:
+     '''
+@@ -176,6 +180,10 @@ class Tracer:
+ 
+         @pysnooper.snoop(thread_info=True)
+ 
++    Customize how values are represented as strings::
++
++        @pysnooper.snoop(custom_repr=((type1, custom_repr_func1), (condition2, custom_repr_func2), ...))
++
+     '''
+     def __init__(
+             self,
+@@ -186,6 +194,7 @@ class Tracer:
+             prefix='',
+             overwrite=False,
+             thread_info=False,
++            custom_repr=(),
+     ):
+         self._write = get_write_function(output, overwrite)
+ 
+@@ -205,8 +214,14 @@ class Tracer:
+         self.target_codes = set()
+         self.target_frames = set()
+         self.thread_local = threading.local()
++        if len(custom_repr) == 2 and not all(isinstance(x,
++                      pycompat.collections_abc.Iterable) for x in custom_repr):
++            custom_repr = (custom_repr,)
++        self.custom_repr = custom_repr
+ 
+     def __call__(self, function):
++        if DISABLED:
++            return function
+         self.target_codes.add(function.__code__)
+ 
+         @functools.wraps(function)
+@@ -242,16 +257,22 @@ class Tracer:
+         self._write(s)
+ 
+     def __enter__(self):
++        if DISABLED:
++            return
+         calling_frame = inspect.currentframe().f_back
+         if not self._is_internal_frame(calling_frame):
+             calling_frame.f_trace = self.trace
+             self.target_frames.add(calling_frame)
+ 
+-        stack = self.thread_local.__dict__.setdefault('original_trace_functions', [])
++        stack = self.thread_local.__dict__.setdefault(
++            'original_trace_functions', []
++        )
+         stack.append(sys.gettrace())
+         sys.settrace(self.trace)
+ 
+     def __exit__(self, exc_type, exc_value, exc_traceback):
++        if DISABLED:
++            return
+         stack = self.thread_local.original_trace_functions
+         sys.settrace(stack.pop())
+         calling_frame = inspect.currentframe().f_back
+@@ -267,7 +288,6 @@ class Tracer:
+                                        current_thread_len)
+         return thread_info.ljust(self.thread_info_padding)
+ 
+-
+     def trace(self, frame, event, arg):
+ 
+         ### Checking whether we should trace this line: #######################
+@@ -307,7 +327,7 @@ class Tracer:
+         #                                                                     #
+         old_local_reprs = self.frame_to_local_reprs.get(frame, {})
+         self.frame_to_local_reprs[frame] = local_reprs = \
+-                                       get_local_reprs(frame, watch=self.watch)
++                                       get_local_reprs(frame, watch=self.watch, custom_repr=self.custom_repr)
+ 
+         newish_string = ('Starting var:.. ' if event == 'call' else
+                                                             'New var:....... ')
+@@ -380,7 +400,7 @@ class Tracer:
+             thread_global.depth -= 1
+ 
+             if not ended_by_exception:
+-                return_value_repr = utils.get_shortish_repr(arg)
++                return_value_repr = utils.get_shortish_repr(arg, custom_repr=self.custom_repr)
+                 self.write('{indent}Return value:.. {return_value_repr}'.
+                            format(**locals()))
+ 

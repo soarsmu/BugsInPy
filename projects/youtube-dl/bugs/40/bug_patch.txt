@@ -1,0 +1,14 @@
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index 7b3f79141..d39f313a4 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -911,7 +911,8 @@ def unified_strdate(date_str, day_first=True):
+         timetuple = email.utils.parsedate_tz(date_str)
+         if timetuple:
+             upload_date = datetime.datetime(*timetuple[:6]).strftime('%Y%m%d')
+-    return compat_str(upload_date)
++    if upload_date is not None:
++        return compat_str(upload_date)
+ 
+ 
+ def determine_ext(url, default_ext='unknown_video'):

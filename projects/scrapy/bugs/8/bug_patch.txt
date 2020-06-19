@@ -1,0 +1,13 @@
+diff --git a/scrapy/http/response/__init__.py b/scrapy/http/response/__init__.py
+index 434d87ea..1974259b 100644
+--- a/scrapy/http/response/__init__.py
++++ b/scrapy/http/response/__init__.py
+@@ -120,6 +120,8 @@ class Response(object_ref):
+         """
+         if isinstance(url, Link):
+             url = url.url
++        elif url is None:
++            raise ValueError("url can't be None")
+         url = self.urljoin(url)
+         return Request(url, callback,
+                        method=method,

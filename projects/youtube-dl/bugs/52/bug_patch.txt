@@ -1,0 +1,79 @@
+diff --git a/youtube_dl/downloader/f4m.py b/youtube_dl/downloader/f4m.py
+index 9a6c03556..052751106 100644
+--- a/youtube_dl/downloader/f4m.py
++++ b/youtube_dl/downloader/f4m.py
+@@ -4,13 +4,14 @@ import base64
+ import io
+ import itertools
+ import os
+-from struct import unpack, pack
+ import time
+ import xml.etree.ElementTree as etree
+ 
+ from .common import FileDownloader
+ from .http import HttpFD
+ from ..utils import (
++    struct_pack,
++    struct_unpack,
+     compat_urllib_request,
+     compat_urlparse,
+     format_bytes,
+@@ -27,13 +28,13 @@ class FlvReader(io.BytesIO):
+ 
+     # Utility functions for reading numbers and strings
+     def read_unsigned_long_long(self):
+-        return unpack('!Q', self.read(8))[0]
++        return struct_unpack('!Q', self.read(8))[0]
+ 
+     def read_unsigned_int(self):
+-        return unpack('!I', self.read(4))[0]
++        return struct_unpack('!I', self.read(4))[0]
+ 
+     def read_unsigned_char(self):
+-        return unpack('!B', self.read(1))[0]
++        return struct_unpack('!B', self.read(1))[0]
+ 
+     def read_string(self):
+         res = b''
+@@ -196,7 +197,7 @@ def write_flv_header(stream, metadata):
+     # Script data
+     stream.write(b'\x12')
+     # Size of the metadata with 3 bytes
+-    stream.write(pack('!L', len(metadata))[1:])
++    stream.write(struct_pack('!L', len(metadata))[1:])
+     stream.write(b'\x00\x00\x00\x00\x00\x00\x00')
+     stream.write(metadata)
+     # Magic numbers extracted from the output files produced by AdobeHDS.php
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index 67c6af507..dd03f058f 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -17,6 +17,7 @@ import platform
+ import re
+ import ssl
+ import socket
++import struct
+ import subprocess
+ import sys
+ import traceback
+@@ -1220,3 +1221,20 @@ def uppercase_escape(s):
+     return re.sub(
+         r'\\U([0-9a-fA-F]{8})',
+         lambda m: compat_chr(int(m.group(1), base=16)), s)
++
++try:
++    struct.pack(u'!I', 0)
++except TypeError:
++    # In Python 2.6 (and some 2.7 versions), struct requires a bytes argument
++    def struct_pack(spec, *args):
++        if isinstance(spec, compat_str):
++            spec = spec.encode('ascii')
++        return struct.pack(spec, *args)
++
++    def struct_unpack(spec, *args):
++        if isinstance(spec, compat_str):
++            spec = spec.encode('ascii')
++        return struct.unpack(spec, *args)
++else:
++    struct_pack = struct.pack
++    struct_unpack = struct.unpack

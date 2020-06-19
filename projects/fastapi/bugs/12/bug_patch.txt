@@ -1,0 +1,13 @@
+diff --git a/fastapi/routing.py b/fastapi/routing.py
+index 3c6774c..930cbe0 100644
+--- a/fastapi/routing.py
++++ b/fastapi/routing.py
+@@ -52,6 +52,8 @@ def serialize_response(
+             errors.extend(errors_)
+         if errors:
+             raise ValidationError(errors)
++        if skip_defaults and isinstance(response, BaseModel):
++            value = response.dict(skip_defaults=skip_defaults)
+         return jsonable_encoder(
+             value,
+             include=include,

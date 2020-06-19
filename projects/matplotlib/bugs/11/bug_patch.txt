@@ -1,0 +1,12 @@
+diff --git a/lib/matplotlib/projections/polar.py b/lib/matplotlib/projections/polar.py
+index 902946c6b..0649a03c8 100644
+--- a/lib/matplotlib/projections/polar.py
++++ b/lib/matplotlib/projections/polar.py
+@@ -949,6 +949,7 @@ class PolarAxes(Axes):
+     @cbook._delete_parameter("3.3", "args")
+     @cbook._delete_parameter("3.3", "kwargs")
+     def draw(self, renderer, *args, **kwargs):
++        self._unstale_viewLim()
+         thetamin, thetamax = np.rad2deg(self._realViewLim.intervalx)
+         if thetamin > thetamax:
+             thetamin, thetamax = thetamax, thetamin

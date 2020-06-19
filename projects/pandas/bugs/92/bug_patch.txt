@@ -1,0 +1,13 @@
+diff --git a/pandas/core/strings.py b/pandas/core/strings.py
+index c4bdbaff1..71d9e8e7a 100644
+--- a/pandas/core/strings.py
++++ b/pandas/core/strings.py
+@@ -775,6 +775,8 @@ def str_repeat(arr, repeats):
+     else:
+ 
+         def rep(x, r):
++            if x is libmissing.NA:
++                return x
+             try:
+                 return bytes.__mul__(x, r)
+             except TypeError:

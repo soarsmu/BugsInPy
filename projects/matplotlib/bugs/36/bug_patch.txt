@@ -1,0 +1,13 @@
+diff --git a/lib/matplotlib/colorbar.py b/lib/matplotlib/colorbar.py
+index 22fdb6801..0100218ac 100644
+--- a/lib/matplotlib/colorbar.py
++++ b/lib/matplotlib/colorbar.py
+@@ -724,7 +724,7 @@ class ColorbarBase(_ColorbarMappableDummy):
+ 
+     def set_label(self, label, **kw):
+         """Label the long axis of the colorbar."""
+-        self._label = str(label)
++        self._label = label
+         self._labelkw = kw
+         self._set_label()
+ 

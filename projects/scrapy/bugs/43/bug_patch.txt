@@ -1,0 +1,15 @@
+diff --git a/scrapy/downloadermiddlewares/redirect.py b/scrapy/downloadermiddlewares/redirect.py
+index 363e56cb..3cf8d2be 100644
+--- a/scrapy/downloadermiddlewares/redirect.py
++++ b/scrapy/downloadermiddlewares/redirect.py
+@@ -55,7 +55,9 @@ class RedirectMiddleware(BaseRedirectMiddleware):
+ 
+     def process_response(self, request, response, spider):
+         if (request.meta.get('dont_redirect', False) or
+-               response.status in getattr(spider, 'handle_httpstatus_list', [])):
++               response.status in getattr(spider, 'handle_httpstatus_list', []) or
++               response.status in request.meta.get('handle_httpstatus_list', []) or
++               request.meta.get('handle_httpstatus_all', False)):
+             return response
+ 
+         if request.method == 'HEAD':

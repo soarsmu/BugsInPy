@@ -1,0 +1,77 @@
+diff --git a/pandas/core/indexes/interval.py b/pandas/core/indexes/interval.py
+index 2555caac2..b1f67eeab 100644
+--- a/pandas/core/indexes/interval.py
++++ b/pandas/core/indexes/interval.py
+@@ -19,6 +19,7 @@ from pandas.core.dtypes.cast import (
+ )
+ from pandas.core.dtypes.common import (
+     ensure_platform_int,
++    is_categorical,
+     is_datetime64tz_dtype,
+     is_datetime_or_timedelta_dtype,
+     is_dtype_equal,
+@@ -36,6 +37,7 @@ from pandas.core.dtypes.generic import ABCSeries
+ from pandas.core.dtypes.missing import isna
+ 
+ from pandas._typing import AnyArrayLike
++from pandas.core.algorithms import take_1d
+ from pandas.core.arrays.interval import IntervalArray, _interval_shared_docs
+ import pandas.core.common as com
+ import pandas.core.indexes.base as ibase
+@@ -958,6 +960,10 @@ class IntervalIndex(IntervalMixin, Index):
+             left_indexer = self.left.get_indexer(target_as_index.left)
+             right_indexer = self.right.get_indexer(target_as_index.right)
+             indexer = np.where(left_indexer == right_indexer, left_indexer, -1)
++        elif is_categorical(target_as_index):
++            # get an indexer for unique categories then propogate to codes via take_1d
++            categories_indexer = self.get_indexer(target_as_index.categories)
++            indexer = take_1d(categories_indexer, target_as_index.codes, fill_value=-1)
+         elif not is_object_dtype(target_as_index):
+             # homogeneous scalar index: use IntervalTree
+             target_as_index = self._maybe_convert_i8(target_as_index)
+diff --git a/pandas/tests/indexes/interval/test_indexing.py b/pandas/tests/indexes/interval/test_indexing.py
+index 05d8aee2a..15ea9a6b6 100644
+--- a/pandas/tests/indexes/interval/test_indexing.py
++++ b/pandas/tests/indexes/interval/test_indexing.py
+@@ -3,7 +3,14 @@ import re
+ import numpy as np
+ import pytest
+ 
+-from pandas import Interval, IntervalIndex, Timedelta, date_range, timedelta_range
++from pandas import (
++    CategoricalIndex,
++    Interval,
++    IntervalIndex,
++    Timedelta,
++    date_range,
++    timedelta_range,
++)
+ from pandas.core.indexes.base import InvalidIndexError
+ import pandas.util.testing as tm
+ 
+@@ -231,6 +238,25 @@ class TestGetIndexer:
+         expected = np.array([0] * size, dtype="intp")
+         tm.assert_numpy_array_equal(result, expected)
+ 
++    @pytest.mark.parametrize(
++        "target",
++        [
++            IntervalIndex.from_tuples([(7, 8), (1, 2), (3, 4), (0, 1)]),
++            IntervalIndex.from_tuples([(0, 1), (1, 2), (3, 4), np.nan]),
++            IntervalIndex.from_tuples([(0, 1), (1, 2), (3, 4)], closed="both"),
++            [-1, 0, 0.5, 1, 2, 2.5, np.nan],
++            ["foo", "foo", "bar", "baz"],
++        ],
++    )
++    def test_get_indexer_categorical(self, target, ordered_fixture):
++        # GH 30063: categorical and non-categorical results should be consistent
++        index = IntervalIndex.from_tuples([(0, 1), (1, 2), (3, 4)])
++        categorical_target = CategoricalIndex(target, ordered=ordered_fixture)
++
++        result = index.get_indexer(categorical_target)
++        expected = index.get_indexer(target)
++        tm.assert_numpy_array_equal(result, expected)
++
+     @pytest.mark.parametrize(
+         "tuples, closed",
+         [

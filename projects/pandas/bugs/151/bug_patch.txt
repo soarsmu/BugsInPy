@@ -1,0 +1,13 @@
+diff --git a/pandas/core/reshape/reshape.py b/pandas/core/reshape/reshape.py
+index da92e1154..97f416e32 100644
+--- a/pandas/core/reshape/reshape.py
++++ b/pandas/core/reshape/reshape.py
+@@ -358,7 +358,7 @@ def _unstack_multiple(data, clocs, fill_value=None):
+             result = data
+             for i in range(len(clocs)):
+                 val = clocs[i]
+-                result = result.unstack(val)
++                result = result.unstack(val, fill_value=fill_value)
+                 clocs = [v if i > v else v - 1 for v in clocs]
+ 
+             return result

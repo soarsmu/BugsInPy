@@ -1,0 +1,95 @@
+diff --git a/pandas/core/reshape/tile.py b/pandas/core/reshape/tile.py
+index 00a7645d0..a18b45a07 100644
+--- a/pandas/core/reshape/tile.py
++++ b/pandas/core/reshape/tile.py
+@@ -202,17 +202,10 @@ def cut(
+     """
+     # NOTE: this binning code is changed a bit from histogram for var(x) == 0
+ 
+-    # for handling the cut for datetime and timedelta objects
+     original = x
+     x = _preprocess_for_cut(x)
+     x, dtype = _coerce_to_type(x)
+ 
+-    # To support cut(IntegerArray), we convert to object dtype with NaN
+-    # Will properly support in the future.
+-    # https://github.com/pandas-dev/pandas/pull/31290
+-    if is_extension_array_dtype(x.dtype) and is_integer_dtype(x.dtype):
+-        x = x.to_numpy(dtype=object, na_value=np.nan)
+-
+     if not np.iterable(bins):
+         if is_scalar(bins) and bins < 1:
+             raise ValueError("`bins` should be a positive integer.")
+@@ -434,7 +427,7 @@ def _bins_to_cuts(
+ 
+ def _coerce_to_type(x):
+     """
+-    if the passed data is of datetime/timedelta or bool type,
++    if the passed data is of datetime/timedelta, bool or nullable int type,
+     this method converts it to numeric so that cut or qcut method can
+     handle it
+     """
+@@ -451,6 +444,12 @@ def _coerce_to_type(x):
+     elif is_bool_dtype(x):
+         # GH 20303
+         x = x.astype(np.int64)
++    # To support cut and qcut for IntegerArray we convert to float dtype.
++    # Will properly support in the future.
++    # https://github.com/pandas-dev/pandas/pull/31290
++    # https://github.com/pandas-dev/pandas/issues/31389
++    elif is_extension_array_dtype(x) and is_integer_dtype(x):
++        x = x.to_numpy(dtype=np.float64, na_value=np.nan)
+ 
+     if dtype is not None:
+         # GH 19768: force NaT to NaN during integer conversion
+diff --git a/pandas/tests/arrays/test_integer.py b/pandas/tests/arrays/test_integer.py
+index cc81ae450..7a0c9300a 100644
+--- a/pandas/tests/arrays/test_integer.py
++++ b/pandas/tests/arrays/test_integer.py
+@@ -1061,19 +1061,6 @@ def test_value_counts_na():
+     tm.assert_series_equal(result, expected)
+ 
+ 
+-@pytest.mark.parametrize("bins", [3, [0, 5, 15]])
+-@pytest.mark.parametrize("right", [True, False])
+-@pytest.mark.parametrize("include_lowest", [True, False])
+-def test_cut(bins, right, include_lowest):
+-    a = np.random.randint(0, 10, size=50).astype(object)
+-    a[::2] = np.nan
+-    result = pd.cut(
+-        pd.array(a, dtype="Int64"), bins, right=right, include_lowest=include_lowest
+-    )
+-    expected = pd.cut(a, bins, right=right, include_lowest=include_lowest)
+-    tm.assert_categorical_equal(result, expected)
+-
+-
+ def test_array_setitem_nullable_boolean_mask():
+     # GH 31446
+     ser = pd.Series([1, 2], dtype="Int64")
+diff --git a/pandas/tests/reshape/test_qcut.py b/pandas/tests/reshape/test_qcut.py
+index 95406a5eb..c436ab5d9 100644
+--- a/pandas/tests/reshape/test_qcut.py
++++ b/pandas/tests/reshape/test_qcut.py
+@@ -3,6 +3,7 @@ import os
+ import numpy as np
+ import pytest
+ 
++import pandas as pd
+ from pandas import (
+     Categorical,
+     DatetimeIndex,
+@@ -286,3 +287,14 @@ def test_qcut_bool_coercion_to_int(bins, box, compare):
+     expected = qcut(data_expected, bins, duplicates="drop")
+     result = qcut(data_result, bins, duplicates="drop")
+     compare(result, expected)
++
++
++@pytest.mark.parametrize("q", [2, 5, 10])
++def test_qcut_nullable_integer(q, any_nullable_int_dtype):
++    arr = pd.array(np.arange(100), dtype=any_nullable_int_dtype)
++    arr[::2] = pd.NA
++
++    result = qcut(arr, q)
++    expected = qcut(arr.astype(float), q)
++
++    tm.assert_categorical_equal(result, expected)

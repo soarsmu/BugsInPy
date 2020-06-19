@@ -1,0 +1,13 @@
+diff --git a/keras/engine/sequential.py b/keras/engine/sequential.py
+index 10a6b577..37d19d0b 100644
+--- a/keras/engine/sequential.py
++++ b/keras/engine/sequential.py
+@@ -226,6 +226,8 @@ class Sequential(Model):
+             for layer in self._layers:
+                 x = layer(x)
+             self.outputs = [x]
++            if self._layers:
++                self._layers[0].batch_input_shape = batch_shape
+ 
+         if self.inputs:
+             self._init_graph_network(self.inputs,

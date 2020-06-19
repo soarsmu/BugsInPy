@@ -1,0 +1,13 @@
+diff --git a/lib/ansible/constants.py b/lib/ansible/constants.py
+index b04e20cb88..5f57860f38 100644
+--- a/lib/ansible/constants.py
++++ b/lib/ansible/constants.py
+@@ -29,8 +29,6 @@ def get_config(p, section, key, env_var, default):
+         try:
+             return p.get(section, key)
+         except:
+-            if env_var is not None:
+-                return os.environ.get(env_var, default)
+             return default
+     else:
+         return default

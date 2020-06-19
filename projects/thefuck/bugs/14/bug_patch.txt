@@ -1,0 +1,13 @@
+diff --git a/thefuck/rules/git_push.py b/thefuck/rules/git_push.py
+index 551b25d..cccee67 100644
+--- a/thefuck/rules/git_push.py
++++ b/thefuck/rules/git_push.py
+@@ -6,7 +6,7 @@ from thefuck.specific.git import git_support
+ @git_support
+ def match(command):
+     return ('push' in command.script_parts
+-            and 'set-upstream' in command.output)
++            and 'git push --set-upstream' in command.output)
+ 
+ 
+ def _get_upstream_option_index(command_parts):

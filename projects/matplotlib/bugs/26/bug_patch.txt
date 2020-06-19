@@ -1,0 +1,45 @@
+diff --git a/lib/matplotlib/_constrained_layout.py b/lib/matplotlib/_constrained_layout.py
+index c6e0e7dc0..d7ad26c48 100644
+--- a/lib/matplotlib/_constrained_layout.py
++++ b/lib/matplotlib/_constrained_layout.py
+@@ -254,10 +254,7 @@ def _make_ghost_gridspec_slots(fig, gs):
+             # this gridspec slot doesn't have an axis so we
+             # make a "ghost".
+             ax = fig.add_subplot(gs[nn])
+-            ax.set_frame_on(False)
+-            ax.set_xticks([])
+-            ax.set_yticks([])
+-            ax.set_facecolor((1, 0, 0, 0))
++            ax.set_visible(False)
+ 
+ 
+ def _make_layout_margins(ax, renderer, h_pad, w_pad):
+diff --git a/lib/matplotlib/backend_bases.py b/lib/matplotlib/backend_bases.py
+index 16f084ddb..45460bfa5 100644
+--- a/lib/matplotlib/backend_bases.py
++++ b/lib/matplotlib/backend_bases.py
+@@ -1853,7 +1853,7 @@ class FigureCanvasBase:
+ 
+     def inaxes(self, xy):
+         """
+-        Check if a point is in an axes.
++        Return the topmost visible `~.axes.Axes` containing the point *xy*.
+ 
+         Parameters
+         ----------
+@@ -1864,12 +1864,11 @@ class FigureCanvasBase:
+ 
+         Returns
+         -------
+-        axes: topmost axes containing the point, or None if no axes.
+-
++        axes : `~matplotlib.axes.Axes` or None
++            The topmost visible axes containing the point, or None if no axes.
+         """
+         axes_list = [a for a in self.figure.get_axes()
+-                     if a.patch.contains_point(xy)]
+-
++                     if a.patch.contains_point(xy) and a.get_visible()]
+         if axes_list:
+             axes = cbook._topmost_artist(axes_list)
+         else:

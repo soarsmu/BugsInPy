@@ -1,0 +1,17 @@
+diff --git a/fastapi/exception_handlers.py b/fastapi/exception_handlers.py
+index cda2f8c..2b286d7 100644
+--- a/fastapi/exception_handlers.py
++++ b/fastapi/exception_handlers.py
+@@ -1,3 +1,4 @@
++from fastapi.encoders import jsonable_encoder
+ from fastapi.exceptions import RequestValidationError
+ from starlette.exceptions import HTTPException
+ from starlette.requests import Request
+@@ -19,5 +20,6 @@ async def request_validation_exception_handler(
+     request: Request, exc: RequestValidationError
+ ) -> JSONResponse:
+     return JSONResponse(
+-        status_code=HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": exc.errors()}
++        status_code=HTTP_422_UNPROCESSABLE_ENTITY,
++        content={"detail": jsonable_encoder(exc.errors())},
+     )

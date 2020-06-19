@@ -1,0 +1,15 @@
+diff --git a/httpie/sessions.py b/httpie/sessions.py
+index e61a8e3..32254bf 100644
+--- a/httpie/sessions.py
++++ b/httpie/sessions.py
+@@ -101,6 +101,10 @@ class Session(BaseConfigDict):
+ 
+         """
+         for name, value in request_headers.items():
++
++            if value is None:
++                continue  # Ignore explicitely unset headers
++
+             value = value.decode('utf8')
+             if name == 'User-Agent' and value.startswith('HTTPie/'):
+                 continue

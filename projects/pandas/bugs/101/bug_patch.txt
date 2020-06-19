@@ -1,0 +1,70 @@
+diff --git a/pandas/core/indexes/base.py b/pandas/core/indexes/base.py
+index b1ac17361..c896e68f7 100644
+--- a/pandas/core/indexes/base.py
++++ b/pandas/core/indexes/base.py
+@@ -3111,7 +3111,7 @@ class Index(IndexOpsMixin, PandasObject):
+                     self._invalid_indexer("label", key)
+ 
+             elif kind == "loc" and is_integer(key):
+-                if not self.holds_integer():
++                if not (is_integer_dtype(self.dtype) or is_object_dtype(self.dtype)):
+                     self._invalid_indexer("label", key)
+ 
+         return key
+diff --git a/pandas/core/series.py b/pandas/core/series.py
+index 218237433..77f9df0f4 100644
+--- a/pandas/core/series.py
++++ b/pandas/core/series.py
+@@ -969,9 +969,11 @@ class Series(base.IndexOpsMixin, generic.NDFrame):
+         if takeable:
+             return self._values[label]
+ 
++        # Similar to Index.get_value, but we do not fall back to positional
++        loc = self.index.get_loc(label)
+         # We assume that _convert_scalar_indexer has already been called,
+         #  with kind="loc", if necessary, by the time we get here
+-        return self.index.get_value(self, label)
++        return self.index._get_values_for_loc(self, loc, label)
+ 
+     def __setitem__(self, key, value):
+         key = com.apply_if_callable(key, self)
+diff --git a/pandas/tests/indexing/test_scalar.py b/pandas/tests/indexing/test_scalar.py
+index c4750778e..25939e63c 100644
+--- a/pandas/tests/indexing/test_scalar.py
++++ b/pandas/tests/indexing/test_scalar.py
+@@ -138,16 +138,12 @@ class TestScalar2:
+         result = ser.loc["a"]
+         assert result == 1
+ 
+-        msg = (
+-            "cannot do label indexing on Index "
+-            r"with these indexers \[0\] of type int"
+-        )
+-        with pytest.raises(TypeError, match=msg):
++        with pytest.raises(KeyError, match="^0$"):
+             ser.at[0]
+-        with pytest.raises(TypeError, match=msg):
++        with pytest.raises(KeyError, match="^0$"):
+             ser.loc[0]
+ 
+-    def test_frame_raises_type_error(self):
++    def test_frame_raises_key_error(self):
+         # GH#31724 .at should match .loc
+         df = DataFrame({"A": [1, 2, 3]}, index=list("abc"))
+         result = df.at["a", "A"]
+@@ -155,13 +151,9 @@ class TestScalar2:
+         result = df.loc["a", "A"]
+         assert result == 1
+ 
+-        msg = (
+-            "cannot do label indexing on Index "
+-            r"with these indexers \[0\] of type int"
+-        )
+-        with pytest.raises(TypeError, match=msg):
++        with pytest.raises(KeyError, match="^0$"):
+             df.at["a", 0]
+-        with pytest.raises(TypeError, match=msg):
++        with pytest.raises(KeyError, match="^0$"):
+             df.loc["a", 0]
+ 
+     def test_series_at_raises_key_error(self):

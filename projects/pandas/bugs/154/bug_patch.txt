@@ -1,0 +1,142 @@
+diff --git a/pandas/core/generic.py b/pandas/core/generic.py
+index 24c794cd7..63bb04371 100644
+--- a/pandas/core/generic.py
++++ b/pandas/core/generic.py
+@@ -6972,8 +6972,7 @@ class NDFrame(PandasObject, SelectionMixin, indexing.IndexingMixin):
+         if not is_list:
+             start = self.index[0]
+             if isinstance(self.index, PeriodIndex):
+-                where = Period(where, freq=self.index.freq).ordinal
+-                start = start.ordinal
++                where = Period(where, freq=self.index.freq)
+ 
+             if where < start:
+                 if not is_series:
+diff --git a/pandas/core/indexes/period.py b/pandas/core/indexes/period.py
+index a8cd8ab49..d34ac1a54 100644
+--- a/pandas/core/indexes/period.py
++++ b/pandas/core/indexes/period.py
+@@ -469,17 +469,19 @@ class PeriodIndex(DatetimeIndexOpsMixin, Int64Index, PeriodDelegateMixin):
+     @Substitution(klass="PeriodIndex")
+     @Appender(_shared_docs["searchsorted"])
+     def searchsorted(self, value, side="left", sorter=None):
+-        if isinstance(value, Period):
+-            if value.freq != self.freq:
+-                raise raise_on_incompatible(self, value)
+-            value = value.ordinal
++        if isinstance(value, Period) or value is NaT:
++            self._data._check_compatible_with(value)
+         elif isinstance(value, str):
+             try:
+-                value = Period(value, freq=self.freq).ordinal
++                value = Period(value, freq=self.freq)
+             except DateParseError:
+                 raise KeyError(f"Cannot interpret '{value}' as period")
++        elif not isinstance(value, PeriodArray):
++            raise TypeError(
++                "PeriodIndex.searchsorted requires either a Period or PeriodArray"
++            )
+ 
+-        return self._ndarray_values.searchsorted(value, side=side, sorter=sorter)
++        return self._data.searchsorted(value, side=side, sorter=sorter)
+ 
+     @property
+     def is_full(self) -> bool:
+@@ -703,8 +705,7 @@ class PeriodIndex(DatetimeIndexOpsMixin, Int64Index, PeriodDelegateMixin):
+ 
+         t1, t2 = self._parsed_string_to_bounds(reso, parsed)
+         return slice(
+-            self.searchsorted(t1.ordinal, side="left"),
+-            self.searchsorted(t2.ordinal, side="right"),
++            self.searchsorted(t1, side="left"), self.searchsorted(t2, side="right")
+         )
+ 
+     def _convert_tolerance(self, tolerance, target):
+diff --git a/pandas/core/resample.py b/pandas/core/resample.py
+index 056ba73ed..0e43880df 100644
+--- a/pandas/core/resample.py
++++ b/pandas/core/resample.py
+@@ -1586,7 +1586,10 @@ class TimeGrouper(Grouper):
+         rng += freq_mult
+         # adjust bin edge indexes to account for base
+         rng -= bin_shift
+-        bins = memb.searchsorted(rng, side="left")
++
++        # Wrap in PeriodArray for PeriodArray.searchsorted
++        prng = type(memb._data)(rng, dtype=memb.dtype)
++        bins = memb.searchsorted(prng, side="left")
+ 
+         if nat_count > 0:
+             # NaT handling as in pandas._lib.lib.generate_bins_dt64()
+diff --git a/pandas/tests/indexes/period/test_period.py b/pandas/tests/indexes/period/test_period.py
+index 4eacf4038..16fa0b0c2 100644
+--- a/pandas/tests/indexes/period/test_period.py
++++ b/pandas/tests/indexes/period/test_period.py
+@@ -451,7 +451,7 @@ class TestPeriodIndex(DatetimeLike):
+         idx = PeriodIndex([2000, 2007, 2007, 2009, 2009], freq="A-JUN")
+         ts = Series(np.random.randn(len(idx)), index=idx)
+ 
+-        result = ts[2007]
++        result = ts["2007"]
+         expected = ts[1:3]
+         tm.assert_series_equal(result, expected)
+         result[:] = 1
+@@ -461,7 +461,7 @@ class TestPeriodIndex(DatetimeLike):
+         idx = PeriodIndex([2000, 2007, 2007, 2009, 2007], freq="A-JUN")
+         ts = Series(np.random.randn(len(idx)), index=idx)
+ 
+-        result = ts[2007]
++        result = ts["2007"]
+         expected = ts[idx == "2007"]
+         tm.assert_series_equal(result, expected)
+ 
+diff --git a/pandas/tests/indexes/period/test_tools.py b/pandas/tests/indexes/period/test_tools.py
+index 2135b8a99..28ab14af7 100644
+--- a/pandas/tests/indexes/period/test_tools.py
++++ b/pandas/tests/indexes/period/test_tools.py
+@@ -231,14 +231,43 @@ class TestPeriodIndex:
+         p2 = pd.Period("2014-01-04", freq=freq)
+         assert pidx.searchsorted(p2) == 3
+ 
+-        msg = "Input has different freq=H from PeriodIndex"
++        assert pidx.searchsorted(pd.NaT) == 0
++
++        msg = "Input has different freq=H from PeriodArray"
+         with pytest.raises(IncompatibleFrequency, match=msg):
+             pidx.searchsorted(pd.Period("2014-01-01", freq="H"))
+ 
+-        msg = "Input has different freq=5D from PeriodIndex"
++        msg = "Input has different freq=5D from PeriodArray"
+         with pytest.raises(IncompatibleFrequency, match=msg):
+             pidx.searchsorted(pd.Period("2014-01-01", freq="5D"))
+ 
++    def test_searchsorted_invalid(self):
++        pidx = pd.PeriodIndex(
++            ["2014-01-01", "2014-01-02", "2014-01-03", "2014-01-04", "2014-01-05"],
++            freq="D",
++        )
++
++        other = np.array([0, 1], dtype=np.int64)
++
++        msg = "requires either a Period or PeriodArray"
++        with pytest.raises(TypeError, match=msg):
++            pidx.searchsorted(other)
++
++        with pytest.raises(TypeError, match=msg):
++            pidx.searchsorted(other.astype("timedelta64[ns]"))
++
++        with pytest.raises(TypeError, match=msg):
++            pidx.searchsorted(np.timedelta64(4))
++
++        with pytest.raises(TypeError, match=msg):
++            pidx.searchsorted(np.timedelta64("NaT", "ms"))
++
++        with pytest.raises(TypeError, match=msg):
++            pidx.searchsorted(np.datetime64(4, "ns"))
++
++        with pytest.raises(TypeError, match=msg):
++            pidx.searchsorted(np.datetime64("NaT", "ns"))
++
+ 
+ class TestPeriodIndexConversion:
+     def test_tolist(self):

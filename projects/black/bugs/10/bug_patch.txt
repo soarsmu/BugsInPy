@@ -1,0 +1,16 @@
+diff --git a/blib2to3/pgen2/driver.py b/blib2to3/pgen2/driver.py
+index 72d9f47..6626c05 100644
+--- a/blib2to3/pgen2/driver.py
++++ b/blib2to3/pgen2/driver.py
+@@ -131,10 +131,8 @@ class Driver(object):
+                     current_line = ""
+                     current_column = 0
+                     wait_for_nl = False
+-            elif char == ' ':
++            elif char in ' \t':
+                 current_column += 1
+-            elif char == '\t':
+-                current_column += 4
+             elif char == '\n':
+                 # unexpected empty line
+                 current_column = 0

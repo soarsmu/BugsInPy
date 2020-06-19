@@ -1,0 +1,26 @@
+diff --git a/pandas/core/internals/blocks.py b/pandas/core/internals/blocks.py
+index 7ace80415..5edb4d93e 100644
+--- a/pandas/core/internals/blocks.py
++++ b/pandas/core/internals/blocks.py
+@@ -2825,6 +2825,8 @@ class ObjectBlock(Block):
+             if convert:
+                 block = [b.convert(numeric=False, copy=True) for b in block]
+             return block
++        if convert:
++            return [self.convert(numeric=False, copy=True)]
+         return self
+ 
+ 
+diff --git a/pandas/core/internals/managers.py b/pandas/core/internals/managers.py
+index 0e6ba8a2c..c36dd9463 100644
+--- a/pandas/core/internals/managers.py
++++ b/pandas/core/internals/managers.py
+@@ -629,7 +629,7 @@ class BlockManager(PandasObject):
+                         convert=convert,
+                         regex=regex,
+                     )
+-                    if m.any():
++                    if m.any() or convert:
+                         new_rb = _extend_blocks(result, new_rb)
+                     else:
+                         new_rb.append(b)

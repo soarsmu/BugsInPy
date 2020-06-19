@@ -1,0 +1,13 @@
+diff --git a/scrapy/contracts/__init__.py b/scrapy/contracts/__init__.py
+index 5eaee3d1..8315d21d 100644
+--- a/scrapy/contracts/__init__.py
++++ b/scrapy/contracts/__init__.py
+@@ -84,7 +84,7 @@ class ContractsManager(object):
+ 
+         def eb_wrapper(failure):
+             case = _create_testcase(method, 'errback')
+-            exc_info = failure.value, failure.type, failure.getTracebackObject()
++            exc_info = failure.type, failure.value, failure.getTracebackObject()
+             results.addError(case, exc_info)
+ 
+         request.callback = cb_wrapper

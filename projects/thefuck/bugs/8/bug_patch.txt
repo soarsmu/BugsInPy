@@ -1,0 +1,40 @@
+diff --git a/thefuck/rules/pacman_not_found.py b/thefuck/rules/pacman_not_found.py
+index 720135a..4e55b0c 100644
+--- a/thefuck/rules/pacman_not_found.py
++++ b/thefuck/rules/pacman_not_found.py
+@@ -1,9 +1,9 @@
+ """ Fixes wrong package names with pacman or yaourt.
+ 
+ For example the `llc` program is in package `llvm` so this:
+-    yaourt -S llc
++    yay -S llc
+ should be:
+-    yaourt -S llvm
++    yay -S llvm
+ """
+ 
+ from thefuck.utils import replace_command
+@@ -12,7 +12,7 @@ from thefuck.specific.archlinux import get_pkgfile, archlinux_env
+ 
+ def match(command):
+     return (command.script_parts
+-            and (command.script_parts[0] in ('pacman', 'yaourt')
++            and (command.script_parts[0] in ('pacman', 'yay', 'yaourt')
+                  or command.script_parts[0:2] == ['sudo', 'pacman'])
+             and 'error: target not found:' in command.output)
+ 
+diff --git a/thefuck/specific/archlinux.py b/thefuck/specific/archlinux.py
+index 5c95aa5..2d9e7b9 100644
+--- a/thefuck/specific/archlinux.py
++++ b/thefuck/specific/archlinux.py
+@@ -32,7 +32,9 @@ def get_pkgfile(command):
+ 
+ 
+ def archlinux_env():
+-    if utils.which('yaourt'):
++    if utils.which('yay'):
++        pacman = 'yay'
++    elif utils.which('yaourt'):
+         pacman = 'yaourt'
+     elif utils.which('pacman'):
+         pacman = 'sudo pacman'

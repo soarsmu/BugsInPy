@@ -1,0 +1,16 @@
+diff --git a/tornado/http1connection.py b/tornado/http1connection.py
+index 30f2a172..fd63be62 100644
+--- a/tornado/http1connection.py
++++ b/tornado/http1connection.py
+@@ -390,7 +390,10 @@ class HTTP1Connection(httputil.HTTPConnection):
+             self._chunking_output = (
+                 start_line.method in ("POST", "PUT", "PATCH")
+                 and "Content-Length" not in headers
+-                and "Transfer-Encoding" not in headers
++                and (
++                    "Transfer-Encoding" not in headers
++                    or headers["Transfer-Encoding"] == "chunked"
++                )
+             )
+         else:
+             assert isinstance(start_line, httputil.ResponseStartLine)

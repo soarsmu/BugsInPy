@@ -1,0 +1,13 @@
+diff --git a/lib/ansible/modules/network/eos/eos_eapi.py b/lib/ansible/modules/network/eos/eos_eapi.py
+index 07eeaf93eb..d3825a30df 100644
+--- a/lib/ansible/modules/network/eos/eos_eapi.py
++++ b/lib/ansible/modules/network/eos/eos_eapi.py
+@@ -264,7 +264,7 @@ def map_obj_to_commands(updates, module, warnings):
+         else:
+             add('protocol unix-socket')
+ 
+-    if needs_update('state') and not needs_update('vrf'):
++    if needs_update('state'):
+         if want['state'] == 'stopped':
+             add('shutdown')
+         elif want['state'] == 'started':

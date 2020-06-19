@@ -1,0 +1,13 @@
+diff --git a/pysnooper/tracer.py b/pysnooper/tracer.py
+index 6584d94..d8f5ba4 100644
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -233,7 +233,7 @@ class Tracer:
+             return self._wrap_function(function_or_class)
+ 
+     def _wrap_class(self, cls):
+-        for attr_name in dir(cls):
++        for attr_name in cls.__dict__:
+             attr = getattr(cls, attr_name)
+             if inspect.isfunction(attr):
+                 setattr(cls, attr_name, self._wrap_function(attr))

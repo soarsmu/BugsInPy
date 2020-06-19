@@ -1,0 +1,10 @@
+diff --git a/thefuck/rules/mkdir_p.py b/thefuck/rules/mkdir_p.py
+index 03b40ce..a62b447 100644
+--- a/thefuck/rules/mkdir_p.py
++++ b/thefuck/rules/mkdir_p.py
+@@ -10,4 +10,4 @@ def match(command, settings):
+ 
+ @sudo_support
+ def get_new_command(command, settings):
+-    return re.sub('^mkdir (.*)', 'mkdir -p \\1', command.script)
++    return re.sub('\\bmkdir (.*)', 'mkdir -p \\1', command.script)

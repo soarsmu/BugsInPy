@@ -1,0 +1,10 @@
+diff --git a/thefuck/rules/open.py b/thefuck/rules/open.py
+index 756f288..22aaea3 100644
+--- a/thefuck/rules/open.py
++++ b/thefuck/rules/open.py
+@@ -23,4 +23,4 @@ def match(command, settings):
+ 
+ 
+ def get_new_command(command, settings):
+-    return 'open http://' + command.script[5:]
++    return command.script.replace('open ', 'open http://')

@@ -1,0 +1,49 @@
+diff --git a/pandas/plotting/_core.py b/pandas/plotting/_core.py
+index a3c149984..ec5c609c1 100644
+--- a/pandas/plotting/_core.py
++++ b/pandas/plotting/_core.py
+@@ -586,6 +586,8 @@ class PlotAccessor(PandasObject):
+     mark_right : bool, default True
+         When using a secondary_y axis, automatically mark the column
+         labels with "(right)" in the legend
++    include_bool : bool, default is False
++        If True, boolean values can be plotted
+     `**kwds` : keywords
+         Options to pass to matplotlib plotting method
+ 
+diff --git a/pandas/plotting/_matplotlib/core.py b/pandas/plotting/_matplotlib/core.py
+index c2b37bb29..50f0d1663 100644
+--- a/pandas/plotting/_matplotlib/core.py
++++ b/pandas/plotting/_matplotlib/core.py
+@@ -106,6 +106,7 @@ class MPLPlot:
+         colormap=None,
+         table=False,
+         layout=None,
++        include_bool=False,
+         **kwds
+     ):
+ 
+@@ -191,6 +192,7 @@ class MPLPlot:
+             self.colormap = colormap
+ 
+         self.table = table
++        self.include_bool = include_bool
+ 
+         self.kwds = kwds
+ 
+@@ -400,9 +402,12 @@ class MPLPlot:
+         # GH16953, _convert is needed as fallback, for ``Series``
+         # with ``dtype == object``
+         data = data._convert(datetime=True, timedelta=True)
+-        numeric_data = data.select_dtypes(
+-            include=[np.number, "datetime", "datetimetz", "timedelta"]
+-        )
++        select_include_type = [np.number, "datetime", "datetimetz", "timedelta"]
++
++        # GH23719, allow plotting boolean
++        if self.include_bool is True:
++            select_include_type.append(np.bool_)
++        numeric_data = data.select_dtypes(include=select_include_type)
+ 
+         try:
+             is_empty = numeric_data.empty

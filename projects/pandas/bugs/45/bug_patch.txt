@@ -1,0 +1,158 @@
+diff --git a/pandas/core/arrays/boolean.py b/pandas/core/arrays/boolean.py
+index 75a0f397e..db6213694 100644
+--- a/pandas/core/arrays/boolean.py
++++ b/pandas/core/arrays/boolean.py
+@@ -26,6 +26,7 @@ from pandas.core.dtypes.generic import ABCDataFrame, ABCIndexClass, ABCSeries
+ from pandas.core.dtypes.missing import isna, notna
+ 
+ from pandas.core import nanops, ops
++from pandas.core.indexers import check_array_indexer
+ 
+ from .masked import BaseMaskedArray
+ 
+@@ -382,6 +383,7 @@ class BooleanArray(BaseMaskedArray):
+             value = value[0]
+             mask = mask[0]
+ 
++        key = check_array_indexer(self, key)
+         self._data[key] = value
+         self._mask[key] = mask
+ 
+diff --git a/pandas/core/arrays/categorical.py b/pandas/core/arrays/categorical.py
+index 412422397..3a6662d3e 100644
+--- a/pandas/core/arrays/categorical.py
++++ b/pandas/core/arrays/categorical.py
+@@ -2073,6 +2073,8 @@ class Categorical(ExtensionArray, PandasObject):
+ 
+         lindexer = self.categories.get_indexer(rvalue)
+         lindexer = self._maybe_coerce_indexer(lindexer)
++
++        key = check_array_indexer(self, key)
+         self._codes[key] = lindexer
+ 
+     def _reverse_indexer(self) -> Dict[Hashable, np.ndarray]:
+diff --git a/pandas/core/arrays/datetimelike.py b/pandas/core/arrays/datetimelike.py
+index 0ea707e1a..4f14ac2a1 100644
+--- a/pandas/core/arrays/datetimelike.py
++++ b/pandas/core/arrays/datetimelike.py
+@@ -601,6 +601,8 @@ class DatetimeLikeArrayMixin(ExtensionOpsMixin, AttributesMixin, ExtensionArray)
+                 f"or array of those. Got '{type(value).__name__}' instead."
+             )
+             raise TypeError(msg)
++
++        key = check_array_indexer(self, key)
+         self._data[key] = value
+         self._maybe_clear_freq()
+ 
+diff --git a/pandas/core/arrays/integer.py b/pandas/core/arrays/integer.py
+index 2c60cc438..48ad659b7 100644
+--- a/pandas/core/arrays/integer.py
++++ b/pandas/core/arrays/integer.py
+@@ -25,6 +25,7 @@ from pandas.core.dtypes.dtypes import register_extension_dtype
+ from pandas.core.dtypes.missing import isna
+ 
+ from pandas.core import nanops, ops
++from pandas.core.indexers import check_array_indexer
+ from pandas.core.ops import invalid_comparison
+ from pandas.core.ops.common import unpack_zerodim_and_defer
+ from pandas.core.tools.numeric import to_numeric
+@@ -425,6 +426,7 @@ class IntegerArray(BaseMaskedArray):
+             value = value[0]
+             mask = mask[0]
+ 
++        key = check_array_indexer(self, key)
+         self._data[key] = value
+         self._mask[key] = mask
+ 
+diff --git a/pandas/core/arrays/interval.py b/pandas/core/arrays/interval.py
+index 4574cd7be..398ed75c0 100644
+--- a/pandas/core/arrays/interval.py
++++ b/pandas/core/arrays/interval.py
+@@ -541,6 +541,7 @@ class IntervalArray(IntervalMixin, ExtensionArray):
+                 msg = f"'value' should be an interval type, got {type(value)} instead."
+                 raise TypeError(msg)
+ 
++        key = check_array_indexer(self, key)
+         # Need to ensure that left and right are updated atomically, so we're
+         # forced to copy, update the copy, and swap in the new values.
+         left = self.left.copy(deep=True)
+diff --git a/pandas/core/arrays/numpy_.py b/pandas/core/arrays/numpy_.py
+index b29727902..e573fe661 100644
+--- a/pandas/core/arrays/numpy_.py
++++ b/pandas/core/arrays/numpy_.py
+@@ -262,6 +262,7 @@ class PandasArray(ExtensionArray, ExtensionOpsMixin, NDArrayOperatorsMixin):
+     def __setitem__(self, key, value) -> None:
+         value = extract_array(value, extract_numpy=True)
+ 
++        key = check_array_indexer(self, key)
+         scalar_key = lib.is_scalar(key)
+         scalar_value = lib.is_scalar(value)
+ 
+diff --git a/pandas/core/arrays/string_.py b/pandas/core/arrays/string_.py
+index 309a0beb9..fcccd8cc1 100644
+--- a/pandas/core/arrays/string_.py
++++ b/pandas/core/arrays/string_.py
+@@ -15,6 +15,7 @@ from pandas import compat
+ from pandas.core import ops
+ from pandas.core.arrays import PandasArray
+ from pandas.core.construction import extract_array
++from pandas.core.indexers import check_array_indexer
+ from pandas.core.missing import isna
+ 
+ if TYPE_CHECKING:
+@@ -238,6 +239,7 @@ class StringArray(PandasArray):
+             # extract_array doesn't extract PandasArray subclasses
+             value = value._ndarray
+ 
++        key = check_array_indexer(self, key)
+         scalar_key = lib.is_scalar(key)
+         scalar_value = lib.is_scalar(value)
+         if scalar_key and not scalar_value:
+diff --git a/pandas/tests/extension/base/setitem.py b/pandas/tests/extension/base/setitem.py
+index 0bb8aede6..e0ca603aa 100644
+--- a/pandas/tests/extension/base/setitem.py
++++ b/pandas/tests/extension/base/setitem.py
+@@ -4,6 +4,7 @@ import numpy as np
+ import pytest
+ 
+ import pandas as pd
++from pandas.core.arrays.numpy_ import PandasDtype
+ 
+ from .base import BaseExtensionTests
+ 
+@@ -195,3 +196,14 @@ class BaseSetitemTests(BaseExtensionTests):
+         data[0] = data[1]
+         assert view1[0] == data[1]
+         assert view2[0] == data[1]
++
++    def test_setitem_nullable_mask(self, data):
++        # GH 31446
++        # TODO: there is some issue with PandasArray, therefore,
++        # TODO: skip the setitem test for now, and fix it later
++        if data.dtype != PandasDtype("object"):
++            arr = data[:5]
++            expected = data.take([0, 0, 0, 3, 4])
++            mask = pd.array([True, True, True, False, False])
++            arr[mask] = data[0]
++            self.assert_extension_array_equal(expected, arr)
+diff --git a/pandas/tests/extension/decimal/array.py b/pandas/tests/extension/decimal/array.py
+index 02153ade4..2614d8c72 100644
+--- a/pandas/tests/extension/decimal/array.py
++++ b/pandas/tests/extension/decimal/array.py
+@@ -11,6 +11,7 @@ from pandas.core.dtypes.base import ExtensionDtype
+ import pandas as pd
+ from pandas.api.extensions import no_default, register_extension_dtype
+ from pandas.core.arrays import ExtensionArray, ExtensionScalarOpsMixin
++from pandas.core.indexers import check_array_indexer
+ 
+ 
+ @register_extension_dtype
+@@ -138,6 +139,8 @@ class DecimalArray(ExtensionArray, ExtensionScalarOpsMixin):
+             value = [decimal.Decimal(v) for v in value]
+         else:
+             value = decimal.Decimal(value)
++
++        key = check_array_indexer(self, key)
+         self._data[key] = value
+ 
+     def __len__(self) -> int:

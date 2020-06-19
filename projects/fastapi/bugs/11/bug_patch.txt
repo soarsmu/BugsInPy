@@ -1,0 +1,36 @@
+diff --git a/fastapi/dependencies/utils.py b/fastapi/dependencies/utils.py
+index f9e42d0..7f0f590 100644
+--- a/fastapi/dependencies/utils.py
++++ b/fastapi/dependencies/utils.py
+@@ -559,6 +559,8 @@ def get_body_field(*, dependant: Dependant, name: str) -> Optional[Field]:
+     for f in flat_dependant.body_params:
+         BodyModel.__fields__[f.name] = get_schema_compatible_field(field=f)
+     required = any(True for f in flat_dependant.body_params if f.required)
++
++    BodySchema_kwargs: Dict[str, Any] = dict(default=None)
+     if any(isinstance(f.schema, params.File) for f in flat_dependant.body_params):
+         BodySchema: Type[params.Body] = params.File
+     elif any(isinstance(f.schema, params.Form) for f in flat_dependant.body_params):
+@@ -566,6 +568,14 @@ def get_body_field(*, dependant: Dependant, name: str) -> Optional[Field]:
+     else:
+         BodySchema = params.Body
+ 
++        body_param_media_types = [
++            getattr(f.schema, "media_type")
++            for f in flat_dependant.body_params
++            if isinstance(f.schema, params.Body)
++        ]
++        if len(set(body_param_media_types)) == 1:
++            BodySchema_kwargs["media_type"] = body_param_media_types[0]
++
+     field = Field(
+         name="body",
+         type_=BodyModel,
+@@ -574,6 +584,6 @@ def get_body_field(*, dependant: Dependant, name: str) -> Optional[Field]:
+         model_config=BaseConfig,
+         class_validators={},
+         alias="body",
+-        schema=BodySchema(None),
++        schema=BodySchema(**BodySchema_kwargs),
+     )
+     return field

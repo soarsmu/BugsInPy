@@ -1,0 +1,13 @@
+diff --git a/tornado/ioloop.py b/tornado/ioloop.py
+index 67e33b52..87d4168e 100644
+--- a/tornado/ioloop.py
++++ b/tornado/ioloop.py
+@@ -249,7 +249,7 @@ class IOLoop(Configurable):
+             if IOLoop.current(instance=False) is None:
+                 self.make_current()
+         elif make_current:
+-            if IOLoop.current(instance=False) is None:
++            if IOLoop.current(instance=False) is not None:
+                 raise RuntimeError("current IOLoop already exists")
+             self.make_current()
+ 

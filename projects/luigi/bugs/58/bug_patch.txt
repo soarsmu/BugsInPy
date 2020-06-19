@@ -1,0 +1,13 @@
+diff --git a/luigi/task_register.py b/luigi/task_register.py
+index ad6dfd1b..393d35d8 100644
+--- a/luigi/task_register.py
++++ b/luigi/task_register.py
+@@ -25,6 +25,8 @@ except ImportError:
+     from ordereddict import OrderedDict
+ 
+ from luigi import six
++import logging
++logger = logging.getLogger('luigi-interface')
+ 
+ 
+ class TaskClassException(Exception):

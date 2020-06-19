@@ -1,0 +1,16 @@
+diff --git a/pandas/core/indexes/range.py b/pandas/core/indexes/range.py
+index 43445a0d5..6e2d500f4 100644
+--- a/pandas/core/indexes/range.py
++++ b/pandas/core/indexes/range.py
+@@ -388,8 +388,9 @@ class RangeIndex(Int64Index):
+         if self.step > 0:
+             start, stop, step = self.start, self.stop, self.step
+         else:
+-            # Work on reversed range for simplicity:
+-            start, stop, step = (self.stop - self.step, self.start + 1, -self.step)
++            # GH 28678: work on reversed range for simplicity
++            reverse = self._range[::-1]
++            start, stop, step = reverse.start, reverse.stop, reverse.step
+ 
+         target_array = np.asarray(target)
+         if not (is_integer_dtype(target_array) and target_array.ndim == 1):

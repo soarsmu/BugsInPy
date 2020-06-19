@@ -1,0 +1,40 @@
+diff --git a/pandas/core/generic.py b/pandas/core/generic.py
+index 3bb584d4d..62a4878f1 100644
+--- a/pandas/core/generic.py
++++ b/pandas/core/generic.py
+@@ -3442,15 +3442,14 @@ class NDFrame(PandasObject, SelectionMixin, indexing.IndexingMixin):
+                 new_index = self.index[loc]
+ 
+         if is_scalar(loc):
+-            new_values = self._data.fast_xs(loc)
++            # In this case loc should be an integer
++            if self.ndim == 1:
++                # if we encounter an array-like and we only have 1 dim
++                # that means that their are list/ndarrays inside the Series!
++                # so just return them (GH 6394)
++                return self._values[loc]
+ 
+-            # may need to box a datelike-scalar
+-            #
+-            # if we encounter an array-like and we only have 1 dim
+-            # that means that their are list/ndarrays inside the Series!
+-            # so just return them (GH 6394)
+-            if not is_list_like(new_values) or self.ndim == 1:
+-                return com.maybe_box_datetimelike(new_values)
++            new_values = self._data.fast_xs(loc)
+ 
+             result = self._constructor_sliced(
+                 new_values,
+diff --git a/pandas/core/internals/managers.py b/pandas/core/internals/managers.py
+index 526863d2e..08ae0b021 100644
+--- a/pandas/core/internals/managers.py
++++ b/pandas/core/internals/managers.py
+@@ -1565,7 +1565,7 @@ class SingleBlockManager(BlockManager):
+         fast path for getting a cross-section
+         return a view of the data
+         """
+-        return self._block.values[loc]
++        raise NotImplementedError("Use series._values[loc] instead")
+ 
+     def concat(self, to_concat, new_axis) -> "SingleBlockManager":
+         """

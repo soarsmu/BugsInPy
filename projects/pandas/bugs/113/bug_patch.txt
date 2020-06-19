@@ -1,0 +1,29 @@
+diff --git a/pandas/core/internals/blocks.py b/pandas/core/internals/blocks.py
+index 85a261792..536aa53c9 100644
+--- a/pandas/core/internals/blocks.py
++++ b/pandas/core/internals/blocks.py
+@@ -830,6 +830,9 @@ class Block(PandasObject):
+         """
+         transpose = self.ndim == 2
+ 
++        if isinstance(indexer, np.ndarray) and indexer.ndim > self.ndim:
++            raise ValueError(f"Cannot set values with ndim > {self.ndim}")
++
+         # coerce None values, if appropriate
+         if value is None:
+             if self.is_numeric:
+diff --git a/pandas/io/stata.py b/pandas/io/stata.py
+index 06bf906be..d651fe9f6 100644
+--- a/pandas/io/stata.py
++++ b/pandas/io/stata.py
+@@ -1678,6 +1678,10 @@ the string values returned are correct."""
+                     missing_value = StataMissingValue(um)
+ 
+                     loc = missing_loc[umissing_loc == j]
++                    if loc.ndim == 2 and loc.shape[1] == 1:
++                        # GH#31813 avoid trying to set Series values with wrong
++                        #  dimension
++                        loc = loc[:, 0]
+                     replacement.iloc[loc] = missing_value
+             else:  # All replacements are identical
+                 dtype = series.dtype

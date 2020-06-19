@@ -1,0 +1,13 @@
+diff --git a/thefuck/rules/ls_lah.py b/thefuck/rules/ls_lah.py
+index 7eba5bd..70f6baa 100644
+--- a/thefuck/rules/ls_lah.py
++++ b/thefuck/rules/ls_lah.py
+@@ -1,5 +1,7 @@
+ def match(command, settings):
+-    return 'ls' in command.script and not ('ls -' in command.script)
++    return (command.script == 'ls'
++            or command.script.startswith('ls ')
++            and not ('ls -' in command.script))
+ 
+ 
+ def get_new_command(command, settings):

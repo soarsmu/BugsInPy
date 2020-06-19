@@ -1,0 +1,236 @@
+diff --git a/keras/backend/cntk_backend.py b/keras/backend/cntk_backend.py
+index bbaa9f11..59430400 100644
+--- a/keras/backend/cntk_backend.py
++++ b/keras/backend/cntk_backend.py
+@@ -2186,7 +2186,7 @@ def in_top_k(predictions, targets, k):
+ 
+ 
+ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+-                     padding='valid', data_format=None):
++                     padding='valid', data_format=None, dilation_rate=(1, 1)):
+     data_format = normalize_data_format(data_format)
+ 
+     x = _preprocess_conv2d_input(x, data_format)
+@@ -2208,7 +2208,8 @@ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+             False,
+             padding,
+             padding],
+-        output_shape=output_shape)
++        output_shape=output_shape,
++        dilation=dilation_rate)
+     return _postprocess_conv2d_output(x, data_format)
+ 
+ 
+diff --git a/keras/backend/tensorflow_backend.py b/keras/backend/tensorflow_backend.py
+index 2e44bb41..99e00949 100644
+--- a/keras/backend/tensorflow_backend.py
++++ b/keras/backend/tensorflow_backend.py
+@@ -3433,12 +3433,14 @@ def _preprocess_conv1d_input(x, data_format):
+     return x, tf_data_format
+ 
+ 
+-def _preprocess_conv2d_input(x, data_format):
++def _preprocess_conv2d_input(x, data_format, force_transpose=False):
+     """Transpose and cast the input before the conv2d.
+ 
+     # Arguments
+         x: input tensor.
+         data_format: string, `"channels_last"` or `"channels_first"`.
++        force_transpose: boolean, whether force to transpose input from NCHW to NHWC
++                        if the `data_format` is `"channels_first"`.
+ 
+     # Returns
+         A tensor.
+@@ -3449,7 +3451,7 @@ def _preprocess_conv2d_input(x, data_format):
+         x = tf.cast(x, 'float32')
+     tf_data_format = 'NHWC'
+     if data_format == 'channels_first':
+-        if not _has_nchw_support():
++        if not _has_nchw_support() or force_transpose:
+             x = tf.transpose(x, (0, 2, 3, 1))  # NCHW -> NHWC
+         else:
+             tf_data_format = 'NCHW'
+@@ -3586,7 +3588,7 @@ def conv2d(x, kernel, strides=(1, 1), padding='valid',
+ 
+ 
+ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+-                     padding='valid', data_format=None):
++                     padding='valid', data_format=None, dilation_rate=(1, 1)):
+     """2D deconvolution (i.e. transposed convolution).
+ 
+     # Arguments
+@@ -3598,6 +3600,7 @@ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+         data_format: string, `"channels_last"` or `"channels_first"`.
+             Whether to use Theano or TensorFlow/CNTK data format
+             for inputs/kernels/outputs.
++        dilation_rate: tuple of 2 integers.
+ 
+     # Returns
+         A tensor, result of transposed 2D convolution.
+@@ -3610,7 +3613,13 @@ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+     if isinstance(output_shape, (tuple, list)):
+         output_shape = tf.stack(output_shape)
+ 
+-    x, tf_data_format = _preprocess_conv2d_input(x, data_format)
++    # tf.nn.atrous_conv2d_transpose input only supports NHWC format
++    if data_format == 'channels_first' and dilation_rate != (1, 1):
++        force_transpose = True
++    else:
++        force_transpose = False
++
++    x, tf_data_format = _preprocess_conv2d_input(x, data_format, force_transpose)
+ 
+     if data_format == 'channels_first' and tf_data_format == 'NHWC':
+         output_shape = (output_shape[0],
+@@ -3627,9 +3636,15 @@ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+     else:
+         strides = (1, 1) + strides
+ 
+-    x = tf.nn.conv2d_transpose(x, kernel, output_shape, strides,
+-                               padding=padding,
+-                               data_format=tf_data_format)
++    if dilation_rate == (1, 1):
++        x = tf.nn.conv2d_transpose(x, kernel, output_shape, strides,
++                                   padding=padding,
++                                   data_format=tf_data_format)
++    else:
++        assert dilation_rate[0] == dilation_rate[1]
++        x = tf.nn.atrous_conv2d_transpose(
++            x, kernel, output_shape, dilation_rate[0], padding)
++
+     if data_format == 'channels_first' and tf_data_format == 'NHWC':
+         x = tf.transpose(x, (0, 3, 1, 2))  # NHWC -> NCHW
+     return x
+diff --git a/keras/backend/theano_backend.py b/keras/backend/theano_backend.py
+index cdb4a681..700a48fe 100644
+--- a/keras/backend/theano_backend.py
++++ b/keras/backend/theano_backend.py
+@@ -2134,7 +2134,7 @@ def conv2d(x, kernel, strides=(1, 1), padding='valid',
+ 
+ 
+ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+-                     padding='valid', data_format=None):
++                     padding='valid', data_format=None, dilation_rate=(1, 1)):
+     """2D deconvolution (transposed convolution).
+ 
+     # Arguments
+@@ -2144,7 +2144,8 @@ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+         padding: string, "same" or "valid".
+         data_format: "channels_last" or "channels_first".
+             Whether to use Theano or TensorFlow data format
+-        in inputs/kernels/outputs.
++            in inputs/kernels/outputs.
++        dilation_rate: tuple of 2 integers.
+ 
+     # Raises
+         ValueError: if using an even kernel size with padding 'same'.
+@@ -2177,7 +2178,8 @@ def conv2d_transpose(x, kernel, output_shape, strides=(1, 1),
+                                                         kshp=kernel_shape,
+                                                         subsample=strides,
+                                                         border_mode=th_padding,
+-                                                        filter_flip=not flip_filters)
++                                                        filter_flip=not flip_filters,
++                                                        filter_dilation=dilation_rate)
+     conv_out = op(kernel, x, output_shape[2:])
+     conv_out = _postprocess_conv2d_output(conv_out, x, padding,
+                                           kernel_shape, strides, data_format)
+diff --git a/keras/layers/convolutional.py b/keras/layers/convolutional.py
+index 672f8820..f3d41bcb 100644
+--- a/keras/layers/convolutional.py
++++ b/keras/layers/convolutional.py
+@@ -731,6 +731,7 @@ class Conv2DTranspose(Conv2D):
+                  padding='valid',
+                  output_padding=None,
+                  data_format=None,
++                 dilation_rate=(1, 1),
+                  activation=None,
+                  use_bias=True,
+                  kernel_initializer='glorot_uniform',
+@@ -747,6 +748,7 @@ class Conv2DTranspose(Conv2D):
+             strides=strides,
+             padding=padding,
+             data_format=data_format,
++            dilation_rate=dilation_rate,
+             activation=activation,
+             use_bias=use_bias,
+             kernel_initializer=kernel_initializer,
+@@ -820,11 +822,13 @@ class Conv2DTranspose(Conv2D):
+         out_height = conv_utils.deconv_length(height,
+                                               stride_h, kernel_h,
+                                               self.padding,
+-                                              out_pad_h)
++                                              out_pad_h,
++                                              self.dilation_rate[0])
+         out_width = conv_utils.deconv_length(width,
+                                              stride_w, kernel_w,
+                                              self.padding,
+-                                             out_pad_w)
++                                             out_pad_w,
++                                             self.dilation_rate[1])
+         if self.data_format == 'channels_first':
+             output_shape = (batch_size, self.filters, out_height, out_width)
+         else:
+@@ -836,7 +840,8 @@ class Conv2DTranspose(Conv2D):
+             output_shape,
+             self.strides,
+             padding=self.padding,
+-            data_format=self.data_format)
++            data_format=self.data_format,
++            dilation_rate=self.dilation_rate)
+ 
+         if self.use_bias:
+             outputs = K.bias_add(
+@@ -867,17 +872,18 @@ class Conv2DTranspose(Conv2D):
+                                                         stride_h,
+                                                         kernel_h,
+                                                         self.padding,
+-                                                        out_pad_h)
++                                                        out_pad_h,
++                                                        self.dilation_rate[0])
+         output_shape[w_axis] = conv_utils.deconv_length(output_shape[w_axis],
+                                                         stride_w,
+                                                         kernel_w,
+                                                         self.padding,
+-                                                        out_pad_w)
++                                                        out_pad_w,
++                                                        self.dilation_rate[1])
+         return tuple(output_shape)
+ 
+     def get_config(self):
+         config = super(Conv2DTranspose, self).get_config()
+-        config.pop('dilation_rate')
+         config['output_padding'] = self.output_padding
+         return config
+ 
+diff --git a/keras/utils/conv_utils.py b/keras/utils/conv_utils.py
+index c4370dbf..d8c65ff3 100644
+--- a/keras/utils/conv_utils.py
++++ b/keras/utils/conv_utils.py
+@@ -135,7 +135,8 @@ def conv_input_length(output_length, filter_size, padding, stride):
+     return (output_length - 1) * stride - 2 * pad + filter_size
+ 
+ 
+-def deconv_length(dim_size, stride_size, kernel_size, padding, output_padding):
++def deconv_length(dim_size, stride_size, kernel_size, padding,
++                  output_padding, dilation=1):
+     """Determines output length of a transposed convolution given input length.
+ 
+     # Arguments
+@@ -146,6 +147,7 @@ def deconv_length(dim_size, stride_size, kernel_size, padding, output_padding):
+         padding: One of `"same"`, `"valid"`, `"full"`.
+         output_padding: Integer, amount of padding along the output dimension,
+             Can be set to `None` in which case the output length is inferred.
++        dilation: dilation rate, integer.
+ 
+     # Returns
+         The output length (integer).
+@@ -154,6 +156,9 @@ def deconv_length(dim_size, stride_size, kernel_size, padding, output_padding):
+     if dim_size is None:
+         return None
+ 
++    # Get the dilated kernel size
++    kernel_size = kernel_size + (kernel_size - 1) * (dilation - 1)
++
+     # Infer length if output padding is None, else compute the exact length
+     if output_padding is None:
+         if padding == 'valid':

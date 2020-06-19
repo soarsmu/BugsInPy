@@ -1,0 +1,22 @@
+diff --git a/tornado/platform/windows.py b/tornado/platform/windows.py
+index 92295fc6..9a319f27 100644
+--- a/tornado/platform/windows.py
++++ b/tornado/platform/windows.py
+@@ -17,4 +17,4 @@ HANDLE_FLAG_INHERIT = 0x00000001
+ def set_close_exec(fd):
+     success = SetHandleInformation(fd, HANDLE_FLAG_INHERIT, 0)
+     if not success:
+-        raise ctypes.GetLastError()
++        raise ctypes.WinError()
+diff --git a/tornado/test/runtests.py b/tornado/test/runtests.py
+index 3b22d396..ca82d66b 100644
+--- a/tornado/test/runtests.py
++++ b/tornado/test/runtests.py
+@@ -53,6 +53,7 @@ TEST_MODULES = [
+     'tornado.test.util_test',
+     'tornado.test.web_test',
+     'tornado.test.websocket_test',
++    'tornado.test.windows_test',
+     'tornado.test.wsgi_test',
+ ]
+ 

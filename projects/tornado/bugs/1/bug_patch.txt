@@ -1,0 +1,36 @@
+diff --git a/tornado/websocket.py b/tornado/websocket.py
+index 00d08bab..d991fee5 100644
+--- a/tornado/websocket.py
++++ b/tornado/websocket.py
+@@ -558,8 +558,8 @@ class WebSocketHandler(tornado.web.RequestHandler):
+ 
+         .. versionadded:: 3.1
+         """
+-        assert self.stream is not None
+-        self.stream.set_nodelay(value)
++        assert self.ws_connection is not None
++        self.ws_connection.set_nodelay(value)
+ 
+     def on_connection_close(self) -> None:
+         if self.ws_connection:
+@@ -714,6 +714,10 @@ class WebSocketProtocol(abc.ABC):
+     async def _receive_frame_loop(self) -> None:
+         raise NotImplementedError()
+ 
++    @abc.abstractmethod
++    def set_nodelay(self, x: bool) -> None:
++        raise NotImplementedError()
++
+ 
+ class _PerMessageDeflateCompressor(object):
+     def __init__(
+@@ -1345,6 +1349,9 @@ class WebSocketProtocol13(WebSocketProtocol):
+         self.write_ping(b"")
+         self.last_ping = now
+ 
++    def set_nodelay(self, x: bool) -> None:
++        self.stream.set_nodelay(x)
++
+ 
+ class WebSocketClientConnection(simple_httpclient._HTTPConnection):
+     """WebSocket client connection.

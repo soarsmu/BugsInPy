@@ -1,0 +1,54 @@
+diff --git a/tornado/ioloop.py b/tornado/ioloop.py
+index 839e7ee5..f6ec177b 100644
+--- a/tornado/ioloop.py
++++ b/tornado/ioloop.py
+@@ -47,7 +47,6 @@ import threading
+ import time
+ import traceback
+ import math
+-import weakref
+ 
+ from tornado.concurrent import Future, is_future, chain_future, future_set_exc_info, future_add_done_callback  # noqa: E501
+ from tornado.log import app_log, gen_log
+@@ -185,7 +184,7 @@ class IOLoop(Configurable):
+     _current = threading.local()
+ 
+     # In Python 3, _ioloop_for_asyncio maps from asyncio loops to IOLoops.
+-    _ioloop_for_asyncio = weakref.WeakKeyDictionary()
++    _ioloop_for_asyncio = dict()
+ 
+     @classmethod
+     def configure(cls, impl, **kwargs):
+diff --git a/tornado/platform/asyncio.py b/tornado/platform/asyncio.py
+index b2ad9fe6..b6a490af 100644
+--- a/tornado/platform/asyncio.py
++++ b/tornado/platform/asyncio.py
+@@ -38,6 +38,20 @@ class BaseAsyncIOLoop(IOLoop):
+         self.readers = set()
+         self.writers = set()
+         self.closing = False
++        # If an asyncio loop was closed through an asyncio interface
++        # instead of IOLoop.close(), we'd never hear about it and may
++        # have left a dangling reference in our map. In case an
++        # application (or, more likely, a test suite) creates and
++        # destroys a lot of event loops in this way, check here to
++        # ensure that we don't have a lot of dead loops building up in
++        # the map.
++        #
++        # TODO(bdarnell): consider making self.asyncio_loop a weakref
++        # for AsyncIOMainLoop and make _ioloop_for_asyncio a
++        # WeakKeyDictionary.
++        for loop in list(IOLoop._ioloop_for_asyncio):
++            if loop.is_closed():
++                del IOLoop._ioloop_for_asyncio[loop]
+         IOLoop._ioloop_for_asyncio[asyncio_loop] = self
+         super(BaseAsyncIOLoop, self).initialize(**kwargs)
+ 
+@@ -49,6 +63,7 @@ class BaseAsyncIOLoop(IOLoop):
+             if all_fds:
+                 self.close_fd(fileobj)
+         self.asyncio_loop.close()
++        del IOLoop._ioloop_for_asyncio[self.asyncio_loop]
+ 
+     def add_handler(self, fd, handler, events):
+         fd, fileobj = self.split_fd(fd)

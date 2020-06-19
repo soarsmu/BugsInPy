@@ -1,0 +1,16 @@
+diff --git a/pandas/core/arrays/categorical.py b/pandas/core/arrays/categorical.py
+index 4167c75eb..40a169d03 100644
+--- a/pandas/core/arrays/categorical.py
++++ b/pandas/core/arrays/categorical.py
+@@ -103,7 +103,10 @@ def _cat_compare_op(op):
+             mask = (self._codes == -1) | (other_codes == -1)
+             if mask.any():
+                 # In other series, the leads to False, so do that here too
+-                ret[mask] = False
++                if opname == "__ne__":
++                    ret[(self._codes == -1) & (other_codes == -1)] = True
++                else:
++                    ret[mask] = False
+             return ret
+ 
+         if is_scalar(other):

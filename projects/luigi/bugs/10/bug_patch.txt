@@ -1,0 +1,13 @@
+diff --git a/luigi/contrib/redshift.py b/luigi/contrib/redshift.py
+index 5901685c..0ab50dc6 100644
+--- a/luigi/contrib/redshift.py
++++ b/luigi/contrib/redshift.py
+@@ -353,7 +353,7 @@ class S3CopyToTable(rdbms.CopyToTable, _CredentialsMixin):
+         """
+         logger.info("Inserting file: %s", f)
+         colnames = ''
+-        if len(self.columns) > 0:
++        if self.columns and len(self.columns) > 0:
+             colnames = ",".join([x[0] for x in self.columns])
+             colnames = '({})'.format(colnames)
+ 

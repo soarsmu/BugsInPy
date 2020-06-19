@@ -1,0 +1,15 @@
+diff --git a/thefuck/rules/pip_unknown_command.py b/thefuck/rules/pip_unknown_command.py
+index 75fcc7c..2720cda 100644
+--- a/thefuck/rules/pip_unknown_command.py
++++ b/thefuck/rules/pip_unknown_command.py
+@@ -12,8 +12,8 @@ def match(command):
+ 
+ 
+ def get_new_command(command):
+-    broken_cmd = re.findall(r'ERROR: unknown command \"([a-z]+)\"',
++    broken_cmd = re.findall(r'ERROR: unknown command "([^"]+)"',
+                             command.output)[0]
+-    new_cmd = re.findall(r'maybe you meant \"([a-z]+)\"', command.output)[0]
++    new_cmd = re.findall(r'maybe you meant "([^"]+)"', command.output)[0]
+ 
+     return replace_argument(command.script, broken_cmd, new_cmd)

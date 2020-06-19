@@ -1,0 +1,41 @@
+diff --git a/pandas/core/dtypes/missing.py b/pandas/core/dtypes/missing.py
+index 6dd032b92..cd87fbef0 100644
+--- a/pandas/core/dtypes/missing.py
++++ b/pandas/core/dtypes/missing.py
+@@ -445,8 +445,14 @@ def array_equivalent(left, right, strict_nan=False):
+                 if not isinstance(right_value, float) or not np.isnan(right_value):
+                     return False
+             else:
+-                if np.any(left_value != right_value):
+-                    return False
++                try:
++                    if np.any(left_value != right_value):
++                        return False
++                except TypeError as err:
++                    if "Cannot compare tz-naive" in str(err):
++                        # tzawareness compat failure, see GH#28507
++                        return False
++                    raise
+         return True
+ 
+     # NaNs can occur in float and complex arrays.
+diff --git a/pandas/core/indexes/base.py b/pandas/core/indexes/base.py
+index 6ef9d78ff..c7e9dd5f0 100644
+--- a/pandas/core/indexes/base.py
++++ b/pandas/core/indexes/base.py
+@@ -4324,12 +4324,9 @@ class Index(IndexOpsMixin, PandasObject):
+             # if other is not object, use other's logic for coercion
+             return other.equals(self)
+ 
+-        try:
+-            return array_equivalent(
+-                com.values_from_object(self), com.values_from_object(other)
+-            )
+-        except Exception:
+-            return False
++        return array_equivalent(
++            com.values_from_object(self), com.values_from_object(other)
++        )
+ 
+     def identical(self, other):
+         """

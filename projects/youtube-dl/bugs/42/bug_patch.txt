@@ -1,0 +1,61 @@
+diff --git a/youtube_dl/extractor/minhateca.py b/youtube_dl/extractor/minhateca.py
+index 077c9b19d..14934b7ec 100644
+--- a/youtube_dl/extractor/minhateca.py
++++ b/youtube_dl/extractor/minhateca.py
+@@ -8,6 +8,7 @@ from ..compat import (
+ )
+ from ..utils import (
+     int_or_none,
++    parse_duration,
+     parse_filesize,
+ )
+ 
+@@ -52,8 +53,8 @@ class MinhatecaIE(InfoExtractor):
+         filesize_approx = parse_filesize(self._html_search_regex(
+             r'<p class="fileSize">(.*?)</p>',
+             webpage, 'file size approximation', fatal=False))
+-        duration = int_or_none(self._html_search_regex(
+-            r'(?s)<p class="fileLeng[ht][th]">.*?([0-9]+)\s*s',
++        duration = parse_duration(self._html_search_regex(
++            r'(?s)<p class="fileLeng[ht][th]">.*?class="bold">(.*?)<',
+             webpage, 'duration', fatal=False))
+         view_count = int_or_none(self._html_search_regex(
+             r'<p class="downloadsCounter">([0-9]+)</p>',
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index 5e9ae7a42..5efb4c59a 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -1206,18 +1206,29 @@ def parse_duration(s):
+ 
+     m = re.match(
+         r'''(?ix)T?
++        (?:
++            (?P<only_mins>[0-9.]+)\s*(?:mins?|minutes?)\s*|
++            (?P<only_hours>[0-9.]+)\s*(?:hours?)|
++
+             (?:
+                 (?:(?P<hours>[0-9]+)\s*(?:[:h]|hours?)\s*)?
+                 (?P<mins>[0-9]+)\s*(?:[:m]|mins?|minutes?)\s*
+             )?
+-            (?P<secs>[0-9]+)(?P<ms>\.[0-9]+)?\s*(?:s|secs?|seconds?)?$''', s)
++            (?P<secs>[0-9]+)(?P<ms>\.[0-9]+)?\s*(?:s|secs?|seconds?)?
++        )$''', s)
+     if not m:
+         return None
+-    res = int(m.group('secs'))
++    res = 0
++    if m.group('only_mins'):
++        return float_or_none(m.group('only_mins'), invscale=60)
++    if m.group('only_hours'):
++        return float_or_none(m.group('only_hours'), invscale=60 * 60)
++    if m.group('secs'):
++        res += int(m.group('secs'))
+     if m.group('mins'):
+         res += int(m.group('mins')) * 60
+-        if m.group('hours'):
+-            res += int(m.group('hours')) * 60 * 60
++    if m.group('hours'):
++        res += int(m.group('hours')) * 60 * 60
+     if m.group('ms'):
+         res += float(m.group('ms'))
+     return res

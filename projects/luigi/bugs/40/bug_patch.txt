@@ -1,0 +1,13 @@
+diff --git a/luigi/scheduler.py b/luigi/scheduler.py
+index cf0d8c40..7c4d4718 100644
+--- a/luigi/scheduler.py
++++ b/luigi/scheduler.py
+@@ -405,7 +405,7 @@ class SimpleTaskState(object):
+             elif task.scheduler_disable_time is not None:
+                 return
+ 
+-        if new_status == FAILED and task.can_disable():
++        if new_status == FAILED and task.can_disable() and task.status != DISABLED:
+             task.add_failure()
+             if task.has_excessive_failures():
+                 task.scheduler_disable_time = time.time()

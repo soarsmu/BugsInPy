@@ -1,0 +1,41 @@
+diff --git a/tqdm/std.py b/tqdm/std.py
+index 0b57f31..14ab11a 100644
+--- a/tqdm/std.py
++++ b/tqdm/std.py
+@@ -485,8 +485,7 @@ class tqdm(Comparable):
+             if not _is_ascii(full_bar.charset) and _is_ascii(bar_format):
+                 bar_format = _unicode(bar_format)
+             res = bar_format.format(bar=full_bar, **format_dict)
+-            if ncols:
+-                return disp_trim(res, ncols)
++            return disp_trim(res, ncols) if ncols else res
+ 
+         elif bar_format:
+             # user-specified bar_format but no total
+@@ -502,8 +501,7 @@ class tqdm(Comparable):
+                 if ncols else 10,
+                 charset=Bar.BLANK)
+             res = bar_format.format(bar=full_bar, **format_dict)
+-            if ncols:
+-                return disp_trim(res, ncols)
++            return disp_trim(res, ncols) if ncols else res
+         else:
+             # no total: no progressbar, ETA, just progress stats
+             return ((prefix + ": ") if prefix else '') + \
+diff --git a/tqdm/utils.py b/tqdm/utils.py
+index 474b1c8..a9a42be 100644
+--- a/tqdm/utils.py
++++ b/tqdm/utils.py
+@@ -360,8 +360,10 @@ def disp_trim(data, length):
+     if len(data) == disp_len(data):
+         return data[:length]
+ 
++    ansi_present = bool(RE_ANSI.search(data))
+     while disp_len(data) > length:  # carefully delete one char at a time
+         data = data[:-1]
+-    if RE_ANSI.search(data):  # assume ANSI reset is required
+-        return data + "\033[0m"
++    if ansi_present and bool(RE_ANSI.search(data)):
++        # assume ANSI reset is required
++        return data if data.endswith("\033[0m") else data + "\033[0m"
+     return data

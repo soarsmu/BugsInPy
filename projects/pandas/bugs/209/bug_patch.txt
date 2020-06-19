@@ -1,0 +1,33 @@
+diff --git a/pandas/core/nanops.py b/pandas/core/nanops.py
+index b9267db76..f6555f390 100644
+--- a/pandas/core/nanops.py
++++ b/pandas/core/nanops.py
+@@ -705,11 +705,14 @@ def nanstd(values, axis=None, skipna=True, ddof=1, mask=None):
+     >>> nanops.nanstd(s)
+     1.0
+     """
++    orig_dtype = values.dtype
++    values, mask, dtype, dtype_max, fill_value = _get_values(values, skipna, mask=mask)
++
+     result = np.sqrt(nanvar(values, axis=axis, skipna=skipna, ddof=ddof, mask=mask))
+-    return _wrap_results(result, values.dtype)
++    return _wrap_results(result, orig_dtype)
+ 
+ 
+-@disallow("M8")
++@disallow("M8", "m8")
+ @bottleneck_switch(ddof=1)
+ def nanvar(values, axis=None, skipna=True, ddof=1, mask=None):
+     """
+diff --git a/pandas/core/series.py b/pandas/core/series.py
+index 3e9d3d5c0..4c7fb4d41 100644
+--- a/pandas/core/series.py
++++ b/pandas/core/series.py
+@@ -3988,6 +3988,7 @@ class Series(base.IndexOpsMixin, generic.NDFrame):
+         If we have an ndarray as a value, then simply perform the operation,
+         otherwise delegate to the object.
+         """
++
+         delegate = self._values
+ 
+         if axis is not None:

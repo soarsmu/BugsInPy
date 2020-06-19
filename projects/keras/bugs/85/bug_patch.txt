@@ -1,0 +1,22 @@
+diff --git a/keras/layers/recurrent.py b/keras/layers/recurrent.py
+index 136fd3c8..8b2d8827 100644
+--- a/keras/layers/recurrent.py
++++ b/keras/layers/recurrent.py
+@@ -731,6 +731,8 @@ class RNN(Layer):
+ 
+     @property
+     def trainable_weights(self):
++        if not self.trainable:
++            return []
+         if isinstance(self.cell, Layer):
+             return self.cell.trainable_weights
+         return []
+@@ -738,6 +740,8 @@ class RNN(Layer):
+     @property
+     def non_trainable_weights(self):
+         if isinstance(self.cell, Layer):
++            if not self.trainable:
++                return self.cell.weights
+             return self.cell.non_trainable_weights
+         return []
+ 

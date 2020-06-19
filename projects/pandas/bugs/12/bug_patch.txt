@@ -1,0 +1,53 @@
+diff --git a/pandas/core/arrays/boolean.py b/pandas/core/arrays/boolean.py
+index b1d318d4d..95bc33490 100644
+--- a/pandas/core/arrays/boolean.py
++++ b/pandas/core/arrays/boolean.py
+@@ -93,6 +93,10 @@ class BooleanDtype(BaseMaskedDtype):
+     def _is_boolean(self) -> bool:
+         return True
+ 
++    @property
++    def _is_numeric(self) -> bool:
++        return True
++
+     def __from_arrow__(
+         self, array: Union["pyarrow.Array", "pyarrow.ChunkedArray"]
+     ) -> "BooleanArray":
+diff --git a/pandas/core/dtypes/cast.py b/pandas/core/dtypes/cast.py
+index 21e05b0c3..3cb52338b 100644
+--- a/pandas/core/dtypes/cast.py
++++ b/pandas/core/dtypes/cast.py
+@@ -312,12 +312,14 @@ def maybe_cast_result_dtype(dtype: DtypeObj, how: str) -> DtypeObj:
+     DtypeObj
+         The desired dtype of the result.
+     """
+-    d = {
+-        (np.dtype(np.bool), "add"): np.dtype(np.int64),
+-        (np.dtype(np.bool), "cumsum"): np.dtype(np.int64),
+-        (np.dtype(np.bool), "sum"): np.dtype(np.int64),
+-    }
+-    return d.get((dtype, how), dtype)
++    from pandas.core.arrays.boolean import BooleanDtype
++    from pandas.core.arrays.integer import Int64Dtype
++
++    if how in ["add", "cumsum", "sum"] and (dtype == np.dtype(np.bool)):
++        return np.dtype(np.int64)
++    elif how in ["add", "cumsum", "sum"] and isinstance(dtype, BooleanDtype):
++        return Int64Dtype()
++    return dtype
+ 
+ 
+ def maybe_cast_to_extension_array(cls: Type["ExtensionArray"], obj, dtype=None):
+diff --git a/pandas/core/groupby/ops.py b/pandas/core/groupby/ops.py
+index 361619701..597a16099 100644
+--- a/pandas/core/groupby/ops.py
++++ b/pandas/core/groupby/ops.py
+@@ -485,7 +485,7 @@ class BaseGrouper:
+             values = values.view("int64")
+             is_numeric = True
+         elif is_bool_dtype(values.dtype):
+-            values = ensure_float64(values)
++            values = ensure_int_or_float(values)
+         elif is_integer_dtype(values):
+             # we use iNaT for the missing value on ints
+             # so pre-convert to guard this condition

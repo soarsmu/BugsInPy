@@ -1,0 +1,14 @@
+diff --git a/httpie/models.py b/httpie/models.py
+index f6b9dff..af6163f 100644
+--- a/httpie/models.py
++++ b/httpie/models.py
+@@ -102,8 +102,7 @@ class HTTPRequest(HTTPMessage):
+         )
+ 
+         headers = dict(self._orig.headers)
+-
+-        if 'Host' not in headers:
++        if 'Host' not in self._orig.headers:
+             headers['Host'] = url.netloc.split('@')[-1]
+ 
+         headers = ['%s: %s' % (name, value)

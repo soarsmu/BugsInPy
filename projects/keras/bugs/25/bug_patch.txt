@@ -1,0 +1,13 @@
+diff --git a/keras/wrappers/scikit_learn.py b/keras/wrappers/scikit_learn.py
+index 6ebf6fc8..83c3e3c4 100644
+--- a/keras/wrappers/scikit_learn.py
++++ b/keras/wrappers/scikit_learn.py
+@@ -320,7 +320,7 @@ class KerasRegressor(BaseWrapper):
+                 Predictions.
+         """
+         kwargs = self.filter_sk_params(Sequential.predict, kwargs)
+-        return np.squeeze(self.model.predict(x, **kwargs))
++        return np.squeeze(self.model.predict(x, **kwargs), axis=-1)
+ 
+     def score(self, x, y, **kwargs):
+         """Returns the mean loss on the given test data and labels.

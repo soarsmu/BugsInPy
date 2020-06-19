@@ -1,0 +1,27 @@
+diff --git a/pandas/tests/groupby/test_categorical.py b/pandas/tests/groupby/test_categorical.py
+index 5391cb5ce..0e30b104b 100644
+--- a/pandas/tests/groupby/test_categorical.py
++++ b/pandas/tests/groupby/test_categorical.py
+@@ -784,7 +784,8 @@ def test_categorical_no_compress():
+ 
+ def test_sort():
+ 
+-    # http://stackoverflow.com/questions/23814368/sorting-pandas-categorical-labels-after-groupby  # noqa: E501
++    # http://stackoverflow.com/questions/23814368/sorting-pandas-
++    #        categorical-labels-after-groupby
+     # This should result in a properly sorted Series so that the plot
+     # has a sorted x axis
+     # self.cat.groupby(['value_group'])['value_group'].count().plot(kind='bar')
+diff --git a/pandas/tseries/holiday.py b/pandas/tseries/holiday.py
+index 1654163d2..eb8600031 100644
+--- a/pandas/tseries/holiday.py
++++ b/pandas/tseries/holiday.py
+@@ -346,7 +346,7 @@ class AbstractHolidayCalendar(metaclass=HolidayCalendarMetaClass):
+ 
+     rules = []  # type: List[Holiday]
+     start_date = Timestamp(datetime(1970, 1, 1))
+-    end_date = Timestamp(datetime(2030, 12, 31))
++    end_date = Timestamp(datetime(2200, 12, 31))
+     _cache = None
+ 
+     def __init__(self, name=None, rules=None):

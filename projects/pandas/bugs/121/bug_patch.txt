@@ -1,0 +1,13 @@
+diff --git a/pandas/core/indexing.py b/pandas/core/indexing.py
+index 6a6797082..7e56148b7 100755
+--- a/pandas/core/indexing.py
++++ b/pandas/core/indexing.py
+@@ -2124,7 +2124,7 @@ class _AtIndexer(_ScalarAccessIndexer):
+                         "can only have integer indexers"
+                     )
+             else:
+-                if is_integer(i) and not ax.holds_integer():
++                if is_integer(i) and not (ax.holds_integer() or ax.is_floating()):
+                     raise ValueError(
+                         "At based indexing on an non-integer "
+                         "index can only have non-integer "

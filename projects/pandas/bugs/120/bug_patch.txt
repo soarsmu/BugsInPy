@@ -1,0 +1,64 @@
+diff --git a/pandas/core/arrays/interval.py b/pandas/core/arrays/interval.py
+index 398ed75c0..0b35a031b 100644
+--- a/pandas/core/arrays/interval.py
++++ b/pandas/core/arrays/interval.py
+@@ -27,6 +27,7 @@ from pandas.core.dtypes.common import (
+ from pandas.core.dtypes.dtypes import IntervalDtype
+ from pandas.core.dtypes.generic import (
+     ABCDatetimeIndex,
++    ABCExtensionArray,
+     ABCIndexClass,
+     ABCInterval,
+     ABCIntervalIndex,
+@@ -789,6 +790,33 @@ class IntervalArray(IntervalMixin, ExtensionArray):
+         # Avoid materializing self.values
+         return self.left.size
+ 
++    def shift(self, periods: int = 1, fill_value: object = None) -> ABCExtensionArray:
++        if not len(self) or periods == 0:
++            return self.copy()
++
++        if isna(fill_value):
++            fill_value = self.dtype.na_value
++
++        # ExtensionArray.shift doesn't work for two reasons
++        # 1. IntervalArray.dtype.na_value may not be correct for the dtype.
++        # 2. IntervalArray._from_sequence only accepts NaN for missing values,
++        #    not other values like NaT
++
++        empty_len = min(abs(periods), len(self))
++        if isna(fill_value):
++            fill_value = self.left._na_value
++            empty = IntervalArray.from_breaks([fill_value] * (empty_len + 1))
++        else:
++            empty = self._from_sequence([fill_value] * empty_len)
++
++        if periods > 0:
++            a = empty
++            b = self[:-periods]
++        else:
++            a = self[abs(periods) :]
++            b = empty
++        return self._concat_same_type([a, b])
++
+     def take(self, indices, allow_fill=False, fill_value=None, axis=None, **kwargs):
+         """
+         Take elements from the IntervalArray.
+diff --git a/pandas/tests/extension/base/methods.py b/pandas/tests/extension/base/methods.py
+index 4a84a2108..22e53dbc8 100644
+--- a/pandas/tests/extension/base/methods.py
++++ b/pandas/tests/extension/base/methods.py
+@@ -280,6 +280,13 @@ class BaseMethodsTests(BaseExtensionTests):
+         expected = empty
+         self.assert_extension_array_equal(result, expected)
+ 
++    def test_shift_zero_copies(self, data):
++        result = data.shift(0)
++        assert result is not data
++
++        result = data[:0].shift(2)
++        assert result is not data
++
+     def test_shift_fill_value(self, data):
+         arr = data[:4]
+         fill_value = data[0]
