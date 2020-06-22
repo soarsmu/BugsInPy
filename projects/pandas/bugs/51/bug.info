@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="a2cdd50"
-fixed_commit_id="3cca07c8a5903d3749d478312f4e6d8f12b2ee20"
-test_file="pandas/tests/series/methods/test_replace.py"

@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="b7c9c56" 
-fixed_commit_id="23abcd909672281cf54ad89d2f1f3be3d3605180"  
-test_file="pandas/tests/tools/test_to_numeric.py" 

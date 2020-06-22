@@ -1,4 +1,0 @@
-python_version="3.7.0"
-buggy_commit_id="eb60900330d038383fe1460e0279d33d303739a7"
-fixed_commit_id="b28ece0f34e54d1c980e31223451f3b2f0f20ff9"
-test_file="tests/rules/test_apt_invalid_operation.py"

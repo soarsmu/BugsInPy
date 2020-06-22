@@ -1,4 +1,0 @@
-python_version="3.8.1"
-buggy_commit_id="d89099aaddc5ea0609af3835b0f8344a44e1d42b"
-fixed_commit_id="b4b425c65278e98c1884562bcad42ba754266d3d"
-test_file="tests/test_pysnooper.py"

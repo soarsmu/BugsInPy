@@ -1,2 +1,0 @@
-pytest pandas/tests/groupby/aggregate/test_aggregate.py::TestNamedAggregationSeries::test_series_named_agg_duplicates_no_raises 
-pytest pandas/tests/groupby/aggregate/test_aggregate.py::TestNamedAggregationDataFrame::test_duplicate_no_raises 

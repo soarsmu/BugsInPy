@@ -1,7 +1,0 @@
-pytest tests/keras/test_callbacks.py::TestCallbackCounts::test_callback_hooks_are_called_in_evaluate
-pytest tests/keras/test_callbacks.py::TestCallbackCounts::test_callback_hooks_are_called_in_fit
-pytest tests/keras/test_callbacks.py::TestCallbackCounts::test_callback_hooks_are_called_in_fit_generator
-pytest tests/keras/test_callbacks.py::TestCallbackCounts::test_callback_hooks_are_called_in_predict
-pytest tests/keras/test_callbacks.py::TestCallbackCounts::test_callback_hooks_are_called_in_evaluate_generator
-pytest tests/keras/test_callbacks.py::TestCallbackCounts::test_callback_hooks_are_called_in_predict_generator
-pytest tests/keras/test_callbacks.py::TestCallbackCounts::test_callback_list_methods

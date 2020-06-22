@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="fb8aaa2" 
-fixed_commit_id="83f84ed5b7230cf9015a7bde5cc95d91b9282bb3"  
-test_file="pandas/tests/reshape/test_cut.py" 

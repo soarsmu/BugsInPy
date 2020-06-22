@@ -1,3 +1,0 @@
-pytest pandas/tests/arithmetic/test_timedelta64.py::TestTimedeltaArraylikeAddSubOps::test_td64arr_add_sub_object_array
-pytest pandas/tests/frame/test_arithmetic.py::TestFrameFlexComparisons::test_df_flex_cmp_ea_dtype_with_ndarray_series
-pytest pandas/tests/frame/test_arithmetic.py::TestFrameArithmeticUnsorted::test_alignment_non_pandas

@@ -1,4 +1,0 @@
-python_version="3.7.3"
-buggy_commit_id="027d37961afff8a7963836ca87ccdbbf65a78811"
-fixed_commit_id="9e18fc5b99a4ecb7ec28b2a0d19d458ac0f4d364"
-test_file="tests/keras/layers/convolutional_test.py"

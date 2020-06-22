@@ -1,1 +1,0 @@
-python -m unittest -q tests.test_commands.StartprojectTemplatesTest.test_startproject_template_override

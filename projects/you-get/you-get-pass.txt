@@ -1,2 +1,0 @@
-/c/Users/yiehy/onedrive/desktop/bugsinpy/projects/you-get/bugs/1 (python tests/test.py YouGetTests.test_xinpianchang)
-PASS: 1

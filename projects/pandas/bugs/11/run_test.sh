@@ -1,2 +1,0 @@
-pytest pandas/tests/groupby/test_groupby_subclass.py::test_groupby_preserves_subclass
-pytest pandas/tests/groupby/test_groupby_subclass.py::test_groupby_resample_preserves_subclass

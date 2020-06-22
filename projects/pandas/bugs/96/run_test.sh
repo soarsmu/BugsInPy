@@ -1,2 +1,0 @@
-pytest pandas/tests/arithmetic/test_datetime64.py::TestDatetime64Arithmetic::test_dt64arr_sub_dt64object_array 
-pytest pandas/tests/arithmetic/test_datetime64.py::test_dt64arr_addsub_object_dtype_2d 

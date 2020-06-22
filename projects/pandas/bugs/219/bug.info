@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="8a0553f" 
-fixed_commit_id="a43ac017bcc774cb8b57c0ce14b9b071b9eb9dad"  
-test_file="pandas/tests/series/test_operators.py" 

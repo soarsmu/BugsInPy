@@ -1,2 +1,0 @@
-tox tests/test_cli.py::test_cli_error_on_existing_output_directory
-tox tests/test_output_folder.py::test_exception_when_output_folder_exists

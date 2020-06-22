@@ -1,1 +1,0 @@
-python -m unittest -q tests.test_spiderloader.__init__.SpiderLoaderTest.test_bad_spider_modules_warning

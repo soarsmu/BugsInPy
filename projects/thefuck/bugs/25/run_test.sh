@@ -1,1 +1,0 @@
-pytest tests/rules/test_hostscli.py::test_match

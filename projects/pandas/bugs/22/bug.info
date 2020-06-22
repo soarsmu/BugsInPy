@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="dd84044"
-fixed_commit_id="a3477c769b3d2ea4950ae69f8867e3b291b743c1"
-test_file="pandas/tests/indexing/test_partial.py"

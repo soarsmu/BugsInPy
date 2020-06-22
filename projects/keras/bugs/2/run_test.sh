@@ -1,3 +1,0 @@
-pytest tests/keras/engine/test_training.py::test_fit_generator_dynamic_size_sequence_with_workers
-pytest tests/keras/engine/test_training.py::test_fit_generator_dynamic_size_sequence_main_thread
-pytest tests/keras/utils/data_utils_test.py::test_on_epoch_end_threads_sequence_change_length

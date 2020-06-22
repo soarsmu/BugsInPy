@@ -1,1 +1,0 @@
-pytest pandas/tests/indexes/datetimes/test_construction.py::TestDatetimeIndex::test_index_constructor_with_numpy_object_array_and_timestamp_tz_with_nan 

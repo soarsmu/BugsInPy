@@ -1,1 +1,0 @@
-pytest test/contrib/redshift_test.py::TestS3CopyToTable::test_s3_copy_to_missing_table_with_compression_encodings

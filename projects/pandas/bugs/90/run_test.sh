@@ -1,3 +1,0 @@
-pytest pandas/tests/indexing/test_iloc.py::TestILocSetItemDuplicateColumns::test_iloc_setitem_scalar_duplicate_columns 
-pytest pandas/tests/indexing/test_iloc.py::TestILocSetItemDuplicateColumns::test_iloc_setitem_list_duplicate_columns 
-pytest pandas/tests/indexing/test_iloc.py::TestILocSetItemDuplicateColumns::test_iloc_setitem_series_duplicate_columns 

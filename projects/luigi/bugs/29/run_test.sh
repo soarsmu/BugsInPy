@@ -1,2 +1,0 @@
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_with_dict_dependency
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_with_dict_argument

@@ -1,6 +1,0 @@
-python_version="3.6.9"
-pythonpath="ansible/build/lib/"
-buggy_commit_id="067e96b152d7bcf397143a0f4625cc4f7c89c3a7"
-fixed_commit_id="3252665a949ec14fb60434589e47720afbadd6c9"
-test_file="test/units/modules/network/nxos/test_nxos_vlans.py"
-

@@ -1,4 +1,0 @@
-pytest test/units/modules/storage/netapp/test_netapp_e_volume.py::NetAppESeriesVolumeTest::tests_wait_for_volume_availability_pass
-pytest test/units/modules/storage/netapp/test_netapp_e_volume.py::NetAppESeriesVolumeTest::tests_wait_for_volume_availability_fail
-pytest test/units/modules/storage/netapp/test_netapp_e_volume.py::NetAppESeriesVolumeTest::tests_wait_for_volume_action_pass
-pytest test/units/modules/storage/netapp/test_netapp_e_volume.py::NetAppESeriesVolumeTest::tests_wait_for_volume_action_fail

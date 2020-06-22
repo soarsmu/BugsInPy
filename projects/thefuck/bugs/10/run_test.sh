@@ -1,1 +1,0 @@
-pytest tests/shells/test_fish.py::TestFish::test_app_alias

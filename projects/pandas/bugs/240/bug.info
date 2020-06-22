@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="f04c4db" 
-fixed_commit_id="5c57e7bc066d86564084b23e832f645f35e06c0e"  
-test_file="pandas/tests/scalar/timestamp/test_arithmetic.py" 

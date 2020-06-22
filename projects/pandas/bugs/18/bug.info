@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="e0eafaa"
-fixed_commit_id="7c3f662d1e379583284015fe7ea17df4fe70fdaf"
-test_file="pandas/tests/indexes/timedeltas/test_timedelta_range.py;pandas/tests/resample/test_timedelta.py"

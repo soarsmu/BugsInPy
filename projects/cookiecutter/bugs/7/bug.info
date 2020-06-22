@@ -1,5 +1,0 @@
-python_version="3.6.9"
-pythonpath="cookiecutter/build/lib/"
-buggy_commit_id="ce113824184bf1ff769929ea732c15fa59a47513"
-fixed_commit_id="7b905c952de6325ff7f18cb8ca2bedaae3e66b83"
-test_file="tests/test_generate_hooks.py"

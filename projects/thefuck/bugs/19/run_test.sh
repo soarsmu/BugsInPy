@@ -1,1 +1,0 @@
-pytest tests/rules/test_yarn_command_not_found.py::test_get_new_command

@@ -1,1 +1,0 @@
-python -m unittest -q tests.test_spidermiddleware_invalid_values.ProcessSpiderInputInvalidOutput.test_invalid_process_spider_input

@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="08a0cb0"
-fixed_commit_id="8f3afd718b2df905383055d21b6680e49a2821f4"
-test_file="pandas/tests/extension/test_boolean.py"

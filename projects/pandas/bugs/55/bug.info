@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="fe42954"
-fixed_commit_id="5d0faa8ca5228c7e139c943996b219609a1bfb74"
-test_file="pandas/tests/indexing/multiindex/test_partial.py;pandas/tests/indexing/multiindex/test_setitem.py"

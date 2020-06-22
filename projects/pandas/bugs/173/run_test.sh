@@ -1,1 +1,0 @@
-pytest pandas/tests/arithmetic/test_datetime64.py::TestDatetimeIndexArithmetic::test_dti_addsub_object_arraylike 

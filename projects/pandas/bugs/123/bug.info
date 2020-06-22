@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="82acdee" 
-fixed_commit_id="54a6490ed050a693f04c740af2dddbd2fd19c4e1"  
-test_file="pandas/tests/indexing/multiindex/test_multiindex.py" 

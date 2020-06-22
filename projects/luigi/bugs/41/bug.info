@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="7488536e862e894a81c83e36f0f1d62395a8b932"
-fixed_commit_id="6dfe9af9a7ce6dda364ef8db0e6cd0b3572c33d6"
-test_file="test/rpc_test.py"

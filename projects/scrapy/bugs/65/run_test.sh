@@ -1,1 +1,0 @@
-python -m unittest -q tests.test_spider.SitemapSpiderTest.test_alternate_url_locs

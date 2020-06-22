@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="3005908" 
-fixed_commit_id="a92109231c9f24e31aad0ade96f51aa374cbf1f2"  
-test_file="pandas/tests/resample/test_base.py" 

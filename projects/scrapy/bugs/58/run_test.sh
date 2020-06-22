@@ -1,1 +1,0 @@
-python -m unittest -q tests.test_pipeline_media.BaseMediaPipelineTestCase.test_should_remove_req_res_references_before_caching_the_results

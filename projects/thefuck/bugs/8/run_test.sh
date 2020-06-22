@@ -1,1 +1,0 @@
-pytest tests/rules/test_pacman_not_found.py::test_match_mocked

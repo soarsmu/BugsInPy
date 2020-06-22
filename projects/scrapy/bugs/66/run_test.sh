@@ -1,1 +1,0 @@
-python -m unittest -q tests.test_downloadermiddleware_redirect.RedirectMiddlewareTest.test_redirect_3xx_permanent

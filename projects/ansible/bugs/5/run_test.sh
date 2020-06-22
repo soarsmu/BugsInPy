@@ -1,1 +1,0 @@
-pytest test/units/plugins/shell/test_cmd.py::test_quote_args 

@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="f34dbbf" 
-fixed_commit_id="0fd888c8b318d4041b0ae53c64715eca0d345dd3"  
-test_file="pandas/tests/test_multilevel.py" 

@@ -1,1 +1,0 @@
-pytest pandas/tests/indexes/test_index_new.py::TestIndexConstructorInference::test_constructor_categorical_to_object 

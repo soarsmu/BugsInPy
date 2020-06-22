@@ -1,4 +1,0 @@
-python_version="3.7.3"
-buggy_commit_id="db849f8e9cd2e7639afb843022db621eb761258b"
-fixed_commit_id="3eab6103e0069d261c3e3586c12d5aaf0a331429"
-test_file="tests/keras/test_sequential_model.py"

@@ -1,1 +1,0 @@
-python -m unittest -q tornado.test.windows_test.WindowsTest.test_set_close_exec

@@ -1,1 +1,0 @@
-pytest pandas/tests/groupby/test_function.py::test_groupby_sum_below_mincount_nullable_integer

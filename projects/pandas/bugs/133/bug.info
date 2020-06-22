@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="3b2c8f6" 
-fixed_commit_id="8d1e084c527c5e4f172ec457d237b5fc62300e05"  
-test_file="pandas/tests/series/methods/test_append.py" 

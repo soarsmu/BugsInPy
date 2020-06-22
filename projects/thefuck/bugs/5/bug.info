@@ -1,4 +1,0 @@
-python_version="3.7.0"
-buggy_commit_id="1683f45e940a25a87b989c0e121a03018661e097"
-fixed_commit_id="84c16fb69a4c0abcb9fe1c90787076800320a950"
-test_file="tests/rules/test_git_checkout.py"

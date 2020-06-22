@@ -1,5 +1,0 @@
-pytest tests/test_invalid_path_param.py::test_invalid_simple_list
-pytest tests/test_invalid_path_param.py::test_invalid_simple_tuple
-pytest tests/test_invalid_path_param.py::test_invalid_simple_set
-pytest tests/test_invalid_path_param.py::test_invalid_simple_dict
-pytest tests/test_invalid_sequence_param.py::test_invalid_simple_dict

@@ -1,1 +1,0 @@
-pytest tests/keras/engine/test_training.py::test_validation_freq

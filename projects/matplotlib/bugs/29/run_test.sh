@@ -1,1 +1,0 @@
-pytest lib/matplotlib/tests/test_fontconfig.py::test_fontconfig_pattern

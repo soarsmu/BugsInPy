@@ -1,1 +1,0 @@
-pytest pandas/tests/io/json/test_normalize.py::TestJSONNormalize::test_non_list_record_path_errors

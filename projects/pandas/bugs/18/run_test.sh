@@ -1,3 +1,0 @@
-pytest pandas/tests/indexes/timedeltas/test_timedelta_range.py::TestTimedeltas::test_timedelta_range_freq_divide_end
-pytest pandas/tests/resample/test_timedelta.py::test_resample_timedelta_edge_case
-

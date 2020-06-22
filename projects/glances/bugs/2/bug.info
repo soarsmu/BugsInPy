@@ -1,4 +1,0 @@
-python_version="3.7.4"
-buggy_commit_id="4426487e63bb10dbdbfd6f9cd51412fd2994b493"
-fixed_commit_id ="25816ceae7799eafda2b23dd8cc872f309e876a0"
-test_file="unitest.py"

@@ -1,4 +1,0 @@
-python_version="3.8.1"
-buggy_commit_id="b9dfc532ea9db66eeabc4897144423faa7a45fca"
-fixed_commit_id="001afafaaffa321d459980eff5779adaf01681e6"
-test_file="lib/matplotlib/tests/test_backend_svg.py"

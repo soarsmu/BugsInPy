@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="0a7bb2a" 
-fixed_commit_id="e118b1d6b23d1d829c3db05505ef4873f0314e99"  
-test_file="pandas/tests/dtypes/test_missing.py" 

@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="8d48680481bce4174fc213050f93086c54c4acc1"
-fixed_commit_id="23a64f2f21341ddf749b0f6e96a35f71e16e5046"
-test_file="test/scheduler_api_test.py"

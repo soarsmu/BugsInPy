@@ -1,1 +1,0 @@
-pytest test/units/modules/network/nxos/test_nxos_l3_interfaces.py

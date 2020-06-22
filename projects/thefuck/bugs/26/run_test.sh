@@ -1,1 +1,0 @@
-pytest tests/rules/test_apt_get.py::test_match

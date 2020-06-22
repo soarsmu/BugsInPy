@@ -1,8 +1,0 @@
-tox tests/test_cookiecutter_local_no_input.py::test_cookiecutter_template_cleanup
-tox tests/test_utils.py::test_prompt_should_ask_and_rm_repo_dir
-tox tests/test_utils.py::test_prompt_should_ask_and_rm_repo_file
-tox tests/test_utils.py::test_prompt_should_ask_and_keep_repo_on_no_reuse
-tox tests/test_utils.py::test_prompt_should_ask_and_keep_repo_on_reuse
-tox tests/test_utils.py::test_prompt_should_not_ask_if_no_input_and_rm_repo_dir
-tox tests/test_utils.py::test_prompt_should_not_ask_if_no_input_and_rm_repo_file
-tox tests/vcs/test_clone.py::test_clone_should_abort_if_user_does_not_want_to_reclone

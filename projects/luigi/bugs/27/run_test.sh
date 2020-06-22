@@ -1,9 +1,0 @@
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_check_complete_error
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_not_run_error
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_deps_error
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_already_running_2
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_not_run
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_somebody_else_finish_task
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_somebody_else_disables_task
-pytest test/retcodes_test.py::RetcodesTest::test_task_limit
-pytest test/retcodes_test.py::RetcodesTest::test_unknown_reason

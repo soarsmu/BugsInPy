@@ -1,1 +1,0 @@
-pytest test/rpc_test.py::RemoteSchedulerTest::test_retry_rpc_method

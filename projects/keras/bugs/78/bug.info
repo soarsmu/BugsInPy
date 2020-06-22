@@ -1,4 +1,0 @@
-python_version="3.7.3"
-buggy_commit_id="88594d7f2e219f46b8df4784ce7b2017e0456295"
-fixed_commit_id="d956d19fccf6de6344c282218f1b027453785fa9"
-test_file="tests/keras/utils/np_utils_test.py"

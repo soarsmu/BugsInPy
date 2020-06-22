@@ -1,4 +1,0 @@
-python_version="3.7.3"
-buggy_commit_id="3c19add103066bc58970810e32050051ac1a7399"
-fixed_commit_id="1b53767da71ab94169c60f46f0b8e9d820fd59d5"
-test_file="tests/keras/test_callbacks.py"

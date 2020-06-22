@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="78d34cc44c950ae526b4a6360f57195f9550e541"
-fixed_commit_id="d19c4c1f809aae47f12637ea6f465127f728451c"
-test_file="tests/test_spiderloader/__init__.py"

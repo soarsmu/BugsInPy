@@ -1,1 +1,0 @@
-pytest pandas/tests/reshape/test_pivot.py::TestPivotTable::test_margin_with_only_columns_defined

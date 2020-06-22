@@ -1,5 +1,0 @@
-python_version="3.7.3"
-pythonpath=""
-buggy_commit_id="c24d16af155e20976bdf61e468ba760408e676ff"
-fixed_commit_id="dc83851aca230648c4f75ac1a0d4b9971b2d6aa0"
-test_file="tests/keras/backend/backend_test.py"

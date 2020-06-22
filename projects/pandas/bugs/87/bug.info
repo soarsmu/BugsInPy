@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="9e7cb7c" 
-fixed_commit_id="ef7e7208d3e396ac574b8b027ca42f89ac99e449"  
-test_file="pandas/tests/groupby/aggregate/test_aggregate.py" 

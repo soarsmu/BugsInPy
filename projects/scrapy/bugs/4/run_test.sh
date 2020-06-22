@@ -1,2 +1,0 @@
-python -m unittest -q tests.test_stats.CoreStatsExtensionTest.test_core_stats_default_stats_collector
-python -m unittest -q tests.test_stats.CoreStatsExtensionTest.test_core_stats_dummy_stats_collector

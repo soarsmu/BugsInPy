@@ -1,1 +1,0 @@
-pytest pandas/tests/indexing/test_indexing.py::test_setitem_with_bool_mask_and_values_matching_n_trues_in_length 

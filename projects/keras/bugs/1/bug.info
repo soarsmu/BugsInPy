@@ -1,4 +1,0 @@
-python_version="3.7.3"
-buggy_commit_id="4d59675b65b6733e525286bbd512e9d5a42f3a22"
-fixed_commit_id="ecac367b2372b5f2326fcd3ddd11718323427f4e"
-test_file="tests/test_model_saving.py"

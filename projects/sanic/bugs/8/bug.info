@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="503622438a61193bdee3bb9981b630fe8d46e3c4"
-fixed_commit_id="72b445621b5977327f866e7dd1c8077fcf2cb685"
-test_file="tests/test_requests.py"

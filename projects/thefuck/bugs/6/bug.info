@@ -1,4 +1,0 @@
-python_version="3.7.0"
-buggy_commit_id="d88454a6386a91b8654b8125ae12cf94b1bdb331"
-fixed_commit_id="1683f45e940a25a87b989c0e121a03018661e097"
-test_file="tests/rules/test_docker_not_command.py"

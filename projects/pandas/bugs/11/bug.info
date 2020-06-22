@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="f9809fe"
-fixed_commit_id="aa3e6119328772db00dd9acb25eb72062cc1e58d"
-test_file="pandas/tests/groupby/test_groupby_subclass.py"

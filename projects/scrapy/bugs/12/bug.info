@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="e72b6e33611f61dbb358f1ff97c5c195a7db696f"
-fixed_commit_id="0344f57fefc0877bf9048a084002fc719335e31c"
-test_file="tests/test_spidermiddleware_referer.py"

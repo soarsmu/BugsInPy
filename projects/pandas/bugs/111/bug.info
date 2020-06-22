@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="ccc6923" 
-fixed_commit_id="341a7190ce91bbd6a630024f6629c9de09d4a2cf"  
-test_file="pandas/tests/series/indexing/test_alter_index.py" 

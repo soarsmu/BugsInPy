@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="7f3d7b9" 
-fixed_commit_id="f9eae2d5ae1586d813d3bdbdcb115235cc2e853c"  
-test_file="pandas/tests/series/test_cumulative.py" 

@@ -1,1 +1,0 @@
-python -m unittest -q tests.test_cmdline.__init__.CmdlineTest.test_override_dict_settings

@@ -1,4 +1,0 @@
-python_version="3.8.1"
-buggy_commit_id="679a77e3363348c9a79e7a311ec149863c8027ef"
-fixed_commit_id="a602866ce10d0f45f56d20fc70107faff75965e2"
-test_file="tests/test_mini_toolbox.py"

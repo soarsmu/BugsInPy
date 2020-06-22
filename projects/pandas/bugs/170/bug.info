@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="56b6561" 
-fixed_commit_id="f14663292831c531eeb76115d6fa4cf124bcb2f2"  
-test_file="pandas/tests/io/formats/test_to_csv.py" 

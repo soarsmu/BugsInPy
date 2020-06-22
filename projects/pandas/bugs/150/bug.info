@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="6b87716" 
-fixed_commit_id="6837794a9af034cd7e5807e627eb21e52b68edc6"  
-test_file="pandas/tests/test_strings.py" 

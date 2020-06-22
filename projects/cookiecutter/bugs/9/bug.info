@@ -1,5 +1,0 @@
-python_version="3.6.9"
-pythonpath="cookiecutter/build/lib/"
-buggy_commit_id="009db6823c7205cf5b622c2ba8d5b4cf23d80873"
-fixed_commit_id="5c22467db2ecb8d7fa36a16f8a0162be4fb3207e"
-test_file="tests/test_cli.py;tests/test_output_folder.py"

@@ -1,5 +1,0 @@
-python_version="3.7.0"
-pythonpath=""
-buggy_commit_id="f64470ec838a2430d5c4f7814d73bd518ade1b89"
-fixed_commit_id="f4e652922553408ca0777127962f080724ce92c4"
-test_file="tornado/test/gen_test.py"

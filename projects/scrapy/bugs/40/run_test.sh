@@ -1,9 +1,0 @@
-python -m unittest -q tests.test_cmdline.CmdlineTest.test_override_dict_settings
-python -m unittest -q tests.test_settings.__init__.SettingsAttributeTest.test_overwrite_basesettings
-python -m unittest -q tests.test_settings.__init__.BaseSettingsTest.test_getwithbase
-python -m unittest -q tests.test_utils_conf.BuildComponentListTest.test_backwards_compatible_build_dict
-python -m unittest -q tests.test_utils_conf.BuildComponentListTest.test_return_list
-python -m unittest -q tests.test_utils_conf.BuildComponentListTest.test_map_dict
-python -m unittest -q tests.test_utils_conf.BuildComponentListTest.test_map_list
-python -m unittest -q tests.test_utils_conf.BuildComponentListTest.test_duplicate_components_in_dict
-python -m unittest -q tests.test_utils_conf.BuildComponentListTest.test_duplicate_components_in_list

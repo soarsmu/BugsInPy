@@ -1,1 +1,0 @@
-pytest tests/rules/test_heroku_not_command.py::test_get_new_command

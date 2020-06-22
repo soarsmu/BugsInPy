@@ -1,1 +1,0 @@
-pytest test/worker_test.py::WorkerTest::test_fails_registering_signal

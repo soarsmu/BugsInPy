@@ -1,1 +1,0 @@
-pytest lib/matplotlib/tests/test_colors.py::test_same_color

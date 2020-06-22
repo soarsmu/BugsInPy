@@ -1,4 +1,0 @@
-python_version="3.7.4"
-buggy_commit_id="0bbcc8a10a4bd339540bf149dd263419fd8b6e66"
-fixed_commit_id ="4195096ea8da8237a63e1ba3876dc8856b8605c6"
-test_file="test/test_utils.py"

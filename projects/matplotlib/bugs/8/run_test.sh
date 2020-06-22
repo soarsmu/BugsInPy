@@ -1,1 +1,0 @@
-pytest lib/matplotlib/tests/test_image.py::test_unclipped

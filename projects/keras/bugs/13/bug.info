@@ -1,4 +1,0 @@
-python_version="3.7.3"
-buggy_commit_id="5394c04a3a3b16db1d3cb4c24b403c79cf2b3108"
-fixed_commit_id="1d81a20292ca6926e595d06a6cd725dbb104a146"
-test_file="tests/keras/initializers_test.py"

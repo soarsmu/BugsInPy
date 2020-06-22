@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="7c7addbbcd8d629cc6a0b6d57aef88e856c1292c"
-fixed_commit_id="07775235c204fdafbc43401751f44d528823c439"
-test_file="test/date_parameter_test.py"

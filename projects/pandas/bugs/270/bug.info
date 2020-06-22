@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="460f174" 
-fixed_commit_id="0d3bdf1ceb1ade613ccf376d01912df71ac64625"  
-test_file="pandas/tests/indexes/datetimes/test_construction.py" 

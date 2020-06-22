@@ -1,4 +1,0 @@
-python_version="3.8.3" 
-buggy_commit_id="3755762" 
-fixed_commit_id="13c9601486e5f6acb7d1d306bcbb98427f20aa42"  
-test_file="pandas/tests/frame/test_api.py" 

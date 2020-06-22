@@ -1,1 +1,0 @@
-pytest tests/test_readme.py::test_readme

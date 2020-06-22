@@ -1,5 +1,0 @@
-python_version="3.6.9"
-pythonpath="ansible/build/lib/"
-buggy_commit_id="82ee341fe03e2bdb3c3d14cda0953469b80750e7"
-fixed_commit_id="4cad7e479c922cd973015fd1cf4bd5e5890158de"
-test_file="test/units/galaxy/test_api.py;test/units/galaxy/test_collection.py"

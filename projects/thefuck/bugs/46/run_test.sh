@@ -1,1 +1,0 @@
-pytest tests/rules/test_rm_dir.py::test_get_new_command

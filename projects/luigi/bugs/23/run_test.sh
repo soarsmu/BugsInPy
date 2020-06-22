@@ -1,2 +1,0 @@
-pytest test/parameter_test.py::TestParamWithDefaultFromConfig::testTimeDeltaNoSeconds
-pytest test/parameter_test.py::TestSerializeTimeDeltaParameters::testSerialize

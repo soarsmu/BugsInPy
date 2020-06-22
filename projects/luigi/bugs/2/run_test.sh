@@ -1,2 +1,0 @@
-
-pytest test/notifications_test.py::TestSendgridEmail::test_sends_sendgrid_email

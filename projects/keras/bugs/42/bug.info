@@ -1,4 +1,0 @@
-python_version="3.7.3"
-buggy_commit_id="f99f633725815635a1cf24aa2dd70bdb094ed7aa"
-fixed_commit_id="bb9b800ebba8914b69db362cfac4e7c8a9b17a9e"
-test_file="tests/keras/engine/test_training.py"

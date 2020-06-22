@@ -1,1 +1,0 @@
-pytest pandas/tests/arithmetic/test_period.py::TestPeriodIndexArithmetic::test_parr_add_sub_tdt64_nat_array 

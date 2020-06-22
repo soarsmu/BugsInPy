@@ -1,1 +1,0 @@
-pytest test/units/module_utils/common/parameters/test_list_deprecations.py::test_list_deprecations

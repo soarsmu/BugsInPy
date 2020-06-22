@@ -1,1 +1,0 @@
-pytest pandas/tests/window/test_apply.py::test_rolling_apply_args_kwargs

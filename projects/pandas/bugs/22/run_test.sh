@@ -1,2 +1,0 @@
-pytest pandas/tests/indexing/test_partial.py::TestPartialSetting::test_loc_with_list_of_strings_representing_datetimes
-pytest pandas/tests/indexing/test_partial.py::TestPartialSetting::test_loc_with_list_of_strings_representing_datetimes_missing_value

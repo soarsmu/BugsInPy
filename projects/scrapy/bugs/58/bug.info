@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="b53ff59a226ce13bbab164afbae06d97efadd572"
-fixed_commit_id="f4f2b1695c4d7bc69e5cb19c33a3a47f69bd1e8d"
-test_file="tests/test_pipeline_media.py"

@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="d6d3e87e3a4fd306829a84f934a971fd4e337a26"
-fixed_commit_id="801d3c07b4b7e57d50429e714a8255e7747568f4"
-test_file="tests/test_spidermiddleware_invalid_values.py"

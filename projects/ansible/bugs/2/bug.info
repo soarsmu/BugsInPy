@@ -1,5 +1,0 @@
-python_version="3.6.9"
-pythonpath="ansible/build/lib/"
-buggy_commit_id="87d9b49de256d788eacc88010ed7585b6c260a2e"
-fixed_commit_id="f2004874144eab5919eb8617915af0683c3dcd08"
-test_file="test/units/executor/module_common/test_recursive_finder.py;test/units/module_utils/basic/test_run_command.py"

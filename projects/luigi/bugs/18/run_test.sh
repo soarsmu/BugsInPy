@@ -1,1 +1,0 @@
-pytest test/batch_notifier_test.py::BatchNotifierTest::test_no_auto_send_for_interval_after_exception

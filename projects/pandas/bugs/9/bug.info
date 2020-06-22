@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="2b67c65"
-fixed_commit_id="e66e5c338a9f458de743a4a1dd2dd3fe65603252"
-test_file="pandas/tests/window/test_apply.py"

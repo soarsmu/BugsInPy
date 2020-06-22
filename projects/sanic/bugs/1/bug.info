@@ -1,4 +1,0 @@
-python_version="3.8.3"
-buggy_commit_id="4658e0f2f31a178d5447c73c9f380dabfbae88ba"
-fixed_commit_id="230941ff4f42ceec3410bb01ca575369191fb497"
-test_file="tests/test_reloader.py"
