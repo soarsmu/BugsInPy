@@ -1,1 +1,1 @@
-pytest pandas/tests/groupby/test_size.py::test_size_period_index
+pytest pandas/tests/frame/methods/test_replace.py::TestDataFrameReplace::test_replace_no_replacement_dtypes

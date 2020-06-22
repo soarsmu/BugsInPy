@@ -1,1 +1,1 @@
-py.test spacy/tests/pipeline/test_tagger.py::test_tagger_warns_no_lemma_lookups
+py.test spacy/tests/matcher/test_matcher_api.py::test_matcher_valid_callback

@@ -1,4 +1,4 @@
 python_version="3.8.3" 
-buggy_commit_id="31c1856" 
-fixed_commit_id="d0c84ce57d23a409169daf7232ec7681e42363fe"  
-test_file="pandas/tests/io/excel/test_writers.py" 
+buggy_commit_id="ed20822" 
+fixed_commit_id="386494d0dc851be9e86b1576f30fa8705df4d47b"  
+test_file="pandas/tests/series/test_missing.py" 

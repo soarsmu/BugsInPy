@@ -1,18 +1,13 @@
-diff --git a/luigi/contrib/redshift.py b/luigi/contrib/redshift.py
-index 398d5f39..a3ac8fc3 100644
---- a/luigi/contrib/redshift.py
-+++ b/luigi/contrib/redshift.py
-@@ -332,11 +332,11 @@ class S3CopyToTable(rdbms.CopyToTable):
-         if '.' in self.table:
-             query = ("select 1 as table_exists "
-                      "from information_schema.tables "
--                     "where table_schema = %s and table_name = %s limit 1")
-+                     "where table_schema = lower(%s) and table_name = lower(%s) limit 1")
-         else:
-             query = ("select 1 as table_exists "
-                      "from pg_table_def "
--                     "where tablename = %s limit 1")
-+                     "where tablename = lower(%s) limit 1")
-         cursor = connection.cursor()
-         try:
-             cursor.execute(query, tuple(self.table.split('.')))
+diff --git a/luigi/scheduler.py b/luigi/scheduler.py
+index cf0d8c40..7c4d4718 100644
+--- a/luigi/scheduler.py
++++ b/luigi/scheduler.py
+@@ -405,7 +405,7 @@ class SimpleTaskState(object):
+             elif task.scheduler_disable_time is not None:
+                 return
+ 
+-        if new_status == FAILED and task.can_disable():
++        if new_status == FAILED and task.can_disable() and task.status != DISABLED:
+             task.add_failure()
+             if task.has_excessive_failures():
+                 task.scheduler_disable_time = time.time()

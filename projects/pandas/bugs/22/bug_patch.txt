@@ -1,0 +1,39 @@
+diff --git a/pandas/core/window/common.py b/pandas/core/window/common.py
+index 40f17126f..436585fe2 100644
+--- a/pandas/core/window/common.py
++++ b/pandas/core/window/common.py
+@@ -328,6 +328,7 @@ def get_weighted_roll_func(cfunc: Callable) -> Callable:
+ def validate_baseindexer_support(func_name: Optional[str]) -> None:
+     # GH 32865: These functions work correctly with a BaseIndexer subclass
+     BASEINDEXER_WHITELIST = {
++        "count",
+         "min",
+         "max",
+         "mean",
+diff --git a/pandas/core/window/rolling.py b/pandas/core/window/rolling.py
+index 3fdf81c4b..62f470060 100644
+--- a/pandas/core/window/rolling.py
++++ b/pandas/core/window/rolling.py
+@@ -1171,8 +1171,9 @@ class _Rolling_and_Expanding(_Rolling):
+     )
+ 
+     def count(self):
+-        if isinstance(self.window, BaseIndexer):
+-            validate_baseindexer_support("count")
++        # GH 32865. Using count with custom BaseIndexer subclass
++        # implementations shouldn't end up here
++        assert not isinstance(self.window, BaseIndexer)
+ 
+         blocks, obj = self._create_blocks()
+         results = []
+@@ -1939,7 +1940,9 @@ class Rolling(_Rolling_and_Expanding):
+     def count(self):
+ 
+         # different impl for freq counting
+-        if self.is_freq_type:
++        # GH 32865. Use a custom count function implementation
++        # when using a BaseIndexer subclass as a window
++        if self.is_freq_type or isinstance(self.window, BaseIndexer):
+             window_func = self._get_roll_func("roll_count")
+             return self._apply(window_func, center=self.center, name="count")
+ 

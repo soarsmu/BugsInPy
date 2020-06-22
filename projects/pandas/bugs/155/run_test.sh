@@ -1,1 +1,1 @@
-pytest pandas/tests/indexes/period/test_indexing.py::TestWhere::test_where_invalid_dtypes 
+pytest pandas/tests/window/test_rolling.py::TestRolling::test_rolling_datetime 

@@ -1,1 +1,0 @@
-pytest lib/matplotlib/tests/test_collections.py::test_EventCollection_nosort

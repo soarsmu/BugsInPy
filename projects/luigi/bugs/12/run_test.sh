@@ -1,2 +1,1 @@
-pytest test/util_test.py::BasicsTest::test_inherits_has_effect_MRO
-pytest test/util_test.py::BasicsTest::test_requires_has_effect_MRO
+pytest test/hdfs_client_test.py::HdfsClientTest::test_get_autoconfig_client_cached

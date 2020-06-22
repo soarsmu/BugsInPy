@@ -1,0 +1,35 @@
+diff --git a/youtube_dl/extractor/npo.py b/youtube_dl/extractor/npo.py
+index f36d446d2..ce31694a5 100644
+--- a/youtube_dl/extractor/npo.py
++++ b/youtube_dl/extractor/npo.py
+@@ -7,6 +7,7 @@ from ..utils import (
+     unified_strdate,
+     parse_duration,
+     qualities,
++    strip_jsonp,
+     url_basename,
+ )
+ 
+@@ -63,7 +64,7 @@ class NPOIE(InfoExtractor):
+             'http://e.omroep.nl/metadata/aflevering/%s' % video_id,
+             video_id,
+             # We have to remove the javascript callback
+-            transform_source=lambda j: re.sub(r'parseMetadata\((.*?)\);\n//.*$', r'\1', j)
++            transform_source=strip_jsonp,
+         )
+         token_page = self._download_webpage(
+             'http://ida.omroep.nl/npoplayer/i.js',
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index 0b2ba39e2..5786fa699 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -1331,7 +1331,8 @@ def parse_age_limit(s):
+ 
+ 
+ def strip_jsonp(code):
+-    return re.sub(r'(?s)^[a-zA-Z0-9_]+\s*\(\s*(.*)\);?\s*?\s*$', r'\1', code)
++    return re.sub(
++        r'(?s)^[a-zA-Z0-9_]+\s*\(\s*(.*)\);?\s*?(?://[^\n]*)*$', r'\1', code)
+ 
+ 
+ def js_to_json(code):

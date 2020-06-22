@@ -1,1 +1,1 @@
-pytest test/execution_summary_test.py::ExecutionSummaryTest::test_status_with_task_retry
+pytest test/interface_test.py::InterfaceTest::test_just_run_main_task_cls

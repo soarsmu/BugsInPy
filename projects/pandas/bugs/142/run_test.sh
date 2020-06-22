@@ -1,1 +1,1 @@
-pytest pandas/tests/groupby/test_apply.py::test_apply_multi_level_name
+pytest pandas/tests/series/test_analytics.py::TestSeriesAnalytics::test_bool_diff 

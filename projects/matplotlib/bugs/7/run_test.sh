@@ -1,1 +1,1 @@
-pytest lib/matplotlib/tests/test_axes.py::TestScatter::test_scatter_single_color_c
+pytest lib/matplotlib/tests/test_colors.py::test_light_source_shading_empty_mask

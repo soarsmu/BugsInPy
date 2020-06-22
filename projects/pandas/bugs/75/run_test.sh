@@ -1,5 +1,1 @@
-pytest pandas/tests/util/test_assert_frame_equal.py::test_assert_frame_equal_extension_dtype_mismatch 
-pytest pandas/tests/util/test_assert_frame_equal.py::test_assert_frame_equal_interval_dtype_mismatch
-pytest pandas/tests/util/test_assert_series_equal.py::test_assert_series_equal_extension_dtype_mismatch 
-pytest pandas/tests/util/test_assert_series_equal.py::test_assert_series_equal_interval_dtype_mismatch
-
+pytest pandas/tests/indexes/period/test_indexing.py::TestIndexing::test_contains 

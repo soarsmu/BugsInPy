@@ -27,7 +27,7 @@ Pygments==2.6.1
 pypandoc==1.5
 pyparsing==2.4.7
 pyte==0.8.0
-pytest==5.4.2
+pytest==3.10.1
 pytest-benchmark==3.2.3
 pytest-docker-pexpect==0.9
 pytest-mock==3.1.0
@@ -36,7 +36,7 @@ readme-renderer==26.0
 requests==2.23.0
 requests-toolbelt==0.9.1
 six==1.15.0
--e git+https://github.com/nvbn/thefuck@40ab4eb62db57627bff10cf029d29c94704086a2#egg=thefuck
+-e git+https://github.com/nvbn/thefuck@ce6b82c92d78ae283cb3db001766b76f6647bc47#egg=thefuck
 tqdm==4.46.0
 twine==3.1.1
 urllib3==1.25.9

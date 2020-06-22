@@ -1,1 +1,3 @@
-python -m unittest -q tests.test_spider.SitemapSpiderTest.test_get_sitemap_urls_from_robotstxt
+python -m unittest -q tests.test_item.ItemTest.test_metaclass_with_fields_attribute
+python -m unittest -q tests.test_item.ItemTest.test_metaclass_multiple_inheritance_simple
+python -m unittest -q tests.test_item.ItemTest.test_metaclass_multiple_inheritance_diamond

@@ -1,1 +1,1 @@
-pytest pandas/tests/series/indexing/test_xs.py::test_xs_datetimelike_wrapping 
+pytest pandas/tests/series/test_analytics.py::TestSeriesAnalytics::test_count 

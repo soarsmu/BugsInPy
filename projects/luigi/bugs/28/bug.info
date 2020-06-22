@@ -1,4 +1,4 @@
 python_version="3.8.3"
-buggy_commit_id="c3119757c9ad4141fb446554109fa09cbd31173c"
-fixed_commit_id="b3e9ad57f8502a390686957b69070105fddcfd49"
-test_file="test/hdfs_client_test.py"
+buggy_commit_id="e37cb0ea1d97e6340840128a68c8d59bd05c28c3"
+fixed_commit_id="e2be971226c34a193d7029c51206e488b6a037cd"
+test_file="test/contrib/hive_test.py"

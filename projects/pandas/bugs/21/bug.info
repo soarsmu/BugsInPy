@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="4071c3b"
+fixed_commit_id="56d0934092b8296c90f940c56fce3b731e0de81b"
+test_file="pandas/tests/series/indexing/test_boolean.py;pandas/tests/series/indexing/test_getitem.py"

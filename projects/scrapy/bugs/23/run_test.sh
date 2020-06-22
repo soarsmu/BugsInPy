@@ -1,1 +1,2 @@
-python -m unittest -q tests.test_utils_gz.GunzipTest.test_gunzip_illegal_eof
+python -m unittest -q tests.test_downloadermiddleware_httpproxy.TestDefaultHeadersMiddleware.test_proxy_auth
+python -m unittest -q tests.test_downloadermiddleware_httpproxy.TestDefaultHeadersMiddleware.test_proxy_auth_empty_passwd

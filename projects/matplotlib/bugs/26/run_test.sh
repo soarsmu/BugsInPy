@@ -1,1 +1,1 @@
-pytest lib/matplotlib/tests/test_axes.py::test_invisible_axes
+pytest lib/matplotlib/tests/test_axes.py::test_set_ticks_inverted

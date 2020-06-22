@@ -1,2 +1,0 @@
-pytest tests/keras/preprocessing/sequence_test.py::test_TimeSeriesGenerator_doesnt_miss_any_sample
-pytest tests/keras/preprocessing/sequence_test.py::test_TimeseriesGenerator

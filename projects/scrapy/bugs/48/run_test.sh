@@ -1,1 +1,0 @@
-python -m unittest -q tests.test_crawler.CrawlerProcessTest.test_crawler_process_accepts_dict

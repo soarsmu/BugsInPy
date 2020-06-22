@@ -1,1 +1,1 @@
-pytest pandas/tests/indexes/period/test_constructors.py::TestPeriodIndex::test_base_constructor_with_period_dtype 
+pytest pandas/tests/arithmetic/test_datetime64.py::TestDatetimeIndexArithmetic::test_dta_add_sub_index 

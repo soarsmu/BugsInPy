@@ -1,1 +1,1 @@
-pytest pandas/tests/indexing/test_scalar.py::TestScalar2::test_series_at_raises_type_error 
+pytest pandas/tests/extension/decimal/test_decimal.py::test_indexing_no_materialize 

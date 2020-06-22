@@ -1,1 +1,2 @@
-pytest test/units/modules/network/eos/test_eos_vlans.py::TestEosVlansModule::test_eos_vlan_replaced
+pytest test/units/modules/system/test_pamd.py::PamdServiceTestCase::test_remove_first_rule
+pytest test/units/modules/system/test_pamd.py::PamdServiceTestCase::test_remove_last_rule

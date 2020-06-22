@@ -1,1 +1,0 @@
-pytest tests/rules/test_git_add.py::test_match

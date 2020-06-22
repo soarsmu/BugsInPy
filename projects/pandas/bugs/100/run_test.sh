@@ -1,1 +1,1 @@
-pytest pandas/tests/groupby/test_function.py::test_series_groupby_nunique 
+pytest pandas/tests/frame/methods/test_pct_change.py::test_pct_change_with_duplicated_indices 

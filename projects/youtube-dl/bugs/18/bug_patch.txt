@@ -1,13 +1,13 @@
-diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
-index d2d3c1a9f..d0cb65814 100644
---- a/youtube_dl/utils.py
-+++ b/youtube_dl/utils.py
-@@ -1868,7 +1868,7 @@ def urljoin(base, path):
-         path = path.decode('utf-8')
-     if not isinstance(path, compat_str) or not path:
-         return None
--    if re.match(r'^(?:https?:)?//', path):
-+    if re.match(r'^(?:[a-zA-Z][a-zA-Z0-9+-.]*:)?//', path):
-         return path
-     if isinstance(base, bytes):
-         base = base.decode('utf-8')
+diff --git a/youtube_dl/YoutubeDL.py b/youtube_dl/YoutubeDL.py
+index 89c07be29..f94836d06 100755
+--- a/youtube_dl/YoutubeDL.py
++++ b/youtube_dl/YoutubeDL.py
+@@ -860,7 +860,7 @@ class YoutubeDL(object):
+ 
+             force_properties = dict(
+                 (k, v) for k, v in ie_result.items() if v is not None)
+-            for f in ('_type', 'url', 'ie_key'):
++            for f in ('_type', 'url', 'id', 'extractor', 'extractor_key', 'ie_key'):
+                 if f in force_properties:
+                     del force_properties[f]
+             new_result = info.copy()

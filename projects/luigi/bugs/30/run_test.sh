@@ -1,1 +1,2 @@
-pytest test/file_test.py::FileSystemTest::test_move_to_new_dir
+pytest test/test_event_callbacks.py::TestEventCallbacks::test_failure
+pytest test/test_event_callbacks.py::TestEventCallbacks::test_processing_time_handler_failure

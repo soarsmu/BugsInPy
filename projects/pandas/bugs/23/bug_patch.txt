@@ -1,0 +1,43 @@
+diff --git a/pandas/core/indexes/datetimelike.py b/pandas/core/indexes/datetimelike.py
+index b83b64c14..53205d3b4 100644
+--- a/pandas/core/indexes/datetimelike.py
++++ b/pandas/core/indexes/datetimelike.py
+@@ -724,10 +724,10 @@ class DatetimeTimedeltaMixin(DatetimeIndexOpsMixin, Int64Index):
+         start = right[0]
+ 
+         if end < start:
+-            return type(self)(data=[])
++            return type(self)(data=[], dtype=self.dtype, freq=self.freq)
+         else:
+             lslice = slice(*left.slice_locs(start, end))
+-            left_chunk = left.values[lslice]
++            left_chunk = left._values[lslice]
+             return self._shallow_copy(left_chunk)
+ 
+     def _can_fast_union(self, other) -> bool:
+diff --git a/pandas/tests/indexes/datetimes/test_indexing.py b/pandas/tests/indexes/datetimes/test_indexing.py
+index ff15cded1..08b8e7102 100644
+--- a/pandas/tests/indexes/datetimes/test_indexing.py
++++ b/pandas/tests/indexes/datetimes/test_indexing.py
+@@ -75,8 +75,9 @@ class TestGetItem:
+     def test_dti_business_getitem(self):
+         rng = pd.bdate_range(START, END)
+         smaller = rng[:5]
+-        exp = DatetimeIndex(rng.view(np.ndarray)[:5])
++        exp = DatetimeIndex(rng.view(np.ndarray)[:5], freq="B")
+         tm.assert_index_equal(smaller, exp)
++        assert smaller.freq == exp.freq
+ 
+         assert smaller.freq == rng.freq
+ 
+@@ -102,8 +103,9 @@ class TestGetItem:
+     def test_dti_custom_getitem(self):
+         rng = pd.bdate_range(START, END, freq="C")
+         smaller = rng[:5]
+-        exp = DatetimeIndex(rng.view(np.ndarray)[:5])
++        exp = DatetimeIndex(rng.view(np.ndarray)[:5], freq="C")
+         tm.assert_index_equal(smaller, exp)
++        assert smaller.freq == exp.freq
+         assert smaller.freq == rng.freq
+ 
+         sliced = rng[::5]

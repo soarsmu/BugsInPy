@@ -1,2 +1,1 @@
-pytest tests/rules/test_dnf_no_such_command.py::test_get_new_command
-pytest tests/rules/test_dnf_no_such_command.py::test_get_operations
+pytest tests/rules/test_sudo.py::test_not_match

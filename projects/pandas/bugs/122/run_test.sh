@@ -1,1 +1,1 @@
-pytest pandas/tests/groupby/test_categorical.py::test_groupby_agg_categorical_columns 
+pytest pandas/tests/internals/test_internals.py::test_dataframe_not_equal 

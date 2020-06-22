@@ -1,4 +1,4 @@
 python_version="3.8.3"
-buggy_commit_id="9bd296c"
-fixed_commit_id="8aa707298428801199280b2b994632080591700a"
-test_file="pandas/tests/frame/methods/test_cov_corr.py"
+buggy_commit_id="6658d89"
+fixed_commit_id="13dc13f12c0fca943979cde065b7484bb0e40d66"
+test_file="pandas/tests/indexes/datetimes/test_to_period.py"

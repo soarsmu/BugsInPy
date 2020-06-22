@@ -1,1 +1,1 @@
-pytest pandas/tests/dtypes//test_missing.py::TestIsNA::test_isna_old_datetimelike 
+pytest pandas/tests/io/parser/test_encoding.py::test_binary_mode_file_buffers 

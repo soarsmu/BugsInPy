@@ -1,1 +1,1 @@
-pytest tests/test_url_for.py::test_routes_with_host
+pytest tests/test_logging.py::test_logging_modified_root_logger_config

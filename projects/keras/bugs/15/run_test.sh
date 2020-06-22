@@ -1,1 +1,1 @@
-pytest tests/test_loss_masking.py::test_masking_is_all_zeros
+pytest tests/keras/test_callbacks.py::test_CSVLogger

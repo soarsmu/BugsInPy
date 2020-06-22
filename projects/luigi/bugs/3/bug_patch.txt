@@ -1,17 +1,15 @@
-diff --git a/luigi/server.py b/luigi/server.py
-index 3cb77ede..41dc28f3 100644
---- a/luigi/server.py
-+++ b/luigi/server.py
-@@ -279,9 +279,10 @@ class MetricsHandler(tornado.web.RequestHandler):
-         self._scheduler = scheduler
- 
-     def get(self):
--        metrics = self._scheduler._state._metrics_collector.generate_latest()
-+        metrics_collector = self._scheduler._state._metrics_collector
-+        metrics = metrics_collector.generate_latest()
-         if metrics:
--            metrics.configure_http_handler(self)
-+            metrics_collector.configure_http_handler(self)
-             self.write(metrics)
+diff --git a/luigi/parameter.py b/luigi/parameter.py
+index 13c6f8af..66395205 100644
+--- a/luigi/parameter.py
++++ b/luigi/parameter.py
+@@ -1114,8 +1114,8 @@ class TupleParameter(ListParameter):
+         try:
+             # loop required to parse tuple of tuples
+             return tuple(tuple(x) for x in json.loads(x, object_pairs_hook=_FrozenOrderedDict))
+-        except ValueError:
+-            return literal_eval(x)  # if this causes an error, let that error be raised.
++        except (ValueError, TypeError):
++            return tuple(literal_eval(x))  # if this causes an error, let that error be raised.
  
  
+ class NumericalParameter(Parameter):

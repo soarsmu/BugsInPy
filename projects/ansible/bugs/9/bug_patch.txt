@@ -1,50 +1,26 @@
-diff --git a/lib/ansible/galaxy/collection.py b/lib/ansible/galaxy/collection.py
-index 24b13d97a1..4d7b327613 100644
---- a/lib/ansible/galaxy/collection.py
-+++ b/lib/ansible/galaxy/collection.py
-@@ -219,12 +219,15 @@ class CollectionRequirement:
-                 requirement = req
-                 op = operator.eq
+diff --git a/lib/ansible/modules/packaging/os/redhat_subscription.py b/lib/ansible/modules/packaging/os/redhat_subscription.py
+index bc0bcc3ee7..d3cca7beb0 100644
+--- a/lib/ansible/modules/packaging/os/redhat_subscription.py
++++ b/lib/ansible/modules/packaging/os/redhat_subscription.py
+@@ -515,7 +515,9 @@ class Rhsm(RegistrationBase):
  
--                # In the case we are checking a new requirement on a base requirement (parent != None) we can't accept
--                # version as '*' (unknown version) unless the requirement is also '*'.
--                if parent and version == '*' and requirement != '*':
--                    break
--                elif requirement == '*' or version == '*':
--                    continue
-+            # In the case we are checking a new requirement on a base requirement (parent != None) we can't accept
-+            # version as '*' (unknown version) unless the requirement is also '*'.
-+            if parent and version == '*' and requirement != '*':
-+                display.warning("Failed to validate the collection requirement '%s:%s' for %s when the existing "
-+                                "install does not have a version set, the collection may not work."
-+                                % (to_text(self), req, parent))
-+                continue
-+            elif requirement == '*' or version == '*':
-+                continue
- 
-             if not op(LooseVersion(version), LooseVersion(requirement)):
-                 break
-@@ -286,7 +289,13 @@ class CollectionRequirement:
-             manifest = info['manifest_file']['collection_info']
-             namespace = manifest['namespace']
-             name = manifest['name']
--            version = manifest['version']
-+            version = to_text(manifest['version'], errors='surrogate_or_strict')
-+
-+            if not hasattr(LooseVersion(version), 'version'):
-+                display.warning("Collection at '%s' does not have a valid version set, falling back to '*'. Found "
-+                                "version: '%s'" % (to_text(b_path), version))
-+                version = '*'
-+
-             dependencies = manifest['dependencies']
+         for pool_id, quantity in sorted(pool_ids.items()):
+             if pool_id in available_pool_ids:
+-                args = [SUBMAN_CMD, 'attach', '--pool', pool_id, '--quantity', quantity]
++                args = [SUBMAN_CMD, 'attach', '--pool', pool_id]
++                if quantity is not None:
++                    args.extend(['--quantity', to_native(quantity)])
+                 rc, stderr, stdout = self.module.run_command(args, check_rc=True)
+             else:
+                 self.module.fail_json(msg='Pool ID: %s not in list of available pools' % pool_id)
+@@ -839,8 +841,8 @@ def main():
+                 module.fail_json(msg='Unable to parse pool_ids option.')
+             pool_id, quantity = list(value.items())[0]
          else:
-             display.warning("Collection at '%s' does not have a MANIFEST.json file, cannot detect version."
-@@ -877,7 +886,7 @@ def _get_collection_info(dep_map, existing_collections, collection, requirement,
-     existing = [c for c in existing_collections if to_text(c) == to_text(collection_info)]
-     if existing and not collection_info.force:
-         # Test that the installed collection fits the requirement
--        existing[0].add_requirement(to_text(collection_info), requirement)
-+        existing[0].add_requirement(parent, requirement)
-         collection_info = existing[0]
- 
-     dep_map[to_text(collection_info)] = collection_info
+-            pool_id, quantity = value, 1
+-        pool_ids[pool_id] = str(quantity)
++            pool_id, quantity = value, None
++        pool_ids[pool_id] = quantity
+     consumer_type = module.params["consumer_type"]
+     consumer_name = module.params["consumer_name"]
+     consumer_id = module.params["consumer_id"]

@@ -1,1 +1,1 @@
-pytest pandas/tests/arrays/categorical/test_analytics.py::TestCategoricalAnalytics::test_min_max_only_nan
+pytest pandas/tests/groupby/test_function.py::test_apply_to_nullable_integer_returns_float 

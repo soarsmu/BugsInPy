@@ -1,1 +1,1 @@
-pytest pandas/tests/io/excel/test_writers.py::TestExcelWriter::test_write_subset_columns 
+pytest pandas/tests/series/test_missing.py::TestSeriesInterpolateData::test_interpolate_unsorted_index 

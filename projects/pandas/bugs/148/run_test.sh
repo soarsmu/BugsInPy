@@ -1,1 +1,2 @@
-pytest pandas/tests/reshape/test_pivot.py::TestCrosstab::test_crosstab_both_tuple_names 
+pytest pandas/tests/frame/test_apply.py::TestDataFrameApply::test_apply_funcs_over_empty 
+pytest pandas/tests/frame/test_apply.py::TestDataFrameApply::test_nunique_empty 

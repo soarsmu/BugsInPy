@@ -1,13 +1,21 @@
-diff --git a/scrapy/spiders/sitemap.py b/scrapy/spiders/sitemap.py
-index eede467a..89d96c33 100644
---- a/scrapy/spiders/sitemap.py
-+++ b/scrapy/spiders/sitemap.py
-@@ -32,7 +32,7 @@ class SitemapSpider(Spider):
+diff --git a/scrapy/item.py b/scrapy/item.py
+index 8ac27964..138728a9 100644
+--- a/scrapy/item.py
++++ b/scrapy/item.py
+@@ -6,6 +6,7 @@ See documentation in docs/topics/item.rst
  
-     def _parse_sitemap(self, response):
-         if response.url.endswith('/robots.txt'):
--            for url in sitemap_urls_from_robots(response.body):
-+            for url in sitemap_urls_from_robots(response.text):
-                 yield Request(url, callback=self._parse_sitemap)
-         else:
-             body = self._get_sitemap_body(response)
+ from pprint import pformat
+ from collections import MutableMapping
++
+ from abc import ABCMeta
+ import six
+ 
+@@ -27,7 +28,7 @@ class ItemMeta(ABCMeta):
+         new_bases = tuple(base._class for base in bases if hasattr(base, '_class'))
+         _class = super(ItemMeta, mcs).__new__(mcs, 'x_' + class_name, new_bases, attrs)
+ 
+-        fields = {}
++        fields = getattr(_class, 'fields', {})
+         new_attrs = {}
+         for n in dir(_class):
+             v = getattr(_class, n)

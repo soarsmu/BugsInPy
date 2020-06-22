@@ -1,15 +1,13 @@
-diff --git a/luigi/scheduler.py b/luigi/scheduler.py
-index d67beb9e..bb419af2 100644
---- a/luigi/scheduler.py
-+++ b/luigi/scheduler.py
-@@ -482,8 +482,8 @@ class SimpleTaskState(object):
-     def get_necessary_tasks(self):
-         necessary_tasks = set()
-         for task in self.get_active_tasks():
--            if task.status not in (DONE, DISABLED) or \
--                    getattr(task, 'scheduler_disable_time', None) is not None:
-+            if task.status not in (DONE, DISABLED, UNKNOWN) or \
-+                    task.scheduler_disable_time is not None:
-                 necessary_tasks.update(task.deps)
-                 necessary_tasks.add(task.id)
-         return necessary_tasks
+diff --git a/luigi/task_register.py b/luigi/task_register.py
+index ad6dfd1b..393d35d8 100644
+--- a/luigi/task_register.py
++++ b/luigi/task_register.py
+@@ -25,6 +25,8 @@ except ImportError:
+     from ordereddict import OrderedDict
+ 
+ from luigi import six
++import logging
++logger = logging.getLogger('luigi-interface')
+ 
+ 
+ class TaskClassException(Exception):

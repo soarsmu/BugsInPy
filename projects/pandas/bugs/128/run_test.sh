@@ -1,1 +1,1 @@
-pytest pandas/tests/indexes/timedeltas/test_constructors.py::TestTimedeltaIndex::test_infer_from_tdi_mismatch 
+pytest pandas/tests/io/json/test_readlines.py::test_readjson_unicode 

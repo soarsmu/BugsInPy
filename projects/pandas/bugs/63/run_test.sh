@@ -1,1 +1,1 @@
-pytest pandas/tests/resample/test_datetime_index.py::test_downsample_dst_at_midnight 
+pytest pandas/tests/indexing/test_scalar.py::TestScalar2::test_series_at_raises_type_error 

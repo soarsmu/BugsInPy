@@ -1,1 +1,1 @@
-pytest tests/keras/backend/backend_test.py::TestBackend::test_function_tf_run_options_with_run_metadata
+pytest tests/keras/layers/convolutional_test.py::test_separable_conv_1d

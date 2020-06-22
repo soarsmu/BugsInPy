@@ -1,26 +1,13 @@
-diff --git a/scrapy/downloadermiddlewares/redirect.py b/scrapy/downloadermiddlewares/redirect.py
-index 4ed7e4c2..db276eef 100644
---- a/scrapy/downloadermiddlewares/redirect.py
-+++ b/scrapy/downloadermiddlewares/redirect.py
-@@ -1,9 +1,10 @@
- import logging
- from six.moves.urllib.parse import urljoin
+diff --git a/scrapy/spiders/sitemap.py b/scrapy/spiders/sitemap.py
+index eede467a..89d96c33 100644
+--- a/scrapy/spiders/sitemap.py
++++ b/scrapy/spiders/sitemap.py
+@@ -32,7 +32,7 @@ class SitemapSpider(Spider):
  
-+from w3lib.url import safe_url_string
-+
- from scrapy.http import HtmlResponse
- from scrapy.utils.response import get_meta_refresh
--from scrapy.utils.python import to_native_str
- from scrapy.exceptions import IgnoreRequest, NotConfigured
- 
- logger = logging.getLogger(__name__)
-@@ -65,8 +66,7 @@ class RedirectMiddleware(BaseRedirectMiddleware):
-         if 'Location' not in response.headers or response.status not in allowed_status:
-             return response
- 
--        # HTTP header is ascii or latin1, redirected url will be percent-encoded utf-8
--        location = to_native_str(response.headers['location'].decode('latin1'))
-+        location = safe_url_string(response.headers['location'])
- 
-         redirected_url = urljoin(request.url, location)
- 
+     def _parse_sitemap(self, response):
+         if response.url.endswith('/robots.txt'):
+-            for url in sitemap_urls_from_robots(response.body):
++            for url in sitemap_urls_from_robots(response.text):
+                 yield Request(url, callback=self._parse_sitemap)
+         else:
+             body = self._get_sitemap_body(response)

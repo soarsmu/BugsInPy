@@ -1,5 +1,5 @@
 python_version="3.7.0"
 pythonpath=""
-buggy_commit_id="4ee9ba94de11aaa4f932560fa2b3d8ceb8c61d2a"
-fixed_commit_id="301f52b532c071a0d2fec1eb7c23f2714bb38567"
-test_file="tornado/test/auth_test.py"
+buggy_commit_id="fdfaf3dffa49479c7461050eacca07bc5ee8d207"
+fixed_commit_id="ecb3ea7543cc942659faf3d2144853018afa6139"
+test_file="tornado/test/web_test.py"

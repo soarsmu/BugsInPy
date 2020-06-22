@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="449cb9a00693c8b4d97d5fda8d732cf0978e117e"
+fixed_commit_id="be48f027847161f907def8987706041c65a1fd58"
+test_file="tests/rules/test_dnf_no_such_command.py"

@@ -1,1 +1,1 @@
-pytest pandas/tests/indexes/datetimes/test_tools.py::test_nullable_integer_to_datetime 
+pytest pandas/tests/frame/test_join.py::test_suppress_future_warning_with_sort_kw 

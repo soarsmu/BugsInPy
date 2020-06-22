@@ -1,1 +1,1 @@
-pytest tests/keras/initializers_test.py::test_statefulness
+pytest tests/test_loss_masking.py::test_masking_is_all_zeros

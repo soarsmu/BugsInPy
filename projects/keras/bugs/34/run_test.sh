@@ -1,2 +1,1 @@
-pytest tests/keras/test_sequential_model.py::test_sequential
-pytest tests/keras/test_sequential_model.py::test_sequential_deferred_build
+pytest tests/test_multiprocessing.py::test_multiprocessing_training

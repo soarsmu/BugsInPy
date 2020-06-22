@@ -1,4 +1,4 @@
 python_version="3.8.3" 
-buggy_commit_id="a9b61a9" 
-fixed_commit_id="0c50950f2a7e32887eff6be5979f09772091e1de"  
-test_file="pandas/tests/frame/indexing/test_categorical.py" 
+buggy_commit_id="e639af2" 
+fixed_commit_id="fb08ceeeeba2ba62f92b47d424b3ae83c20ed9db"  
+test_file="pandas/tests/arrays/categorical/test_algos.py;pandas/tests/frame/test_replace.py" 

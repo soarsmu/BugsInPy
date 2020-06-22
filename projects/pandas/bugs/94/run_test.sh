@@ -1,1 +1,1 @@
-pytest pandas/tests/extension/test_categorical.py::TestComparisonOps::test_not_equal_with_na 
+pytest pandas/tests/indexes/datetimes/test_constructors.py::TestDatetimeIndex::test_shallow_copy_inherits_array_freq 

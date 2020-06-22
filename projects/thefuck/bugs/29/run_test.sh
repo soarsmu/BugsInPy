@@ -1,1 +1,2 @@
-pytest tests/rules/test_man.py::test_get_new_command
+pytest tests/test_types.py::test_update_settings
+pytest tests/test_utils.py::test_wrap_settings

@@ -1,1 +1,1 @@
-pytest pandas/tests/frame/test_arithmetic.py::test_pow_with_realignment 
+pytest pandas/tests/io/json/test_pandas.py::TestPandasContainer::test_frame_int_overflow 

@@ -1,0 +1,4 @@
+python_version="3.7.7"
+buggy_commit_id="6b874ef09611ac32ad038203423d44087cbeb3ae"
+fixed_commit_id="afe4a428f78abe45d6104d74ef42a066570fa43d"
+test_file="spacy/tests/pipeline/test_analysis.py"

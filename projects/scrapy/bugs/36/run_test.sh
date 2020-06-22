@@ -1,1 +1,1 @@
-python -m unittest -q tests.test_exporters.XmlItemExporterTest.test_nonstring_types_item
+python -m unittest -q tests.test_utils_misc.__init__.UtilsMiscTestCase.test_create_instance

@@ -1,1 +1,1 @@
-pytest tests/keras/engine/test_training.py::test_sample_weights
+pytest tests/keras/test_sequential_model.py::test_nested_sequential_deferred_build

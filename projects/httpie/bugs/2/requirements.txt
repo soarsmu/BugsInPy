@@ -23,10 +23,10 @@ py==1.8.1
 pycparser==2.20
 Pygments==2.6.1
 pyparsing==2.4.7
-pytest==3.2.1
+pytest==5.4.2
 pytest-httpbin==1.0.0
 raven==6.10.0
-requests==2.0.0
+requests==2.23.0
 six==1.15.0
 urllib3==1.25.9
 wcwidth==0.1.9

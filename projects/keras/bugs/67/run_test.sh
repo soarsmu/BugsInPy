@@ -1,1 +1,0 @@
-pytest tests/keras/layers/wrappers_test.py::test_Bidirectional_state_reuse

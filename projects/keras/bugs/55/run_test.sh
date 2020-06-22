@@ -1,1 +1,0 @@
-pytest tests/keras/metrics_test.py::test_stateful_metrics[dict]

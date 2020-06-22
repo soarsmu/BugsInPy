@@ -1,1 +1,1 @@
-pytest lib/matplotlib/tests/test_axes.py::test_boxplot_marker_behavior
+pytest lib/matplotlib/tests/test_colorbar.py::test_colorbar_label

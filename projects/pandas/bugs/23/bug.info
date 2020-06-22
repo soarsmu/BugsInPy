@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="ab9f3c9"
+fixed_commit_id="38b669a206b151e0a2bb985200d4a493c4ac078f"
+test_file="pandas/tests/indexes/datetimes/test_setops.py"

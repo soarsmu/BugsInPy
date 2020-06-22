@@ -1,1 +1,1 @@
-python -m unittest -q tornado.test.httpserver_test.HTTPServerRawTest.test_chunked_request_uppercase
+python -m unittest -q tornado.test.http1connection_test.HTTP1ConnectionTest.test_http10_no_content_length

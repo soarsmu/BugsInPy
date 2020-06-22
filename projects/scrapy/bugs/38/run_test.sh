@@ -1,2 +1,1 @@
-python -m unittest -q tests.test_downloadermiddleware_httpproxy.TestDefaultHeadersMiddleware.test_proxy_auth
-python -m unittest -q tests.test_downloadermiddleware_httpproxy.TestDefaultHeadersMiddleware.test_proxy_auth_empty_passwd
+python -m unittest -q tests.test_http_request.FormRequestTest.test_from_response_clickdata_does_not_ignore_image

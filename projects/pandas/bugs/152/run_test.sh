@@ -1,2 +1,1 @@
-pytest pandas/tests/io/test_pickle.py::test_pickle_buffer_roundtrip 
-pytest pandas/tests/io/test_pickle.py::test_pickle_generalurl_read 
+pytest pandas/tests/series/test_combine_concat.py::TestSeriesCombine::test_append_tuples 

@@ -1,1 +1,1 @@
-pytest tests/test_utils.py::test_get_all_executables_pathsep
+pytest tests/rules/test_git_push.py::test_get_new_command

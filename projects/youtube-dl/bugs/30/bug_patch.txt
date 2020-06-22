@@ -1,22 +1,14 @@
-diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
-index 8738aa249..d293c7498 100644
---- a/youtube_dl/utils.py
-+++ b/youtube_dl/utils.py
-@@ -1748,11 +1748,16 @@ def base_url(url):
+diff --git a/youtube_dl/YoutubeDL.py b/youtube_dl/YoutubeDL.py
+index 5a79e5f1d..6478d05dc 100755
+--- a/youtube_dl/YoutubeDL.py
++++ b/youtube_dl/YoutubeDL.py
+@@ -1005,6 +1005,9 @@ class YoutubeDL(object):
+                 format_spec = selector.selector
  
- 
- def urljoin(base, path):
-+    if isinstance(path, bytes):
-+        path = path.decode('utf-8')
-     if not isinstance(path, compat_str) or not path:
-         return None
-     if re.match(r'^(?:https?:)?//', path):
-         return path
--    if not isinstance(base, compat_str) or not re.match(r'^(?:https?:)?//', base):
-+    if isinstance(base, bytes):
-+        base = base.decode('utf-8')
-+    if not isinstance(base, compat_str) or not re.match(
-+            r'^(?:https?:)?//', base):
-         return None
-     return compat_urlparse.urljoin(base, path)
- 
+                 def selector_function(formats):
++                    formats = list(formats)
++                    if not formats:
++                        return
+                     if format_spec == 'all':
+                         for f in formats:
+                             yield f

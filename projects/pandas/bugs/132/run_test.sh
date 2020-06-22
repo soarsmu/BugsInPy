@@ -1,1 +1,2 @@
-pytest pandas/tests/arithmetic/test_array_ops.py::test_na_logical_op_2d 
+pytest pandas/tests/reductions/test_reductions.py::TestIndexReductions::test_timedelta_ops 
+pytest pandas/tests/reductions/test_reductions.py::TestSeriesReductions::test_ops_consistency_on_empty 

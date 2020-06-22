@@ -1,1 +1,0 @@
-pytest tests/test_jsonable_encoder.py::test_encode_model_with_config

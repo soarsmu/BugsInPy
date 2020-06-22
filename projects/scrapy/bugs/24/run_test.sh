@@ -1,1 +1,1 @@
-python -m unittest -q tests.test_selector.SelectorTestCase.test_selector_bad_args
+python -m unittest -q tests.test_downloader_handlers.HttpProxyTestCase.test_download_with_proxy_https_timeout

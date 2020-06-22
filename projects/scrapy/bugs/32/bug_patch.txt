@@ -1,14 +1,15 @@
-diff --git a/scrapy/responsetypes.py b/scrapy/responsetypes.py
-index 4880cc7b..c667b141 100644
---- a/scrapy/responsetypes.py
-+++ b/scrapy/responsetypes.py
-@@ -59,7 +59,8 @@ class ResponseTypes(object):
+diff --git a/scrapy/crawler.py b/scrapy/crawler.py
+index 9b35b364..2cd65827 100644
+--- a/scrapy/crawler.py
++++ b/scrapy/crawler.py
+@@ -209,8 +209,8 @@ class CrawlerProcess(CrawlerRunner):
+     def __init__(self, settings):
+         super(CrawlerProcess, self).__init__(settings)
+         install_shutdown_handlers(self._signal_shutdown)
+-        configure_logging(settings)
+-        log_scrapy_info(settings)
++        configure_logging(self.settings)
++        log_scrapy_info(self.settings)
  
-     def from_content_disposition(self, content_disposition):
-         try:
--            filename = to_native_str(content_disposition).split(';')[1].split('=')[1]
-+            filename = to_native_str(content_disposition,
-+                encoding='latin-1', errors='replace').split(';')[1].split('=')[1]
-             filename = filename.strip('"\'')
-             return self.from_filename(filename)
-         except IndexError:
+     def _signal_shutdown(self, signum, _):
+         install_shutdown_handlers(self._signal_kill)

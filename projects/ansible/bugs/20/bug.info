@@ -1,5 +1,0 @@
-python_version="3.6.9"
-pythonpath="ansible/build/lib/"
-buggy_commit_id="b1e8a6c1cbd2a668b462995487b819ef7dd8ba4b"
-fixed_commit_id="68de182555b185737353e780882159a3d213908c"
-test_file="test/units/modules/network/eos/test_eos_eapi.py"

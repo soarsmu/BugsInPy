@@ -1,15 +1,16 @@
-diff --git a/pandas/core/groupby/grouper.py b/pandas/core/groupby/grouper.py
-index 9660fb9c2..39892d87b 100644
---- a/pandas/core/groupby/grouper.py
-+++ b/pandas/core/groupby/grouper.py
-@@ -754,7 +754,9 @@ def get_grouper(
-             return False
-         try:
-             return gpr is obj[gpr.name]
--        except (KeyError, IndexError):
-+        except (KeyError, IndexError, ValueError):
-+            # TODO: ValueError: Given date string not likely a datetime.
-+            # should be KeyError?
-             return False
+diff --git a/pandas/core/internals/blocks.py b/pandas/core/internals/blocks.py
+index ff2b63858..bfde82d6f 100644
+--- a/pandas/core/internals/blocks.py
++++ b/pandas/core/internals/blocks.py
+@@ -728,11 +728,6 @@ class Block(PandasObject):
  
-     for i, (gpr, level) in enumerate(zip(keys, levels)):
+         mask = missing.mask_missing(values, to_replace)
+ 
+-        if not mask.any():
+-            if inplace:
+-                return [self]
+-            return [self.copy()]
+-
+         try:
+             blocks = self.putmask(mask, value, inplace=inplace)
+             # Note: it is _not_ the case that self._can_hold_element(value)

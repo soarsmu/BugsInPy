@@ -1,1 +1,1 @@
-pytest pandas/tests/groupby/test_function.py::test_ops_not_as_index
+pytest pandas/tests/groupby/test_size.py::test_size_period_index

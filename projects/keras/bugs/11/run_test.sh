@@ -1,1 +1,1 @@
-pytest tests/keras/optimizers_test.py::test_tfoptimizer_pass_correct_named_params_to_native_tensorflow_optimizer
+pytest tests/integration_tests/test_image_data_tasks.py::test_image_data_generator_training

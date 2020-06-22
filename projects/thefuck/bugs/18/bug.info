@@ -1,4 +1,4 @@
 python_version="3.7.0"
-buggy_commit_id="449cb9a00693c8b4d97d5fda8d732cf0978e117e"
-fixed_commit_id="be48f027847161f907def8987706041c65a1fd58"
-test_file="tests/rules/test_dnf_no_such_command.py"
+buggy_commit_id="b65a9a0a4fd9bef394b45a1d367d29aa1e1c403e"
+fixed_commit_id="c3b1ba763708b8faaaf55717c436c4cd4c57a7ea"
+test_file="tests/rules/test_sudo.py"

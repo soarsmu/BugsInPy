@@ -1,0 +1,5 @@
+python_version="3.6.9"
+pythonpath="ansible/build/lib/"
+buggy_commit_id="da07b98b7a433493728ddb7ac7efbd20b8988776"
+fixed_commit_id="52f3ce8a808f943561803bd664e695fed1841fe8"
+test_file="test/units/modules/network/ios/test_ios_banner.py"

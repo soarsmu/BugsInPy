@@ -1,1 +1,1 @@
-pytest tests/shells/test_fish.py::TestFish::test_info
+pytest tests/rules/test_git_push.py::test_get_new_command

@@ -1,3 +1,1 @@
-pytest pandas/tests/frame/test_reshape.py::TestDataFrameReshape::test_unstack_long_index 
-pytest pandas/tests/frame/test_reshape.py::TestDataFrameReshape::test_unstack_multi_level_cols 
-pytest pandas/tests/frame/test_reshape.py::TestDataFrameReshape::test_unstack_multi_level_rows_and_cols 
+pytest pandas/tests/indexes/test_numeric.py::TestFloat64Index::test_lookups_datetimelike_values 

@@ -1,13 +1,22 @@
-diff --git a/pandas/core/reshape/reshape.py b/pandas/core/reshape/reshape.py
-index da92e1154..97f416e32 100644
---- a/pandas/core/reshape/reshape.py
-+++ b/pandas/core/reshape/reshape.py
-@@ -358,7 +358,7 @@ def _unstack_multiple(data, clocs, fill_value=None):
-             result = data
-             for i in range(len(clocs)):
-                 val = clocs[i]
--                result = result.unstack(val)
-+                result = result.unstack(val, fill_value=fill_value)
-                 clocs = [v if i > v else v - 1 for v in clocs]
+diff --git a/pandas/core/arrays/numpy_.py b/pandas/core/arrays/numpy_.py
+index 4e2e37d88..32da0199e 100644
+--- a/pandas/core/arrays/numpy_.py
++++ b/pandas/core/arrays/numpy_.py
+@@ -235,15 +235,8 @@ class PandasArray(ExtensionArray, ExtensionOpsMixin, NDArrayOperatorsMixin):
+         if not lib.is_scalar(value):
+             value = np.asarray(value)
  
-             return result
+-        values = self._ndarray
+-        t = np.result_type(value, values)
+-        if t != self._ndarray.dtype:
+-            values = values.astype(t, casting="safe")
+-            values[key] = value
+-            self._dtype = PandasDtype(t)
+-            self._ndarray = values
+-        else:
+-            self._ndarray[key] = value
++        value = np.asarray(value, dtype=self._ndarray.dtype)
++        self._ndarray[key] = value
+ 
+     def __len__(self) -> int:
+         return len(self._ndarray)

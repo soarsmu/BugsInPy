@@ -1,1 +1,1 @@
-pytest pandas/tests/reshape/test_concat.py::test_duplicate_keys
+pytest pandas/tests/indexes/datetimes/test_timezones.py::test_tz_localize_invalidates_freq

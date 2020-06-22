@@ -1,1 +1,1 @@
-pytest test/contrib/redshift_test.py::TestS3CopyToTable::test_s3_copy_with_nonetype_columns
+pytest test/scheduler_test.py::SchedulerWorkerTest::test_get_pending_tasks_with_many_done_tasks

@@ -1,4 +1,4 @@
 python_version="3.7.7"
-buggy_commit_id="6b874ef09611ac32ad038203423d44087cbeb3ae"
-fixed_commit_id="afe4a428f78abe45d6104d74ef42a066570fa43d"
-test_file="spacy/tests/pipeline/test_analysis.py"
+buggy_commit_id="da6e0de34f4947fdebc839df3969c641014cfa97"
+fixed_commit_id="6f54e59fe7ccb3bacce896ed33d36b39f11cbfaf"
+test_file="spacy/tests/doc/test_span.py"

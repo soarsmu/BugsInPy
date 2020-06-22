@@ -1,1 +1,1 @@
-python -m unittest -q tests.test_downloadermiddleware_robotstxt.RobotsTxtMiddlewareTest.test_robotstxt_immediate_error
+python -m unittest -q tests.test_crawler.CrawlerRunnerTestCase.test_spidermanager_deprecation

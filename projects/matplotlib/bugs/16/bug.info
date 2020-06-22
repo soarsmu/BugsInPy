@@ -1,4 +1,4 @@
 python_version="3.8.1"
-buggy_commit_id="f8459a513c3f67447ceb1a07c29760d504517ff2"
-fixed_commit_id="af745264376a10782bd0d8b96d255f958c2950f3"
-test_file="lib/matplotlib/tests/test_text.py"
+buggy_commit_id="89ff308306bafac22647c050a42141f040210216"
+fixed_commit_id="5d99e151be80bcb0b3b6d081fd3038330f573d94"
+test_file="lib/matplotlib/tests/test_colorbar.py"

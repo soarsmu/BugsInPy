@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="baa54c9f4f809692d62d4c3e4497161717c76550"
+fixed_commit_id="24e85945ae39e5975491527e00c3f0f64b42ea6e"
+test_file="test/contrib/beam_dataflow_test.py"

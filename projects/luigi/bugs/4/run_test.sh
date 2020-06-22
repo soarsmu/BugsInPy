@@ -1,1 +1,1 @@
-pytest test/contrib/beam_dataflow_test.py::BeamDataflowTest::test_get_target_path
+pytest test/contrib/redshift_test.py::TestS3CopyToTable::test_s3_copy_with_nonetype_columns

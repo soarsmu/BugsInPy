@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="797ca1c5647c565f62e21a8e29515c8b0fbe275f"
+fixed_commit_id="7c858fadb3458be829d3d43666ccb46c3ed5b8a0"
+test_file="tests/rules/test_git_branch_exists.py"

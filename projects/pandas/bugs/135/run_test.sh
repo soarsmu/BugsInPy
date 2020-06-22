@@ -1,1 +1,2 @@
-pytest pandas/tests/indexes/datetimes/test_indexing.py::TestDatetimeIndex::test_get_loc 
+pytest pandas/tests/extension/decimal/test_decimal.py::test_groupby_agg 
+pytest pandas/tests/extension/decimal/test_decimal.py::test_groupby_agg_ea_method 

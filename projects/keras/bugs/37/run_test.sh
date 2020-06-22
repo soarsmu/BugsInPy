@@ -1,2 +1,1 @@
-pytest tests/keras/layers/recurrent_test.py::test_inconsistent_output_state_size
-pytest tests/keras/layers/recurrent_test.py::test_minimal_rnn_cell_non_layer_multiple_states
+pytest tests/keras/layers/wrappers_test.py::test_Bidirectional_state_reuse

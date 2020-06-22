@@ -1,4 +1,4 @@
 python_version="3.7.3"
-buggy_commit_id="87540a2a2f42e00c4a2ca7ca35d19f96e62e6cb0"
-fixed_commit_id="d78c982b326adeed6ac25200dc6892ff8f518ca6"
-test_file="tests/keras/engine/test_topology.py"
+buggy_commit_id="f9210387088fe91b5bc8999cf0cb41a0fe9eacf6"
+fixed_commit_id="66f8cc7ac4942f7f9fe0164a2a854a6264b87735"
+test_file="tests/keras/layers/recurrent_test.py"

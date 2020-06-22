@@ -1,3 +1,1 @@
-pytest test/units/galaxy/test_collection_install.py::test_build_requirement_from_path_with_manifest
-pytest test/units/galaxy/test_collection_install.py::test_build_requirement_from_path_no_version
-pytest test/units/galaxy/test_collection_install.py::test_add_collection_requirement_to_unknown_installed_version
+pytest test/units/modules/packaging/os/test_redhat_subscription.py::test_redhat_subscribtion

@@ -1,1 +1,1 @@
-pytest tests/keras/layers/convolutional_test.py::test_conv2d_transpose_dilation
+pytest tests/keras/layers/recurrent_test.py::test_minimal_rnn_cell_layer

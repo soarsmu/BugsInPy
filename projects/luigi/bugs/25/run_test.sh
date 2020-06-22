@@ -1,1 +1,1 @@
-pytest test/scheduler_api_test.py::SchedulerApiTest::test_batch_ignore_items_not_ready
+pytest test/contrib/redshift_test.py::TestS3CopyToTable::test_s3_copy_to_table

@@ -1,1 +1,2 @@
-pytest tests/integration_tests/test_image_data_tasks.py::test_image_data_generator_training
+pytest tests/keras/preprocessing/sequence_test.py::test_TimeSeriesGenerator_doesnt_miss_any_sample
+pytest tests/keras/preprocessing/sequence_test.py::test_TimeseriesGenerator

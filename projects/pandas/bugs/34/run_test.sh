@@ -1,1 +1,1 @@
-pytest pandas/tests/indexes/datetimes/test_insert.py::TestInsert::test_insert_mismatched_types_raises
+pytest pandas/tests/resample/test_datetime_index.py::test_downsample_dst_at_midnight 

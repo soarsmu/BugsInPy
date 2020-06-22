@@ -1,4 +1,4 @@
 python_version="3.8.3" 
-buggy_commit_id="467e1c2" 
-fixed_commit_id="c82cb179affed1c1136431ce39e4c66f4f3a65c0"  
-test_file="pandas/tests/io/sas/test_xport.py" 
+buggy_commit_id="292a993" 
+fixed_commit_id="8dd9fabd2ad9104e747084437b9ad436d5be087a"  
+test_file="pandas/tests/window/test_pairwise.py" 

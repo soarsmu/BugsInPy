@@ -1,29 +1,24 @@
-diff --git a/lib/matplotlib/path.py b/lib/matplotlib/path.py
-index 93165dc68..f56746b88 100644
---- a/lib/matplotlib/path.py
-+++ b/lib/matplotlib/path.py
-@@ -330,6 +330,7 @@ class Path:
-         if not args:
-             return Path(np.empty([0, 2], dtype=np.float32))
- 
-+        # concatenate paths
-         vertices = np.concatenate([x.vertices for x in args])
-         codes = np.empty(len(vertices), dtype=cls.code_type)
-         i = 0
-@@ -341,6 +342,16 @@ class Path:
-                 codes[i:i + len(path.codes)] = path.codes
-             i += len(path.vertices)
- 
-+        # remove internal STOP's, replace kinal stop if present
-+        last_vert = None
-+        if codes.size > 0 and codes[-1] == cls.STOP:
-+            last_vert = vertices[-1]
-+        vertices = vertices[codes != cls.STOP, :]
-+        codes = codes[codes != cls.STOP]
-+        if last_vert is not None:
-+            vertices = np.append(vertices, [last_vert], axis=0)
-+            codes = np.append(codes, cls.STOP)
+diff --git a/lib/matplotlib/projections/polar.py b/lib/matplotlib/projections/polar.py
+index 2aa1bd35e..9da973c97 100644
+--- a/lib/matplotlib/projections/polar.py
++++ b/lib/matplotlib/projections/polar.py
+@@ -385,6 +385,7 @@ class RadialLocator(mticker.Locator):
+     :class:`~matplotlib.ticker.Locator` (which may be different
+     depending on the scale of the *r*-axis.
+     """
 +
-         return cls(vertices, codes)
+     def __init__(self, base, axes=None):
+         self.base = base
+         self._axes = axes
+@@ -416,6 +417,11 @@ class RadialLocator(mticker.Locator):
+         # docstring inherited
+         return self.base.refresh()
  
-     def __repr__(self):
++    def nonsingular(self, vmin, vmax):
++        # docstring inherited
++        return ((0, 1) if (vmin, vmax) == (-np.inf, np.inf)  # Init. limits.
++                else self.base.nonsingular(vmin, vmax))
++
+     def view_limits(self, vmin, vmax):
+         vmin, vmax = self.base.view_limits(vmin, vmax)
+         if vmax > vmin:

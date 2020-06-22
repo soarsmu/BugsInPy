@@ -1,1 +1,1 @@
-pytest tests/rules/test_git_push.py::test_get_new_command
+pytest tests/rules/test_fix_file.py::test_get_new_command_with_settings

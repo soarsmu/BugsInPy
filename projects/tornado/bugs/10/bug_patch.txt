@@ -1,19 +1,35 @@
+diff --git a/tornado/web.py b/tornado/web.py
+index 8ff52e9c..d79889fa 100644
+--- a/tornado/web.py
++++ b/tornado/web.py
+@@ -993,6 +993,9 @@ class RequestHandler(object):
+         self._log()
+         self._finished = True
+         self.on_finish()
++        self._break_cycles()
++
++    def _break_cycles(self):
+         # Break up a reference cycle between this handler and the
+         # _ui_module closures to allow for faster GC on CPython.
+         self.ui = None
 diff --git a/tornado/websocket.py b/tornado/websocket.py
-index d5a7fa89..c6804ca0 100644
+index ce13d262..69437ee4 100644
 --- a/tornado/websocket.py
 +++ b/tornado/websocket.py
-@@ -616,6 +616,14 @@ class WebSocketProtocol13(WebSocketProtocol):
-     def accept_connection(self):
-         try:
-             self._handle_websocket_headers()
-+        except ValueError:
-+            self.handler.set_status(400)
-+            log_msg = "Missing/Invalid WebSocket headers"
-+            self.handler.finish(log_msg)
-+            gen_log.debug(log_msg)
-+            return
+@@ -434,6 +434,16 @@ class WebSocketHandler(tornado.web.RequestHandler):
+         if not self._on_close_called:
+             self._on_close_called = True
+             self.on_close()
++            self._break_cycles()
 +
-+        try:
-             self._accept_connection()
-         except ValueError:
-             gen_log.debug("Malformed WebSocket request received",
++    def _break_cycles(self):
++        # WebSocketHandlers call finish() early, but we don't want to
++        # break up reference cycles (which makes it impossible to call
++        # self.render_string) until after we've really closed the
++        # connection (if it was established in the first place,
++        # indicated by status code 101).
++        if self.get_status() != 101 or self._on_close_called:
++            super(WebSocketHandler, self)._break_cycles()
+ 
+     def send_error(self, *args, **kwargs):
+         if self.stream is None:

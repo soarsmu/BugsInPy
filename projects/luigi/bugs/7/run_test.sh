@@ -1,1 +1,1 @@
-pytest test/parameter_test.py::TestSerializeTupleParameter::testSerialize
+pytest test/scheduler_api_test.py::SchedulerApiTest::test_status_wont_override

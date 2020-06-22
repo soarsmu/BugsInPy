@@ -1,1 +1,1 @@
-pytest -q -s tests/test_chinese.py::test_chinese
+pytest -q -s tests/test_pysnooper.py::test_file_output

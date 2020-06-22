@@ -1,1 +1,1 @@
-pytest test/units/modules/packaging/os/test_redhat_subscription.py::test_redhat_subscribtion
+pytest test/units/cli/test_galaxy.py::test_collection_install_with_url

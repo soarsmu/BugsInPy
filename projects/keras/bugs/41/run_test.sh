@@ -1,1 +1,1 @@
-pytest tests/keras/test_callbacks.py::test_EarlyStopping_final_weights_when_restoring_model_weights
+pytest tests/keras/utils/data_utils_test.py::test_generator_enqueuer_fail_threads

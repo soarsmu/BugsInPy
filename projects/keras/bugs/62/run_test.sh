@@ -1,1 +1,0 @@
-pytest tests/test_multiprocessing.py::test_multiprocessing_training

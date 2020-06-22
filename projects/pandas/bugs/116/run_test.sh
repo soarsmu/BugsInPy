@@ -1,1 +1,1 @@
-pytest pandas/tests/io/parser/test_encoding.py::test_binary_mode_file_buffers 
+pytest pandas/tests/reshape/merge/test_merge_asof.py::TestAsOfMerge::test_merge_index_column_tz 

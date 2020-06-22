@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="5c12d4f" 
+fixed_commit_id="cb9a1c7d0319c34a97247973ca96af53ead8033a"  
+test_file="pandas/tests/arrays/test_timedeltas.py" 

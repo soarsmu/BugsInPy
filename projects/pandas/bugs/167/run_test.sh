@@ -1,1 +1,1 @@
-pytest pandas/tests/frame/methods/test_pct_change.py::test_pct_change_with_duplicated_indices 
+pytest pandas/tests/indexes/datetimes/test_partial_slicing.py::TestSlicing::test_slice_reduce_to_series 

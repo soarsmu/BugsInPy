@@ -1,1 +1,0 @@
-pytest tests/keras/layers/recurrent_test.py::test_minimal_rnn_cell_layer

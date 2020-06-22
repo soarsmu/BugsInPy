@@ -1,1 +1,1 @@
-python -m unittest -q test.test_utils.TestUtil.test_urljoin
+python -m unittest -q test.test_YoutubeDL.TestFormatSelection.test_format_filtering

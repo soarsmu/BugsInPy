@@ -1,0 +1,32 @@
+diff --git a/pandas/core/window/common.py b/pandas/core/window/common.py
+index 8707893dc..082c2f533 100644
+--- a/pandas/core/window/common.py
++++ b/pandas/core/window/common.py
+@@ -337,6 +337,7 @@ def validate_baseindexer_support(func_name: Optional[str]) -> None:
+         "median",
+         "std",
+         "var",
++        "skew",
+         "kurt",
+         "quantile",
+     }
+diff --git a/pandas/core/window/rolling.py b/pandas/core/window/rolling.py
+index 05400f63d..24130c044 100644
+--- a/pandas/core/window/rolling.py
++++ b/pandas/core/window/rolling.py
+@@ -472,13 +472,13 @@ class _Window(PandasObject, ShallowMixin, SelectionMixin):
+ 
+                 def calc(x):
+                     x = np.concatenate((x, additional_nans))
+-                    if not isinstance(window, BaseIndexer):
++                    if not isinstance(self.window, BaseIndexer):
+                         min_periods = calculate_min_periods(
+                             window, self.min_periods, len(x), require_min_periods, floor
+                         )
+                     else:
+                         min_periods = calculate_min_periods(
+-                            self.min_periods or 1,
++                            window_indexer.window_size,
+                             self.min_periods,
+                             len(x),
+                             require_min_periods,

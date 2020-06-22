@@ -1,39 +1,50 @@
-diff --git a/lib/ansible/playbook/collectionsearch.py b/lib/ansible/playbook/collectionsearch.py
-index 93b80a8665..994e2e13e4 100644
---- a/lib/ansible/playbook/collectionsearch.py
-+++ b/lib/ansible/playbook/collectionsearch.py
-@@ -7,6 +7,10 @@ __metaclass__ = type
- from ansible.module_utils.six import string_types
- from ansible.playbook.attribute import FieldAttribute
- from ansible.utils.collection_loader import AnsibleCollectionLoader
-+from ansible.template import is_template, Environment
-+from ansible.utils.display import Display
+diff --git a/lib/ansible/galaxy/collection.py b/lib/ansible/galaxy/collection.py
+index 24b13d97a1..4d7b327613 100644
+--- a/lib/ansible/galaxy/collection.py
++++ b/lib/ansible/galaxy/collection.py
+@@ -219,12 +219,15 @@ class CollectionRequirement:
+                 requirement = req
+                 op = operator.eq
+ 
+-                # In the case we are checking a new requirement on a base requirement (parent != None) we can't accept
+-                # version as '*' (unknown version) unless the requirement is also '*'.
+-                if parent and version == '*' and requirement != '*':
+-                    break
+-                elif requirement == '*' or version == '*':
+-                    continue
++            # In the case we are checking a new requirement on a base requirement (parent != None) we can't accept
++            # version as '*' (unknown version) unless the requirement is also '*'.
++            if parent and version == '*' and requirement != '*':
++                display.warning("Failed to validate the collection requirement '%s:%s' for %s when the existing "
++                                "install does not have a version set, the collection may not work."
++                                % (to_text(self), req, parent))
++                continue
++            elif requirement == '*' or version == '*':
++                continue
+ 
+             if not op(LooseVersion(version), LooseVersion(requirement)):
+                 break
+@@ -286,7 +289,13 @@ class CollectionRequirement:
+             manifest = info['manifest_file']['collection_info']
+             namespace = manifest['namespace']
+             name = manifest['name']
+-            version = manifest['version']
++            version = to_text(manifest['version'], errors='surrogate_or_strict')
 +
-+display = Display()
- 
- 
- def _ensure_default_collection(collection_list=None):
-@@ -32,7 +36,8 @@ def _ensure_default_collection(collection_list=None):
- class CollectionSearch:
- 
-     # this needs to be populated before we can resolve tasks/roles/etc
--    _collections = FieldAttribute(isa='list', listof=string_types, priority=100, default=_ensure_default_collection)
-+    _collections = FieldAttribute(isa='list', listof=string_types, priority=100, default=_ensure_default_collection,
-+                                  always_post_validate=True, static=True)
- 
-     def _load_collections(self, attr, ds):
-         # this will only be called if someone specified a value; call the shared value
-@@ -41,4 +46,13 @@ class CollectionSearch:
-         if not ds:  # don't return an empty collection list, just return None
-             return None
- 
-+        # This duplicates static attr checking logic from post_validate()
-+        # because if the user attempts to template a collection name, it will
-+        # error before it ever gets to the post_validate() warning.
-+        env = Environment()
-+        for collection_name in ds:
-+            if is_template(collection_name, env):
-+                display.warning('"collections" is not templatable, but we found: %s, '
-+                                'it will not be templated and will be used "as is".' % (collection_name))
++            if not hasattr(LooseVersion(version), 'version'):
++                display.warning("Collection at '%s' does not have a valid version set, falling back to '*'. Found "
++                                "version: '%s'" % (to_text(b_path), version))
++                version = '*'
 +
-         return ds
+             dependencies = manifest['dependencies']
+         else:
+             display.warning("Collection at '%s' does not have a MANIFEST.json file, cannot detect version."
+@@ -877,7 +886,7 @@ def _get_collection_info(dep_map, existing_collections, collection, requirement,
+     existing = [c for c in existing_collections if to_text(c) == to_text(collection_info)]
+     if existing and not collection_info.force:
+         # Test that the installed collection fits the requirement
+-        existing[0].add_requirement(to_text(collection_info), requirement)
++        existing[0].add_requirement(parent, requirement)
+         collection_info = existing[0]
+ 
+     dep_map[to_text(collection_info)] = collection_info

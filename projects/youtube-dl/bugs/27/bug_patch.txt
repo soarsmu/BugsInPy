@@ -1,13 +1,16 @@
-diff --git a/youtube_dl/YoutubeDL.py b/youtube_dl/YoutubeDL.py
-index 89c07be29..f94836d06 100755
---- a/youtube_dl/YoutubeDL.py
-+++ b/youtube_dl/YoutubeDL.py
-@@ -860,7 +860,7 @@ class YoutubeDL(object):
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index ee20c3d9b..5b396ede8 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -1982,9 +1982,9 @@ def parse_dfxp_time_expr(time_expr):
+     if mobj:
+         return float(mobj.group('time_offset'))
  
-             force_properties = dict(
-                 (k, v) for k, v in ie_result.items() if v is not None)
--            for f in ('_type', 'url', 'ie_key'):
-+            for f in ('_type', 'url', 'id', 'extractor', 'extractor_key', 'ie_key'):
-                 if f in force_properties:
-                     del force_properties[f]
-             new_result = info.copy()
+-    mobj = re.match(r'^(\d+):(\d\d):(\d\d(?:\.\d+)?)$', time_expr)
++    mobj = re.match(r'^(\d+):(\d\d):(\d\d(?:(?:\.|:)\d+)?)$', time_expr)
+     if mobj:
+-        return 3600 * int(mobj.group(1)) + 60 * int(mobj.group(2)) + float(mobj.group(3))
++        return 3600 * int(mobj.group(1)) + 60 * int(mobj.group(2)) + float(mobj.group(3).replace(':', '.'))
+ 
+ 
+ def srt_subtitles_timecode(seconds):

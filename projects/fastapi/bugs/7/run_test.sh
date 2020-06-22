@@ -1,0 +1,1 @@
+pytest tests/test_multi_body_errors.py::test_jsonable_encoder_requiring_error

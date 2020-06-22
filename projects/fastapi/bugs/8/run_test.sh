@@ -1,1 +1,1 @@
-pytest tests/test_multi_body_errors.py::test_jsonable_encoder_requiring_error
+pytest tests/test_custom_route_class.py::test_route_classes

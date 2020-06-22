@@ -1,1 +1,0 @@
-pytest tests/rules/test_sudo.py::test_not_match

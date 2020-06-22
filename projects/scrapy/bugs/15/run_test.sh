@@ -1,2 +1,1 @@
-python -m unittest -q tests.test_item.ItemMetaTest.test_new_method_propagates_classcell
-python -m unittest -q tests.test_item.ItemMetaClassCellRegression.test_item_meta_classcell_regression
+python -m unittest -q tests.test_utils_url.CanonicalizeUrlTest.test_canonicalize_url_idna_exceptions

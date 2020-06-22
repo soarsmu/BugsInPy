@@ -1,5 +1,0 @@
-python_version="3.6.9"
-pythonpath="ansible/build/lib/"
-buggy_commit_id="2a9964ede8b2b77a62a005f6f5abc964b2819b0e"
-fixed_commit_id="93d9d640380252084855885ad27873b4377898ec"
-test_file="test/units/module_utils/facts/hardware/test_linux_get_cpu_info.py"

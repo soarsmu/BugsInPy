@@ -1,1 +1,1 @@
-pytest pandas/tests/groupby/test_function.py::test_apply_to_nullable_integer_returns_float 
+pytest pandas/tests/reshape/test_pivot.py::TestPivotTable::test_pivot_table_multiindex_only 

@@ -1,4 +1,4 @@
 python_version="3.8.3"
-buggy_commit_id="e7001b00747b659f7042b0534802b936ee8a53e0"
-fixed_commit_id="44973125c15304b4262c51c78b5a86bd1daafa86"
-test_file="tests/test_blueprints.py"
+buggy_commit_id="ba9b432993019b0af0c4827a5ed42aaa091bd17d"
+fixed_commit_id="801595e24acdf8050b8d3ffa512d424147848d32"
+test_file="tests/test_app.py"

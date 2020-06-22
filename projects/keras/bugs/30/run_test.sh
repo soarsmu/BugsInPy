@@ -1,1 +1,1 @@
-pytest tests/keras/engine/test_training.py::test_model_methods
+pytest tests/keras/engine/test_training.py::test_model_with_external_loss

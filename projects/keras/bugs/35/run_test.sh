@@ -1,1 +1,1 @@
-pytest tests/keras/metrics_test.py::test_sparse_categorical_accuracy_correctness
+pytest tests/keras/preprocessing/image_test.py::TestImage::test_directory_iterator

@@ -1,1 +1,1 @@
-pytest tests/test_additional_responses_router.py::test_openapi_schema
+pytest tests/test_jsonable_encoder.py::test_encode_model_with_config

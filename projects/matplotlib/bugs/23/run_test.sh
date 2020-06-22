@@ -1,1 +1,1 @@
-pytest lib/matplotlib/tests/test_colorbar.py::test_colorbar_int
+pytest lib/matplotlib/tests/test_axes.py::test_aspect_nonlinear_adjustable_datalim

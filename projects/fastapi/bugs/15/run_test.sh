@@ -1,1 +1,2 @@
-pytest tests/test_security_http_bearer_optional.py::test_security_http_bearer_incorrect_scheme_credentials
+pytest tests/test_ws_router.py::test_router
+pytest tests/test_ws_router.py::test_prefix_router

@@ -1,4 +1,4 @@
 python_version="3.7.3"
-buggy_commit_id="f9210387088fe91b5bc8999cf0cb41a0fe9eacf6"
-fixed_commit_id="66f8cc7ac4942f7f9fe0164a2a854a6264b87735"
-test_file="tests/keras/layers/recurrent_test.py"
+buggy_commit_id="81f6b3aa5b2b6215a533180e848a3b4dff851d03"
+fixed_commit_id="1d2ad790dd43a2d702176c1170b2f3fd592a385a"
+test_file="tests/keras/layers/wrappers_test.py"

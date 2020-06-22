@@ -1,1 +1,2 @@
-pytest pandas/tests/frame/test_reshape.py::test_unstacking_multi_index_df 
+pytest pandas/tests/arrays/test_numpy.py::test_setitem_object_typecode 
+pytest pandas/tests/arrays/test_numpy.py::test_setitem_no_coercion 

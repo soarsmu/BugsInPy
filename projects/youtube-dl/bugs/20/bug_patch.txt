@@ -1,0 +1,16 @@
+diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
+index 39860e9d1..fdf5e29e7 100644
+--- a/youtube_dl/utils.py
++++ b/youtube_dl/utils.py
+@@ -365,9 +365,9 @@ def get_elements_by_attribute(attribute, value, html, escape_value=True):
+     retlist = []
+     for m in re.finditer(r'''(?xs)
+         <([a-zA-Z0-9:._-]+)
+-         (?:\s+[a-zA-Z0-9:._-]+(?:=[a-zA-Z0-9:._-]*|="[^"]*"|='[^']*'))*?
++         (?:\s+[a-zA-Z0-9:._-]+(?:=[a-zA-Z0-9:._-]*|="[^"]*"|='[^']*'|))*?
+          \s+%s=['"]?%s['"]?
+-         (?:\s+[a-zA-Z0-9:._-]+(?:=[a-zA-Z0-9:._-]*|="[^"]*"|='[^']*'))*?
++         (?:\s+[a-zA-Z0-9:._-]+(?:=[a-zA-Z0-9:._-]*|="[^"]*"|='[^']*'|))*?
+         \s*>
+         (?P<content>.*?)
+         </\1>

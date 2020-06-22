@@ -1,13 +1,13 @@
 diff --git a/youtube_dl/utils.py b/youtube_dl/utils.py
-index fdf5e29e7..c9cbd5842 100644
+index c8308ba3a..82f67f6cd 100644
 --- a/youtube_dl/utils.py
 +++ b/youtube_dl/utils.py
-@@ -2733,6 +2733,8 @@ def cli_option(params, command_option, param):
+@@ -1970,7 +1970,7 @@ def js_to_json(code):
+         '(?:[^'\\]*(?:\\\\|\\['"nurtbfx/\n]))*[^'\\]*'|
+         /\*.*?\*/|,(?=\s*[\]}])|
+         [a-zA-Z_][.a-zA-Z_0-9]*|
+-        (?:0[xX][0-9a-fA-F]+|0+[0-7]+)(?:\s*:)?|
++        \b(?:0[xX][0-9a-fA-F]+|0+[0-7]+)(?:\s*:)?|
+         [0-9]+(?=\s*:)
+         ''', fix_kv, code)
  
- def cli_bool_option(params, command_option, param, true_value='true', false_value='false', separator=None):
-     param = params.get(param)
-+    if param is None:
-+        return []
-     assert isinstance(param, bool)
-     if separator:
-         return [command_option + separator + (true_value if param else false_value)]

@@ -1,0 +1,22 @@
+diff --git a/pandas/core/arrays/categorical.py b/pandas/core/arrays/categorical.py
+index c9b8db28e..b3fb34598 100644
+--- a/pandas/core/arrays/categorical.py
++++ b/pandas/core/arrays/categorical.py
+@@ -2143,7 +2143,7 @@ class Categorical(ExtensionArray, PandasObject):
+ 
+         good = self._codes != -1
+         if not good.all():
+-            if skipna:
++            if skipna and good.any():
+                 pointer = self._codes[good].min()
+             else:
+                 return np.nan
+@@ -2178,7 +2178,7 @@ class Categorical(ExtensionArray, PandasObject):
+ 
+         good = self._codes != -1
+         if not good.all():
+-            if skipna:
++            if skipna and good.any():
+                 pointer = self._codes[good].max()
+             else:
+                 return np.nan

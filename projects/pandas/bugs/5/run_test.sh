@@ -1,1 +1,1 @@
-pytest pandas/tests/indexes/multi/test_join.py::test_join_multi_return_indexers
+pytest pandas/tests/groupby/test_function.py::test_ops_not_as_index

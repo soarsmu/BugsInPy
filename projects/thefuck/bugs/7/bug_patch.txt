@@ -1,0 +1,17 @@
+diff --git a/thefuck/rules/php_s.py b/thefuck/rules/php_s.py
+index 10c0996..114fb15 100644
+--- a/thefuck/rules/php_s.py
++++ b/thefuck/rules/php_s.py
+@@ -3,11 +3,8 @@ from thefuck.utils import replace_argument, for_app
+ 
+ @for_app('php')
+ def match(command):
+-    return "php -s" in command.script
++    return " -s " in command.script
+ 
+ 
+ def get_new_command(command):
+     return replace_argument(command.script, "-s", "-S")
+-
+-
+-requires_output = False

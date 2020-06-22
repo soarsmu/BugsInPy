@@ -1,4 +1,4 @@
 python_version="3.8.3"
-buggy_commit_id="a7a92bc63768ccee3f3afc2b73b2c581928dfe75"
-fixed_commit_id="c5817912d2be25bb310bf9da517882f57bbe7bb5"
-test_file="tests/test_request_body_parameters_media_type.py"
+buggy_commit_id="bf229ad5d830eb5320f966d51a55e590e8d57008"
+fixed_commit_id="06eb4219345a77d23484528c9d164eb8d2097fec"
+test_file="tests/test_union_body.py;tests/test_union_inherited_body.py"

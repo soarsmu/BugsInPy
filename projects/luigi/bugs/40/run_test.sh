@@ -1,1 +1,0 @@
-pytest test/central_planner_test.py::CentralPlannerTest::test_automatic_re_enable_with_one_failure_allowed

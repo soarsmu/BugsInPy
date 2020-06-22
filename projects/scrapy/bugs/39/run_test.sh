@@ -1,1 +1,1 @@
-python -m unittest -q tests.test_downloader_handlers.HttpProxyTestCase.test_download_with_proxy_https_timeout
+python -m unittest -q tests.test_spider.DeprecationTest.test_make_requests_from_url_deprecated

@@ -1,0 +1,4 @@
+python_version="3.7.3"
+buggy_commit_id="001bda19450ad85c91345eea3cfa3991e1d492ba"
+fixed_commit_id="5300b0b490b8db48fac30b5e32164be93dc574b7"
+test_file="tests/test_downloads.py"

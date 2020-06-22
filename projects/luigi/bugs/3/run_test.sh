@@ -1,1 +1,1 @@
-pytest test/server_test.py::MetricsHandlerTest::test_get
+pytest test/parameter_test.py::TestSerializeTupleParameter::testSerialize

@@ -1,25 +1,14 @@
-diff --git a/thefuck/rules/dnf_no_such_command.py b/thefuck/rules/dnf_no_such_command.py
-index 70c7939..9a70c4f 100644
---- a/thefuck/rules/dnf_no_such_command.py
-+++ b/thefuck/rules/dnf_no_such_command.py
-@@ -15,10 +15,7 @@ def match(command):
+diff --git a/thefuck/rules/sudo.py b/thefuck/rules/sudo.py
+index 121efe7..9711444 100644
+--- a/thefuck/rules/sudo.py
++++ b/thefuck/rules/sudo.py
+@@ -21,6 +21,9 @@ patterns = ['permission denied',
  
  
- def _parse_operations(help_text_lines):
--    # The regex has to be a bytes-style regex since reading from a file
--    # like stdin returns a bytes-style object and a string-style regex
--    # wouldn't work.
--    operation_regex = re.compile(b'^([a-z-]+) +', re.MULTILINE)
-+    operation_regex = re.compile(r'^([a-z-]+) +', re.MULTILINE)
-     return operation_regex.findall(help_text_lines)
- 
- 
-@@ -26,7 +23,7 @@ def _get_operations():
-     proc = subprocess.Popen(["dnf", '--help'],
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
--    lines = proc.stdout.read()
-+    lines = proc.stdout.read().decode("utf-8")
- 
-     return _parse_operations(lines)
- 
+ def match(command):
++    if command.script_parts and command.script_parts[0] == 'sudo':
++        return False
++
+     for pattern in patterns:
+         if pattern.lower() in command.stderr.lower()\
+                 or pattern.lower() in command.stdout.lower():

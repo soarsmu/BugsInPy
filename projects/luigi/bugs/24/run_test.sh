@@ -1,1 +1,2 @@
-pytest test/scheduler_test.py::SchedulerWorkerTest::test_get_pending_tasks_with_many_done_tasks
+pytest test/contrib/spark_test.py::SparkSubmitTaskTest::test_run
+pytest test/contrib/spark_test.py::SparkSubmitTaskTest::test_defaults

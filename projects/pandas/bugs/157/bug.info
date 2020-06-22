@@ -1,4 +1,4 @@
 python_version="3.8.3" 
-buggy_commit_id="8803056" 
-fixed_commit_id="613df15047887957f5964d2a6ce59ea20b0c4c91"  
-test_file="pandas/tests/indexes/datetimes/test_constructors.py" 
+buggy_commit_id="b1c871c" 
+fixed_commit_id="def01cf7bbb5ef8c9bf2e19737ea918e6a76a143"  
+test_file="pandas/tests/reshape/merge/test_merge_asof.py" 

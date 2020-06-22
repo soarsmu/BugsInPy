@@ -1,18 +1,21 @@
 diff --git a/lib/matplotlib/axes/_axes.py b/lib/matplotlib/axes/_axes.py
-index cc36b6871..556883ad0 100644
+index 1eb12b4ca..7008e4c9e 100644
 --- a/lib/matplotlib/axes/_axes.py
 +++ b/lib/matplotlib/axes/_axes.py
-@@ -4492,7 +4492,12 @@ default: :rc:`scatter.edgecolors`
-             marker_obj.get_transform())
-         if not marker_obj.is_filled():
-             edgecolors = 'face'
--            linewidths = rcParams['lines.linewidth']
-+            if linewidths is None:
-+                linewidths = rcParams['lines.linewidth']
-+            elif np.iterable(linewidths):
-+                linewidths = [
-+                    lw if lw is not None else rcParams['lines.linewidth']
-+                    for lw in linewidths]
- 
-         offsets = np.ma.column_stack([x, y])
- 
+@@ -4281,9 +4281,15 @@ class Axes(_AxesBase):
+             except ValueError:
+                 pass  # Failed to convert to float array; must be color specs.
+             else:
++                # handle the documented special case of a 2D array with 1
++                # row which as RGB(A) to broadcast.
++                if c.shape == (1, 4) or c.shape == (1, 3):
++                    c_is_mapped = False
++                    if c.size != xsize:
++                        valid_shape = False
+                 # If c can be either mapped values or a RGB(A) color, prefer
+                 # the former if shapes match, the latter otherwise.
+-                if c.size == xsize:
++                elif c.size == xsize:
+                     c = c.ravel()
+                     c_is_mapped = True
+                 else:  # Wrong size; it must not be intended for mapping.

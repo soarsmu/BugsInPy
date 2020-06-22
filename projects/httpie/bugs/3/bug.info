@@ -1,4 +1,4 @@
 python_version="3.7.3"
-buggy_commit_id="356e0436510fee70b4071fac58be81c0a0a7db59"
-fixed_commit_id="e18b609ef7d867d6efa0efe42c832be5e0d09338"
-test_file="tests/test_redirects.py"
+buggy_commit_id="8c33e5e3d31d3cd6476c4d9bc963a4c529f883d2"
+fixed_commit_id="589887939507ff26d36ec74bd2c045819cfa3d56"
+test_file="tests/test_sessions.py"

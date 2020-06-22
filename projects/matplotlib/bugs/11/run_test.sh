@@ -1,1 +1,1 @@
-pytest lib/matplotlib/tests/test_polar.py::test_polar_invertedylim_rorigin
+pytest lib/matplotlib/tests/test_text.py::test_non_default_dpi

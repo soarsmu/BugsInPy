@@ -1,0 +1,4 @@
+python_version="3.8.3" 
+buggy_commit_id="a474a01" 
+fixed_commit_id="1c3d64bae7c07b5ae1be337e0ebd751385b7ce27"  
+test_file="pandas/tests/io/test_pickle.py" 

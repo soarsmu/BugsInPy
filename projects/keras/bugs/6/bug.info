@@ -1,5 +1,4 @@
 python_version="3.7.3"
-pythonpath=""
-buggy_commit_id="331d5b0102ab0cc79cece1f03cc551d8105db3c9"
-fixed_commit_id="8e23a3ec47a2ccbf6cdd222a80886c6b9f17264f"
-test_file="tests/keras/initializers_test.py"
+buggy_commit_id="88af7d0c97497b5c3a198ee9416b2accfbc72c36"
+fixed_commit_id="4b54657ab4806b0aaef8f8eeb973edb83c3d3483"
+test_file="tests/test_loss_masking.py"

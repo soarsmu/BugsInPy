@@ -1,1 +1,1 @@
-python -m unittest -q test.test_utils.TestUtil.test_strip_jsonp
+python -m unittest -q test.test_utils.TestUtil.test_url_basename

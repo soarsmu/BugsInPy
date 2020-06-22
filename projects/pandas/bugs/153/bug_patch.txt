@@ -1,34 +1,23 @@
-diff --git a/pandas/core/indexes/timedeltas.py b/pandas/core/indexes/timedeltas.py
-index d1d8db074..a94e19d99 100644
---- a/pandas/core/indexes/timedeltas.py
-+++ b/pandas/core/indexes/timedeltas.py
-@@ -357,11 +357,25 @@ class TimedeltaIndex(
-     @Appender(_shared_docs["searchsorted"])
-     def searchsorted(self, value, side="left", sorter=None):
-         if isinstance(value, (np.ndarray, Index)):
--            value = np.array(value, dtype=_TD_DTYPE, copy=False)
--        else:
--            value = Timedelta(value).asm8.view(_TD_DTYPE)
-+            if not type(self._data)._is_recognized_dtype(value):
-+                raise TypeError(
-+                    "searchsorted requires compatible dtype or scalar, "
-+                    f"not {type(value).__name__}"
-+                )
-+            value = type(self._data)(value)
-+            self._data._check_compatible_with(value)
-+
-+        elif isinstance(value, self._data._recognized_scalars):
-+            self._data._check_compatible_with(value)
-+            value = self._data._scalar_type(value)
-+
-+        elif not isinstance(value, TimedeltaArray):
-+            raise TypeError(
-+                "searchsorted requires compatible dtype or scalar, "
-+                f"not {type(value).__name__}"
-+            )
+diff --git a/pandas/core/internals/blocks.py b/pandas/core/internals/blocks.py
+index 2a44177d4..29d225443 100644
+--- a/pandas/core/internals/blocks.py
++++ b/pandas/core/internals/blocks.py
+@@ -7,7 +7,7 @@ import warnings
  
--        return self.values.searchsorted(value, side=side, sorter=sorter)
-+        return self._data.searchsorted(value, side=side, sorter=sorter)
+ import numpy as np
  
-     def is_type_compatible(self, typ) -> bool:
-         return typ == self.inferred_type or typ == "timedelta"
+-from pandas._libs import NaT, Timestamp, lib, tslib
++from pandas._libs import NaT, Timestamp, lib, tslib, writers
+ import pandas._libs.internals as libinternals
+ from pandas._libs.tslibs import Timedelta, conversion
+ from pandas._libs.tslibs.timezones import tz_compare
+@@ -706,7 +706,8 @@ class Block(PandasObject):
+         mask = isna(values)
+ 
+         if not self.is_object and not quoting:
+-            values = values.astype(str)
++            itemsize = writers.word_len(na_rep)
++            values = values.astype("<U{size}".format(size=itemsize))
+         else:
+             values = np.array(values, dtype="object")
+ 

@@ -1,4 +1,4 @@
 python_version="3.8.1"
-buggy_commit_id="89ff308306bafac22647c050a42141f040210216"
-fixed_commit_id="5d99e151be80bcb0b3b6d081fd3038330f573d94"
-test_file="lib/matplotlib/tests/test_colorbar.py"
+buggy_commit_id="a87cd8a4c43688137155accdc57ed64fb95e2d40"
+fixed_commit_id="2349d826a170a10510d1ee8be02eaff51f7ee89f"
+test_file="lib/matplotlib/tests/test_axes.py"

@@ -1,16 +1,33 @@
-diff --git a/pandas/core/internals/blocks.py b/pandas/core/internals/blocks.py
-index ff2b63858..bfde82d6f 100644
---- a/pandas/core/internals/blocks.py
-+++ b/pandas/core/internals/blocks.py
-@@ -728,11 +728,6 @@ class Block(PandasObject):
+diff --git a/pandas/core/indexes/datetimelike.py b/pandas/core/indexes/datetimelike.py
+index 4ddac12ae..f41044db2 100644
+--- a/pandas/core/indexes/datetimelike.py
++++ b/pandas/core/indexes/datetimelike.py
+@@ -88,7 +88,7 @@ def _make_wrapped_arith_op_with_freq(opname: str):
+         if result is NotImplemented:
+             return NotImplemented
  
-         mask = missing.mask_missing(values, to_replace)
+-        new_freq = self._get_addsub_freq(other)
++        new_freq = self._get_addsub_freq(other, result)
+         result._freq = new_freq
+         return result
  
--        if not mask.any():
--            if inplace:
--                return [self]
--            return [self.copy()]
--
-         try:
-             blocks = self.putmask(mask, value, inplace=inplace)
-             # Note: it is _not_ the case that self._can_hold_element(value)
+@@ -451,14 +451,16 @@ class DatetimeIndexOpsMixin(ExtensionIndex):
+     # --------------------------------------------------------------------
+     # Arithmetic Methods
+ 
+-    def _get_addsub_freq(self, other) -> Optional[DateOffset]:
++    def _get_addsub_freq(self, other, result) -> Optional[DateOffset]:
+         """
+         Find the freq we expect the result of an addition/subtraction operation
+         to have.
+         """
+         if is_period_dtype(self.dtype):
+-            # Only used for ops that stay PeriodDtype
+-            return self.freq
++            if is_period_dtype(result.dtype):
++                # Only used for ops that stay PeriodDtype
++                return self.freq
++            return None
+         elif self.freq is None:
+             return None
+         elif lib.is_scalar(other) and isna(other):

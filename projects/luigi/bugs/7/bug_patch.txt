@@ -1,15 +1,15 @@
-diff --git a/luigi/parameter.py b/luigi/parameter.py
-index 13c6f8af..66395205 100644
---- a/luigi/parameter.py
-+++ b/luigi/parameter.py
-@@ -1114,8 +1114,8 @@ class TupleParameter(ListParameter):
-         try:
-             # loop required to parse tuple of tuples
-             return tuple(tuple(x) for x in json.loads(x, object_pairs_hook=_FrozenOrderedDict))
--        except ValueError:
--            return literal_eval(x)  # if this causes an error, let that error be raised.
-+        except (ValueError, TypeError):
-+            return tuple(literal_eval(x))  # if this causes an error, let that error be raised.
+diff --git a/luigi/scheduler.py b/luigi/scheduler.py
+index fb43fc9b..b84aa849 100644
+--- a/luigi/scheduler.py
++++ b/luigi/scheduler.py
+@@ -823,8 +823,8 @@ class Scheduler(object):
+                 for batch_task in self._state.get_batch_running_tasks(task.batch_id):
+                     batch_task.expl = expl
  
- 
- class NumericalParameter(Parameter):
+-        if not (task.status in (RUNNING, BATCH_RUNNING) and status == PENDING) or new_deps:
+-            # don't allow re-scheduling of task while it is running, it must either fail or succeed first
++        if not (task.status in (RUNNING, BATCH_RUNNING) and (status not in (DONE, FAILED, RUNNING) or task.worker_running != worker_id)) or new_deps:
++            # don't allow re-scheduling of task while it is running, it must either fail or succeed on the worker actually running it
+             if status == PENDING or status != task.status:
+                 # Update the DB only if there was a acctual change, to prevent noise.
+                 # We also check for status == PENDING b/c that's the default value

@@ -1,1 +1,2 @@
-pytest tests/keras/metrics_test.py::test_sparse_top_k_categorical_accuracy[y_pred1-y_true1]
+pytest tests/keras/test_callbacks.py::test_ReduceLROnPlateau_patience
+pytest tests/keras/test_callbacks.py::test_ReduceLROnPlateau_backwards_compatibility

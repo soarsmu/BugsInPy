@@ -1,0 +1,5 @@
+python_version="3.7.0"
+pythonpath=""
+buggy_commit_id="34c43f4775971ab9b2b8ed43356f218add6387b2"
+fixed_commit_id="5d4a9ab26372efd255bbb29fde55c41395ed17b1"
+test_file="tornado/test/websocket_test.py"

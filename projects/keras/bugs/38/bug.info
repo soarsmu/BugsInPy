@@ -1,4 +1,4 @@
 python_version="3.7.3"
-buggy_commit_id="76da5f0a21ca98e4bf6706e182fb825243e76204"
-fixed_commit_id="6dd087ab73b09e449144ff17450cc14f981b9ac2"
-test_file="tests/keras/layers/convolutional_test.py"
+buggy_commit_id="53ec990d54130dd0a457dd235c93d39de32d571d"
+fixed_commit_id="64f80d6077edd5f277a1181df94bf4510ea0517a"
+test_file="tests/keras/layers/recurrent_test.py"

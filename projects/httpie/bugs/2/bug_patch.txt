@@ -1,58 +1,24 @@
-diff --git a/httpie/downloads.py b/httpie/downloads.py
-index b49e335..972151e 100644
---- a/httpie/downloads.py
-+++ b/httpie/downloads.py
-@@ -7,6 +7,7 @@ from __future__ import division
- import os
- import re
- import sys
-+import errno
- import mimetypes
- import threading
- from time import sleep, time
-@@ -135,12 +136,43 @@ def filename_from_url(url, content_type):
-     return fn
+diff --git a/httpie/client.py b/httpie/client.py
+index 1115f4d..482f9dc 100644
+--- a/httpie/client.py
++++ b/httpie/client.py
+@@ -40,6 +40,7 @@ def get_response(args, config_dir):
+     """Send the request and return a `request.Response`."""
  
+     requests_session = get_requests_session()
++    requests_session.max_redirects = args.max_redirects
  
-+def trim_filename(filename, max_len):
-+    if len(filename) > max_len:
-+        trim_by = len(filename) - max_len
-+        name, ext = os.path.splitext(filename)
-+        if trim_by >= len(name):
-+            filename = filename[:-trim_by]
-+        else:
-+            filename = name[:-trim_by] + ext
-+    return filename
-+
-+
-+def get_filename_max_length(directory):
-+    try:
-+        max_len = os.pathconf(directory, 'PC_NAME_MAX')
-+    except OSError as e:
-+        if e.errno == errno.EINVAL:
-+            max_len = 255
-+        else:
-+            raise
-+    return max_len
-+
-+
-+def trim_filename_if_needed(filename, directory='.', extra=0):
-+    max_len = get_filename_max_length(directory) - extra
-+    if len(filename) > max_len:
-+        filename = trim_filename(filename, max_len)
-+    return filename
-+
-+
- def get_unique_filename(filename, exists=os.path.exists):
-     attempt = 0
-     while True:
-         suffix = '-' + str(attempt) if attempt > 0 else ''
--        if not exists(filename + suffix):
--            return filename + suffix
-+        try_filename = trim_filename_if_needed(filename, extra=len(suffix))
-+        try_filename += suffix
-+        if not exists(try_filename):
-+            return try_filename
-         attempt += 1
- 
- 
+     if not args.session and not args.session_read_only:
+         kwargs = get_requests_kwargs(args)
+diff --git a/httpie/core.py b/httpie/core.py
+index c0014ce..3dbe7f2 100644
+--- a/httpie/core.py
++++ b/httpie/core.py
+@@ -192,7 +192,6 @@ def main(args=sys.argv[1:], env=Environment(), error=None):
+         error('Too many redirects (--max-redirects=%s).', args.max_redirects)
+     except Exception as e:
+         # TODO: Better distinction between expected and unexpected errors.
+-        #       Network errors vs. bugs, etc.
+         if traceback:
+             raise
+         msg = str(e)

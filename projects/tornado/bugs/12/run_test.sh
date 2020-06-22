@@ -1,1 +1,1 @@
-python -m unittest -q tornado.test.websocket_test.WebSocketTest.test_render_message
+python -m unittest -q tornado.test.auth_test.AuthTest.test_facebook_login

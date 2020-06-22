@@ -1,0 +1,80 @@
+diff --git a/pandas/core/groupby/grouper.py b/pandas/core/groupby/grouper.py
+index 0b89e702c..f0c6eedf5 100644
+--- a/pandas/core/groupby/grouper.py
++++ b/pandas/core/groupby/grouper.py
+@@ -27,6 +27,7 @@ from pandas.core.frame import DataFrame
+ from pandas.core.groupby import ops
+ from pandas.core.groupby.categorical import recode_for_groupby, recode_from_groupby
+ from pandas.core.indexes.api import CategoricalIndex, Index, MultiIndex
++from pandas.core.indexes.base import InvalidIndexError
+ from pandas.core.series import Series
+ 
+ from pandas.io.formats.printing import pprint_thing
+@@ -565,7 +566,7 @@ def get_grouper(
+             items = obj._data.items
+             try:
+                 items.get_loc(key)
+-            except (KeyError, TypeError):
++            except (KeyError, TypeError, InvalidIndexError):
+                 # TypeError shows up here if we pass e.g. Int64Index
+                 return False
+ 
+diff --git a/pandas/core/indexes/datetimes.py b/pandas/core/indexes/datetimes.py
+index b1463f523..fbcca270b 100644
+--- a/pandas/core/indexes/datetimes.py
++++ b/pandas/core/indexes/datetimes.py
+@@ -27,7 +27,7 @@ from pandas.core.arrays.datetimes import (
+     validate_tz_from_dtype,
+ )
+ import pandas.core.common as com
+-from pandas.core.indexes.base import Index, maybe_extract_name
++from pandas.core.indexes.base import Index, InvalidIndexError, maybe_extract_name
+ from pandas.core.indexes.datetimelike import (
+     DatetimelikeDelegateMixin,
+     DatetimeTimedeltaMixin,
+@@ -641,6 +641,8 @@ class DatetimeIndex(DatetimeTimedeltaMixin, DatetimeDelegateMixin):
+         Fast lookup of value from 1-dimensional ndarray. Only use this if you
+         know what you're doing
+         """
++        if not is_scalar(key):
++            raise InvalidIndexError(key)
+ 
+         if isinstance(key, (datetime, np.datetime64)):
+             return self.get_value_maybe_box(series, key)
+@@ -677,6 +679,9 @@ class DatetimeIndex(DatetimeTimedeltaMixin, DatetimeDelegateMixin):
+         -------
+         loc : int
+         """
++        if not is_scalar(key):
++            raise InvalidIndexError(key)
++
+         if is_valid_nat_for_dtype(key, self.dtype):
+             key = NaT
+ 
+diff --git a/pandas/core/indexes/multi.py b/pandas/core/indexes/multi.py
+index a26a01ab7..704430fbb 100644
+--- a/pandas/core/indexes/multi.py
++++ b/pandas/core/indexes/multi.py
+@@ -2778,7 +2778,7 @@ class MultiIndex(Index):
+                     indexer = self._get_level_indexer(key, level=level)
+                     new_index = maybe_mi_droplevels(indexer, [0], drop_level)
+                     return indexer, new_index
+-            except TypeError:
++            except (TypeError, InvalidIndexError):
+                 pass
+ 
+             if not any(isinstance(k, slice) for k in key):
+diff --git a/pandas/core/series.py b/pandas/core/series.py
+index b92ac3731..d8eb98d06 100644
+--- a/pandas/core/series.py
++++ b/pandas/core/series.py
+@@ -980,6 +980,9 @@ class Series(base.IndexOpsMixin, generic.NDFrame):
+                 self[:] = value
+             else:
+                 self.loc[key] = value
++        except InvalidIndexError:
++            # e.g. slice
++            self._set_with(key, value)
+ 
+         except TypeError as e:
+             if isinstance(key, tuple) and not isinstance(self.index, MultiIndex):

@@ -1,1 +1,1 @@
-pytest pandas/tests/io/sas/test_xport.py::TestXport::test2_binary 
+pytest pandas/tests/window/test_pairwise.py::TestPairwise::test_corr_freq_memory_error 

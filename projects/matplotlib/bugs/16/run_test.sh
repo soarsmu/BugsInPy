@@ -1,1 +1,1 @@
-pytest lib/matplotlib/tests/test_text.py::test_non_default_dpi
+pytest lib/matplotlib/tests/test_colorbar.py::test_colorbar_int

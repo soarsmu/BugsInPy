@@ -1,4 +1,4 @@
 python_version="3.8.3"
-buggy_commit_id="bf229ad5d830eb5320f966d51a55e590e8d57008"
-fixed_commit_id="06eb4219345a77d23484528c9d164eb8d2097fec"
-test_file="tests/test_union_body.py;tests/test_union_inherited_body.py"
+buggy_commit_id="6f7f9268f6b03f42831dcfeaa5c15ba9813333ec"
+fixed_commit_id="c8df3ae57c57e119d115dd3c1f44efa78de1022a"
+test_file="tests/test_additional_responses_router.py"

@@ -1,2 +1,0 @@
-pytest test/test_event_callbacks.py::TestEventCallbacks::test_failure
-pytest test/test_event_callbacks.py::TestEventCallbacks::test_processing_time_handler_failure

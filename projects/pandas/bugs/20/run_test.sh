@@ -1,1 +1,1 @@
-pytest pandas/tests/series/methods/test_update.py::TestUpdate::test_update_extension_array_series
+pytest pandas/tests/tseries/offsets/test_yqm_offsets.py::test_apply_index

@@ -1,12 +1,42 @@
-diff --git a/lib/matplotlib/projections/polar.py b/lib/matplotlib/projections/polar.py
-index 902946c6b..0649a03c8 100644
---- a/lib/matplotlib/projections/polar.py
-+++ b/lib/matplotlib/projections/polar.py
-@@ -949,6 +949,7 @@ class PolarAxes(Axes):
-     @cbook._delete_parameter("3.3", "args")
-     @cbook._delete_parameter("3.3", "kwargs")
-     def draw(self, renderer, *args, **kwargs):
-+        self._unstale_viewLim()
-         thetamin, thetamax = np.rad2deg(self._realViewLim.intervalx)
-         if thetamin > thetamax:
-             thetamin, thetamax = thetamax, thetamin
+diff --git a/lib/matplotlib/text.py b/lib/matplotlib/text.py
+index 429d31fb9..77ab7145a 100644
+--- a/lib/matplotlib/text.py
++++ b/lib/matplotlib/text.py
+@@ -891,12 +891,12 @@ class Text(Artist):
+         #return _unit_box
+         if not self.get_visible():
+             return Bbox.unit()
+-        if dpi is not None:
+-            dpi_orig = self.figure.dpi
+-            self.figure.dpi = dpi
++        if dpi is None:
++            dpi = self.figure.dpi
+         if self.get_text() == '':
+-            tx, ty = self._get_xy_display()
+-            return Bbox.from_bounds(tx, ty, 0, 0)
++            with cbook._setattr_cm(self.figure, dpi=dpi):
++                tx, ty = self._get_xy_display()
++                return Bbox.from_bounds(tx, ty, 0, 0)
+ 
+         if renderer is not None:
+             self._renderer = renderer
+@@ -905,13 +905,12 @@ class Text(Artist):
+         if self._renderer is None:
+             raise RuntimeError('Cannot get window extent w/o renderer')
+ 
+-        bbox, info, descent = self._get_layout(self._renderer)
+-        x, y = self.get_unitless_position()
+-        x, y = self.get_transform().transform((x, y))
+-        bbox = bbox.translated(x, y)
+-        if dpi is not None:
+-            self.figure.dpi = dpi_orig
+-        return bbox
++        with cbook._setattr_cm(self.figure, dpi=dpi):
++            bbox, info, descent = self._get_layout(self._renderer)
++            x, y = self.get_unitless_position()
++            x, y = self.get_transform().transform((x, y))
++            bbox = bbox.translated(x, y)
++            return bbox
+ 
+     def set_backgroundcolor(self, color):
+         """

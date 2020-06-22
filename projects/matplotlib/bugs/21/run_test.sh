@@ -1,1 +1,1 @@
-pytest lib/matplotlib/tests/test_colors.py::test_SymLogNorm
+pytest lib/matplotlib/tests/test_axes.py::test_boxplot_marker_behavior

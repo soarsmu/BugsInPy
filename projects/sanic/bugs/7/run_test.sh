@@ -1,1 +1,0 @@
-pytest tests/test_requests.py::test_url_for_without_server_name

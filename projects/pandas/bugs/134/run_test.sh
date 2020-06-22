@@ -1,1 +1,1 @@
-pytest pandas/tests/frame/test_subclass.py::TestDataFrameSubclassing::test_subclassed_boolean_reductions 
+pytest pandas/tests/tseries/holiday/test_calendar.py::test_calendar_2031 

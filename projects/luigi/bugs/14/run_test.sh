@@ -1,2 +1,1 @@
-pytest test/parameter_test.py::TestParametersHashability::test_list_dict
-pytest test/parameter_test.py::TestParametersHashability::test_tuple_dict
+pytest test/central_planner_test.py::CentralPlannerTest::test_no_crash_on_only_disable_hard_timeout

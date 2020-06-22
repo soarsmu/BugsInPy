@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="61ee32e9968978c32be12a6af0affa3a5750e87e"
+fixed_commit_id="8874b93165953c4f6bbe7b747804654d13290018"
+test_file="test/contrib/redshift_test.py"

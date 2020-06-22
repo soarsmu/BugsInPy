@@ -1,15 +1,14 @@
 diff --git a/luigi/scheduler.py b/luigi/scheduler.py
-index fb43fc9b..b84aa849 100644
+index 8f5beada..3a08956f 100644
 --- a/luigi/scheduler.py
 +++ b/luigi/scheduler.py
-@@ -823,8 +823,8 @@ class Scheduler(object):
-                 for batch_task in self._state.get_batch_running_tasks(task.batch_id):
-                     batch_task.expl = expl
+@@ -567,7 +567,8 @@ class CentralPlannerScheduler(Scheduler):
  
--        if not (task.status in (RUNNING, BATCH_RUNNING) and status == PENDING) or new_deps:
--            # don't allow re-scheduling of task while it is running, it must either fail or succeed first
-+        if not (task.status in (RUNNING, BATCH_RUNNING) and (status not in (DONE, FAILED, RUNNING) or task.worker_running != worker_id)) or new_deps:
-+            # don't allow re-scheduling of task while it is running, it must either fail or succeed on the worker actually running it
-             if status == PENDING or status != task.status:
-                 # Update the DB only if there was a acctual change, to prevent noise.
-                 # We also check for status == PENDING b/c that's the default value
+         for task in self._state.get_active_tasks():
+             self._state.fail_dead_worker_task(task, self._config, assistant_ids)
+-            if task.id not in necessary_tasks and self._state.prune(task, self._config):
++            removed = self._state.prune(task, self._config)
++            if removed and task.id not in necessary_tasks:
+                 remove_tasks.append(task.id)
+ 
+         self._state.inactivate_tasks(remove_tasks)

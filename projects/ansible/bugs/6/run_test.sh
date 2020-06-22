@@ -1,1 +1,3 @@
-pytest test/units/playbook/test_collectionsearch.py::test_collection_static_warning
+pytest test/units/galaxy/test_collection_install.py::test_build_requirement_from_path_with_manifest
+pytest test/units/galaxy/test_collection_install.py::test_build_requirement_from_path_no_version
+pytest test/units/galaxy/test_collection_install.py::test_add_collection_requirement_to_unknown_installed_version

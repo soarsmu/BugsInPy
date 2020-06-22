@@ -1,1 +1,0 @@
-pytest tests/test_logging.py::test_logging_modified_root_logger_config

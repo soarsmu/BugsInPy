@@ -1,59 +1,69 @@
-diff --git a/keras/engine/sequential.py b/keras/engine/sequential.py
-index 262d9245..83a2b22b 100644
---- a/keras/engine/sequential.py
-+++ b/keras/engine/sequential.py
-@@ -85,6 +85,7 @@ class Sequential(Model):
+diff --git a/keras/engine/training.py b/keras/engine/training.py
+index ea641c3a..44d7587b 100644
+--- a/keras/engine/training.py
++++ b/keras/engine/training.py
+@@ -2162,7 +2162,10 @@ class Model(Container):
+                         val_enqueuer.start(workers=workers, max_queue_size=max_queue_size)
+                         validation_generator = val_enqueuer.get()
+                     else:
+-                        validation_generator = validation_data
++                        if isinstance(validation_data, Sequence):
++                            validation_generator = iter(validation_data)
++                        else:
++                            validation_generator = validation_data
+                 else:
+                     if len(validation_data) == 2:
+                         val_x, val_y = validation_data
+@@ -2194,7 +2197,10 @@ class Model(Container):
+                 enqueuer.start(workers=workers, max_queue_size=max_queue_size)
+                 output_generator = enqueuer.get()
+             else:
+-                output_generator = generator
++                if is_sequence:
++                    output_generator = iter(generator)
++                else:
++                    output_generator = generator
  
-     def __init__(self, layers=None, name=None):
-         super(Sequential, self).__init__(name=name)
-+        self._build_input_shape = None
+             callback_model.stop_training = False
+             # Construct epoch logs.
+@@ -2366,7 +2372,10 @@ class Model(Container):
+                 enqueuer.start(workers=workers, max_queue_size=max_queue_size)
+                 output_generator = enqueuer.get()
+             else:
+-                output_generator = generator
++                if is_sequence:
++                    output_generator = iter(generator)
++                else:
++                    output_generator = generator
  
-         # Add to the model any layers passed to the constructor.
-         if layers:
-@@ -219,8 +220,7 @@ class Sequential(Model):
-             for layer in self._layers:
-                 x = layer(x)
-             self.outputs = [x]
--            if self._layers:
--                self._layers[0].batch_input_shape = batch_shape
-+            self._build_input_shape = input_shape
+             while steps_done < steps:
+                 generator_output = next(output_generator)
+@@ -2490,7 +2499,10 @@ class Model(Container):
+                 enqueuer.start(workers=workers, max_queue_size=max_queue_size)
+                 output_generator = enqueuer.get()
+             else:
+-                output_generator = generator
++                if is_sequence:
++                    output_generator = iter(generator)
++                else:
++                    output_generator = generator
  
-         if self.inputs:
-             self._init_graph_network(self.inputs,
-@@ -271,19 +271,31 @@ class Sequential(Model):
-             return (proba > 0.5).astype('int32')
+             if verbose == 1:
+                 progbar = Progbar(target=steps)
+diff --git a/keras/utils/data_utils.py b/keras/utils/data_utils.py
+index 514ad655..1edd5531 100644
+--- a/keras/utils/data_utils.py
++++ b/keras/utils/data_utils.py
+@@ -366,6 +366,12 @@ class Sequence(object):
+         """
+         pass
  
-     def get_config(self):
--        config = []
-+        layer_configs = []
-         for layer in self.layers:
--            config.append({
-+            layer_configs.append({
-                 'class_name': layer.__class__.__name__,
-                 'config': layer.get_config()
-             })
--        return copy.deepcopy(config)
-+        config = {
-+            'name': self.name,
-+            'layers': copy.deepcopy(layer_configs)
-+        }
-+        if self._build_input_shape:
-+            config['build_input_shape'] = self._build_input_shape
-+        return config
++    def __iter__(self):
++        """Create an infinite generator that iterate over the Sequence."""
++        while True:
++            for item in (self[i] for i in range(len(self))):
++                yield item
++
  
-     @classmethod
-     def from_config(cls, config, custom_objects=None):
--        model = cls()
--        for conf in config:
-+        if 'name' in config:
-+            name = config['name']
-+            build_input_shape = config.get('build_input_shape')
-+            layer_configs = config['layers']
-+        model = cls(name=name)
-+        for conf in layer_configs:
-             layer = layer_module.deserialize(conf,
-                                              custom_objects=custom_objects)
-             model.add(layer)
-+        if not model.inputs and build_input_shape:
-+            model.build(build_input_shape)
-         return model
+ # Global variables to be shared across processes
+ _SHARED_SEQUENCES = {}

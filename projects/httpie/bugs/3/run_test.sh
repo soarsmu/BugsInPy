@@ -1,1 +1,1 @@
-pytest tests/test_redirects.py::TestRedirects::test_max_redirects
+pytest tests/test_sessions.py::TestSession::test_download_in_session

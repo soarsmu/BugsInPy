@@ -1,1 +1,1 @@
-pytest test/units/module_utils/test_distribution_version.py::test_distribution_version
+pytest test/units/playbook/test_collectionsearch.py::test_collection_static_warning

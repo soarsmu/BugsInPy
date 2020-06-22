@@ -1,4 +1,4 @@
 python_version="3.7.0"
-buggy_commit_id="64d6835e15a22cf8803d398cbb593f748c550e8a"
-fixed_commit_id="75d2c43997ca703150cbdb4c46ed7b2e2e71fd11"
-test_file="tests/rules/test_php_s.py"
+buggy_commit_id="d92765d5df6607cb2f2fb67cee7b63f64ac7aa6b"
+fixed_commit_id="bb5f6bb705a3b217eb682f3357ec6bbb709555c1"
+test_file="tests/shells/test_bash.py;tests/shells/test_zsh.py"

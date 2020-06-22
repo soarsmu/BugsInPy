@@ -1,1 +1,1 @@
-pytest tests/test_blueprints.py::test_bp_middleware_order
+pytest tests/test_app.py::test_asyncio_server_start_serving

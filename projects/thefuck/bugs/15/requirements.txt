@@ -36,7 +36,7 @@ readme-renderer==26.0
 requests==2.23.0
 requests-toolbelt==0.9.1
 six==1.15.0
--e git+https://github.com/nvbn/thefuck@797ca1c5647c565f62e21a8e29515c8b0fbe275f#egg=thefuck
+-e git+https://github.com/nvbn/thefuck@3a39deb485995e67afb1919972cd1c9aaedf4c32#egg=thefuck
 tqdm==4.46.0
 twine==3.1.1
 urllib3==1.25.9

@@ -1,1 +1,1 @@
-pytest test/contrib/redshift_test.py::TestS3CopyToSchemaTable::test_s3_copy_to_table
+pytest test/central_planner_test.py::CentralPlannerTest::test_automatic_re_enable_with_one_failure_allowed

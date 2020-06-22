@@ -11,9 +11,9 @@ google-pasta==0.2.0
 grpcio==1.29.0
 h5py==2.10.0
 importlib-metadata==1.6.0
-Keras==2.2.4
-keras-applications==1.0.8
-keras-preprocessing==1.1.2
+Keras==2.2.2
+Keras-Applications==1.0.8
+Keras-Preprocessing==1.1.2
 Markdown==3.2.2
 more-itertools==8.3.0
 numpy==1.19.0rc2

@@ -1,1 +1,1 @@
-pytest pandas/tests/frame/methods/test_cov_corr.py::TestDataFrameCov::test_cov_nullable_integer
+pytest pandas/tests/indexes/datetimes/test_to_period.py::TestToPeriod::test_to_period_infer

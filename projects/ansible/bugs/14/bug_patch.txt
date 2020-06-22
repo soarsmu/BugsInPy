@@ -1,23 +1,41 @@
-diff --git a/lib/ansible/modules/system/pamd.py b/lib/ansible/modules/system/pamd.py
-index 0d8e32b5ae..50da1fcf9e 100644
---- a/lib/ansible/modules/system/pamd.py
-+++ b/lib/ansible/modules/system/pamd.py
-@@ -351,6 +351,8 @@ class PamdRule(PamdLine):
-     valid_control_actions = ['ignore', 'bad', 'die', 'ok', 'done', 'reset']
+diff --git a/lib/ansible/galaxy/api.py b/lib/ansible/galaxy/api.py
+index da53f2e70c..ed9be32af3 100644
+--- a/lib/ansible/galaxy/api.py
++++ b/lib/ansible/galaxy/api.py
+@@ -21,6 +21,12 @@ from ansible.module_utils.urls import open_url
+ from ansible.utils.display import Display
+ from ansible.utils.hashing import secure_hash_s
  
-     def __init__(self, rule_type, rule_control, rule_path, rule_args=None):
-+        self.prev = None
-+        self.next = None
-         self._control = None
-         self._args = None
-         self.rule_type = rule_type
-@@ -478,7 +480,8 @@ class PamdService(object):
-             if current_line.matches(rule_type, rule_control, rule_path):
-                 if current_line.prev is not None:
-                     current_line.prev.next = current_line.next
--                    current_line.next.prev = current_line.prev
-+                    if current_line.next is not None:
-+                        current_line.next.prev = current_line.prev
-                 else:
-                     self._head = current_line.next
-                     current_line.next.prev = None
++try:
++    from urllib.parse import urlparse
++except ImportError:
++    # Python 2
++    from urlparse import urlparse
++
+ display = Display()
+ 
+ 
+@@ -289,14 +295,20 @@ class GalaxyAPI:
+             data = self._call_galaxy(url)
+             results = data['results']
+             done = (data.get('next_link', None) is None)
++
++            # https://github.com/ansible/ansible/issues/64355
++            # api_server contains part of the API path but next_link includes the the /api part so strip it out.
++            url_info = urlparse(self.api_server)
++            base_url = "%s://%s/" % (url_info.scheme, url_info.netloc)
++
+             while not done:
+-                url = _urljoin(self.api_server, data['next_link'])
++                url = _urljoin(base_url, data['next_link'])
+                 data = self._call_galaxy(url)
+                 results += data['results']
+                 done = (data.get('next_link', None) is None)
+         except Exception as e:
+-            display.vvvv("Unable to retrive role (id=%s) data (%s), but this is not fatal so we continue: %s"
+-                         % (role_id, related, to_text(e)))
++            display.warning("Unable to retrieve role (id=%s) data (%s), but this is not fatal so we continue: %s"
++                            % (role_id, related, to_text(e)))
+         return results
+ 
+     @g_connect(['v1'])

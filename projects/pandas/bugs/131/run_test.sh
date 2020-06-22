@@ -1,1 +1,2 @@
-pytest pandas/tests/io/json/test_pandas.py::TestPandasContainer::test_frame_int_overflow 
+pytest pandas/tests/series/test_datetime_values.py::TestSeriesDatetimeValues::test_dt_tz_localize_categorical 
+pytest pandas/tests/series/test_datetime_values.py::TestSeriesDatetimeValues::test_dt_tz_convert_categorical 

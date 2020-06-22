@@ -1,1 +1,1 @@
-pytest tests/rules/test_git_push.py::test_match_bitbucket
+pytest tests/shells/test_fish.py::TestFish::test_get_overridden_aliases

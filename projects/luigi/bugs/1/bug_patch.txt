@@ -1,0 +1,17 @@
+diff --git a/luigi/server.py b/luigi/server.py
+index 3cb77ede..41dc28f3 100644
+--- a/luigi/server.py
++++ b/luigi/server.py
+@@ -279,9 +279,10 @@ class MetricsHandler(tornado.web.RequestHandler):
+         self._scheduler = scheduler
+ 
+     def get(self):
+-        metrics = self._scheduler._state._metrics_collector.generate_latest()
++        metrics_collector = self._scheduler._state._metrics_collector
++        metrics = metrics_collector.generate_latest()
+         if metrics:
+-            metrics.configure_http_handler(self)
++            metrics_collector.configure_http_handler(self)
+             self.write(metrics)
+ 
+ 

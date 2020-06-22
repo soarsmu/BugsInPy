@@ -1,1 +1,0 @@
-pytest test/interface_test.py::InterfaceTest::test_just_run_main_task_cls

@@ -1,0 +1,35 @@
+diff --git a/pandas/core/generic.py b/pandas/core/generic.py
+index 579daae2b..ac03843a0 100644
+--- a/pandas/core/generic.py
++++ b/pandas/core/generic.py
+@@ -3467,13 +3467,13 @@ class NDFrame(PandasObject, SelectionMixin, indexing.IndexingMixin):
+             res._is_copy = self._is_copy
+         return res
+ 
+-    def _iget_item_cache(self, item):
++    def _iget_item_cache(self, item: int):
+         """Return the cached item, item represents a positional indexer."""
+         ax = self._info_axis
+         if ax.is_unique:
+             lower = self._get_item_cache(ax[item])
+         else:
+-            lower = self._take_with_is_copy(item, axis=self._info_axis_number)
++            return self._ixs(item, axis=1)
+         return lower
+ 
+     def _box_item_values(self, key, values):
+diff --git a/pandas/core/indexing.py b/pandas/core/indexing.py
+index 745456109..c53e690b5 100755
+--- a/pandas/core/indexing.py
++++ b/pandas/core/indexing.py
+@@ -1414,10 +1414,6 @@ class _iLocIndexer(_LocationIndexer):
+             if not is_integer(k):
+                 return False
+ 
+-            ax = self.obj.axes[i]
+-            if not ax.is_unique:
+-                return False
+-
+         return True
+ 
+     def _validate_integer(self, key: int, axis: int) -> None:

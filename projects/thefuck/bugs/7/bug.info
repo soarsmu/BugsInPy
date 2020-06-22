@@ -1,0 +1,4 @@
+python_version="3.7.0"
+buggy_commit_id="64d6835e15a22cf8803d398cbb593f748c550e8a"
+fixed_commit_id="75d2c43997ca703150cbdb4c46ed7b2e2e71fd11"
+test_file="tests/rules/test_php_s.py"

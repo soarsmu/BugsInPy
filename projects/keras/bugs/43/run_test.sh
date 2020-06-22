@@ -1,1 +1,1 @@
-pytest tests/keras/layers/core_test.py::test_sequential_as_downstream_of_masking_layer
+pytest tests/keras/utils/np_utils_test.py::test_to_categorical

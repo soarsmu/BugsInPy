@@ -1,1 +1,1 @@
-pytest pandas/tests/arrays/test_integer.py::test_cut 
+pytest pandas/tests/test_strings.py::TestStringMethods::test_empty_str_methods 

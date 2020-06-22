@@ -1,1 +1,1 @@
-py.test spacy/tests/doc/test_span.py::test_filter_spans
+py.test spacy/tests/matcher/test_matcher_logic.py::test_matcher_remove

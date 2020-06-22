@@ -1,1 +1,1 @@
-pytest tests/keras/test_sequential_model.py::test_nested_sequential_deferred_build
+pytest tests/keras/layers/recurrent_test.py::test_trainability

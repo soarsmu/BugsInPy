@@ -1,0 +1,4 @@
+python_version="3.8.3"
+buggy_commit_id="45fee32"
+fixed_commit_id="d3a6a3a58e1a6eb68b8b8399ff252b8f4501950e"
+test_file="pandas/tests/series/methods/test_to_period.py;pandas/tests/series/methods/test_to_timestamp.py"

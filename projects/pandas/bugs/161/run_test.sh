@@ -1,1 +1,1 @@
-pytest pandas/tests/indexes/datetimes/test_date_range.py::test_date_range_with_custom_holidays 
+pytest pandas/tests/series/test_missing.py::TestSeriesMissingData::test_fillna_categorical_with_new_categories 

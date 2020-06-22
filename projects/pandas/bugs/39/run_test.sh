@@ -1,1 +1,1 @@
-pytest pandas/tests/series/indexing/test_getitem.py::TestSeriesGetitemListLike::test_getitem_no_matches
+pytest pandas/tests/frame//test_axis_select_reindex.py::TestDataFrameSelectReindex::test_inplace_drop_and_operation 

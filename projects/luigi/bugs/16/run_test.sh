@@ -1,1 +1,1 @@
-pytest test/scheduler_api_test.py::SchedulerApiTest::test_status_wont_override
+pytest test/central_planner_test.py::CentralPlannerTest::test_re_enable_failed_task_assistant
