@@ -112,7 +112,10 @@ done < "$work_dir/bugsinpy_bug.info"
 ###Run setup.sh
 dos2unix $work_dir/bugsinpy_requirements.txt
 #pip install -r "$work_dir/bugsinpy_requirements.txt"
-cat "$work_dir/bugsinpy_requirements.txt" | sed -e '/^\s*#.*$/d' -e '/^\s*$/d' | xargs -n 1 pip install
+if grep -q '[^[:space:]]' "$work_dir/bugsinpy_requirements.txt"; then
+    cat "$work_dir/bugsinpy_requirements.txt" | sed -e '/^\s*#.*$/d' -e '/^\s*$/d' | xargs -n 1 pip install
+fi
+
 for index in "${!run_setup[@]}"
 do
    run_setup_trail=${run_setup[index]} 
