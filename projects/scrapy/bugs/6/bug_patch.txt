@@ -1,0 +1,16 @@
+diff --git a/scrapy/pipelines/images.py b/scrapy/pipelines/images.py
+index 5796bfb8..bc449431 100644
+--- a/scrapy/pipelines/images.py
++++ b/scrapy/pipelines/images.py
+@@ -132,6 +132,11 @@ class ImagesPipeline(FilesPipeline):
+             background = Image.new('RGBA', image.size, (255, 255, 255))
+             background.paste(image, image)
+             image = background.convert('RGB')
++        elif image.mode == 'P':
++            image = image.convert("RGBA")
++            background = Image.new('RGBA', image.size, (255, 255, 255))
++            background.paste(image, image)
++            image = background.convert('RGB')
+         elif image.mode != 'RGB':
+             image = image.convert('RGB')
+ 

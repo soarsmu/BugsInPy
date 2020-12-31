@@ -1,0 +1,12 @@
+diff --git a/scrapy/dupefilters.py b/scrapy/dupefilters.py
+index 739ba922..9d8966b9 100644
+--- a/scrapy/dupefilters.py
++++ b/scrapy/dupefilters.py
+@@ -36,6 +36,7 @@ class RFPDupeFilter(BaseDupeFilter):
+         self.logger = logging.getLogger(__name__)
+         if path:
+             self.file = open(os.path.join(path, 'requests.seen'), 'a+')
++            self.file.seek(0)
+             self.fingerprints.update(x.rstrip() for x in self.file)
+ 
+     @classmethod

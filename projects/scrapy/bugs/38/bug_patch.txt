@@ -1,0 +1,16 @@
+diff --git a/scrapy/http/request/form.py b/scrapy/http/request/form.py
+index d9d178a3..95b38e99 100644
+--- a/scrapy/http/request/form.py
++++ b/scrapy/http/request/form.py
+@@ -170,9 +170,8 @@ def _get_clickable(clickdata, form):
+     """
+     clickables = [
+         el for el in form.xpath(
+-            'descendant::*[(self::input or self::button)'
+-            ' and re:test(@type, "^submit$", "i")]'
+-            '|descendant::button[not(@type)]',
++            'descendant::input[re:test(@type, "^(submit|image)$", "i")]'
++            '|descendant::button[not(@type) or re:test(@type, "^submit$", "i")]',
+             namespaces={"re": "http://exslt.org/regular-expressions"})
+         ]
+     if not clickables:
