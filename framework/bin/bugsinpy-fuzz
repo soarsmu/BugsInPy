@@ -72,7 +72,11 @@ if [ ! -f $bug_location/fuzz_target.py ]; then
     echo "Did not find any fuzzing script that execises the function containing the fix for this bug."
 
 else
-	source env/bin/activate
+	if [ -d "env/Scripts" ]; then
+	  source env/Scripts/activate
+	else
+	  source env/bin/activate
+	fi
 
     pip install pythonfuzz==1.0.3
 
