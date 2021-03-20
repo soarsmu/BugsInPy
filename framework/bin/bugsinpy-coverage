@@ -63,7 +63,12 @@ rm -f "$work_dir/coverage_singletest_bugsinpy.txt"
 rm -f "$work_dir/coverage_alltest_bugsinpy.txt"
 
 ###Activate environment
-source env/bin/activate
+cd "$work_dir"
+if [ -d "env/Scripts" ]; then
+  source env/Scripts/activate
+else
+  source env/bin/activate
+fi
 pip install coverage
 
 pytest="0"
