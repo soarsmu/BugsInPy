@@ -56,7 +56,12 @@ if [[ "$target" == "" && "$unit" == "" ]]; then
 fi  
 
 ###Activate environment
-source env/bin/activate
+cd "$work_dir"
+if [ -d "env/Scripts" ]; then
+  source env/Scripts/activate
+else
+  source env/bin/activate
+fi
 pip install mutpy
 
 rm -f mut_bugsinpy.py
