@@ -43,11 +43,11 @@ elif [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
 fi
 
 ###Check dos2unix
-check_dos2unix=$(dos2unix --version 2>&1)
-if [ "$check_dos2unix" == *"not found"* ]; then
-   echo "Please install dos2unix (sudo apt-get dos2unix)"
-   exit
-fi
+#check_dos2unix=$(dos2unix --version 2>&1)
+#if [ "$check_dos2unix" == *"not found"* ]; then
+#   echo "Please install dos2unix (sudo apt-get dos2unix)"
+#   exit
+#fi
 
 ###Remove environment if exist
 rm -r -f env/
@@ -56,8 +56,17 @@ rm -r -f env/
 python -m venv env
 
 ###Activate environment
-source env/bin/activate
-
+if [ -d "env/Scripts" ]; then
+  source env/Scripts/activate
+else
+  check_dos2unix=$(dos2unix --version 2>&1)
+	if [ "$check_dos2unix" == *"not found"* ]; then
+	   echo "Please install dos2unix (sudo apt-get dos2unix)"
+	   exit
+	fi
+  source env/bin/activate
+  dos2unix $work_dir/bugsinpy_requirements.txt
+fi
 ###Add pythonpath
 pythonpath_set=""
 pythonpath_without_folder=""
@@ -110,7 +119,7 @@ done < "$work_dir/bugsinpy_bug.info"
   IFS=';' read -r -a run_setup <<< "$run_setup_all"
 
 ###Run setup.sh
-dos2unix $work_dir/bugsinpy_requirements.txt
+#dos2unix $work_dir/bugsinpy_requirements.txt
 #pip install -r "$work_dir/bugsinpy_requirements.txt"
 if grep -q '[^[:space:]]' "$work_dir/bugsinpy_requirements.txt"; then
     cat "$work_dir/bugsinpy_requirements.txt" | sed -e '/^\s*#.*$/d' -e '/^\s*$/d' | xargs -n 1 pip install
