@@ -60,7 +60,12 @@ if [[ "$relevant" == "1" ]]; then
 fi
 
 ###Activate environment
-source env/bin/activate
+cd "$work_dir"
+if [ -d "env/Scripts" ]; then
+  source env/Scripts/activate
+else
+  source env/bin/activate
+fi
 
 pytest="0"
 #read file run_test.sh
