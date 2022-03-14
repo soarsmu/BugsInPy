@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 usage="-w work_dir
              The working directory to compile the project. Default will be the current directory.
 "
@@ -53,7 +54,7 @@ fi
 rm -r -f env/
 
 ###Add environment
-python -m venv env
+python3 -m venv env
 
 ###Activate environment
 if [ -d "env/Scripts" ]; then
