@@ -1,7 +1,7 @@
 appdirs==1.4.4
 arrow==0.15.6
 binaryornot==0.4.4
-certifi==2020.4.5.2
+certifi==2022.12.7
 chardet==3.0.4
 click==7.1.2
 -e git+https://github.com/cookiecutter/cookiecutter@9568ab6ecd2d6836646006c59473c4a4ac0dee04#egg=cookiecutter
