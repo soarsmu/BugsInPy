@@ -122,7 +122,7 @@ done < "$work_dir/bugsinpy_bug.info"
 #dos2unix $work_dir/bugsinpy_requirements.txt
 #pip install -r "$work_dir/bugsinpy_requirements.txt"
 if grep -q '[^[:space:]]' "$work_dir/bugsinpy_requirements.txt"; then
-    cat "$work_dir/bugsinpy_requirements.txt" | sed -e '/^\s*#.*$/d' -e '/^\s*$/d' | xargs -n 1 pip install
+    sed -e '/^\s*#.*$/d' -e '/^\s*$/d' $work_dir/bugsinpy_requirements.txt | xargs -I {} pip install {}
 fi
 
 for index in "${!run_setup[@]}"
@@ -135,7 +135,7 @@ done
 ###Install requirement
 #pip install -r "$work_dir/bugsinpy_requirements.txt"
 if grep -q '[^[:space:]]' "$work_dir/bugsinpy_requirements.txt"; then
-    cat "$work_dir/bugsinpy_requirements.txt" | sed -e '/^\s*#.*$/d' -e '/^\s*$/d' | xargs -n 1 pip install
+    sed -e '/^\s*#.*$/d' -e '/^\s*$/d' $work_dir/bugsinpy_requirements.txt | xargs -I {} pip install {}
 fi
 deactivate
 
