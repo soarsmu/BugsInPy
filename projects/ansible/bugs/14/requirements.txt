@@ -1,4 +1,4 @@
-ansible==2.10.0.dev0
+ansible==8.5.0
 ansible-base==2.10.0.dev0
 argcomplete==1.11.1
 cffi==1.14.0
