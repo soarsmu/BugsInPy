@@ -141,6 +141,7 @@ done < bug.info
 cd "$work_dir/$project_name"
 git reset --hard "$fix_commit"
 
+###Copy updated files in the fixed version to temp
 check_file=$(git show --name-only 2>&1)
 change_file_all=""
 while IFS= read -r line; do
@@ -148,7 +149,9 @@ while IFS= read -r line; do
       if [[ -e "$work_dir/$project_name/$line" ]]; then
             change_file_all+="$line;"
             if [ $version_id == "1" ]; then
-                cp -v "$work_dir/$project_name/$line" "$project_location/bugs/$bug_id"
+                new_dir=$(dirname $project_location/bugs/$bug_id/$line)
+                mkdir -p "$new_dir"
+                cp -v "$work_dir/$project_name/$line" "$project_location/bugs/$bug_id/$line"
             fi
       fi
    fi
@@ -160,9 +163,12 @@ IFS=';' read -r -a change_file <<< "$change_file_all"
 for index in "${!test_file[@]}"
 do
    test_file_now=${test_file[index]}
-   cp -v "$work_dir/$project_name/$test_file_now" "$project_location/bugs/$bug_id"
+   new_dir=$(dirname $project_location/bugs/$bug_id/$test_file_now)
+   mkdir -p "$new_dir"
+   cp -v "$work_dir/$project_name/$test_file_now" "$project_location/bugs/$bug_id/$test_file_now"
 done
    
+###Set to buggy version
 cd "$work_dir/$project_name"
 git reset --hard "$buggy_commit"
 git clean -f -d
@@ -171,22 +177,20 @@ git clean -f -d
 for index in "${!test_file[@]}"
 do
    test_file_now=${test_file[index]}
-   string1="${test_file_now%/*}"
-   string2="${test_file_now##*/}"
-   mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
+   mv -f  "$project_location/bugs/$bug_id/$test_file_now" "$work_dir/$project_name/$test_file_now"
 done
 
 patch_fix_all=""
-###Copy other change file from fixed to buggy if version is fixed commit
+###Copy other change files from fixed to buggy if the version is fixed commit
 for index in "${!change_file[@]}"
 do
    change_file_now=${change_file[index]}
    string1="${change_file_now%/*}"
    string2="${change_file_now##*/}"
-   if [[ -e "$project_location/bugs/$bug_id/$string2" ]]; then
+   if [[ -e "$project_location/bugs/$bug_id/$change_file_now" ]]; then
        patch_fix_all+="$change_file_now;"
        if [ $version_id == "1" ]; then
-           mv -f  "$project_location/bugs/$bug_id/$string2" "$work_dir/$project_name/$string1"
+           mv -f  "$project_location/bugs/$bug_id/$change_file_now" "$work_dir/$project_name/$string1"
        fi
    fi
 done
@@ -194,7 +198,7 @@ done
 rm -f "$work_dir/$project_name/bugsinpy_patchfile.info"
 echo "$patch_fix_all" > "$work_dir/$project_name/bugsinpy_patchfile.info"
 
-###Move information about bug to clone project folder
+###Move information about the bug to the clone project folder
 cp -f "$project_location/bugs/$bug_id/bug.info" "$work_dir/$project_name/bugsinpy_bug.info"
 cp -f "$project_location/bugs/$bug_id/requirements.txt" "$work_dir/$project_name/bugsinpy_requirements.txt"
 cp -f "$project_location/bugs/$bug_id/run_test.sh" "$work_dir/$project_name/bugsinpy_run_test.sh"
@@ -204,5 +208,7 @@ if [[ -e "$project_location/bugs/$bug_id/setup.sh" ]]; then
    cp -f "$project_location/bugs/$bug_id/setup.sh" "$work_dir/$project_name/bugsinpy_setup.sh"
 fi
 
-
+###Clean up the files in temp
+cd "$project_location/bugs/$bug_id/"
+rm -R -- */
 
