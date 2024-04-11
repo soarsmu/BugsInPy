@@ -7,7 +7,7 @@ click==7.1.2
 -e git+https://github.com/cookiecutter/cookiecutter@9568ab6ecd2d6836646006c59473c4a4ac0dee04#egg=cookiecutter
 distlib==0.3.0
 filelock==3.0.12
-idna==2.9
+idna==3.7
 importlib-metadata==1.6.1
 importlib-resources==2.0.1
 Jinja2==2.11.2
