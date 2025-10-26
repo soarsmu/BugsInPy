@@ -16,7 +16,7 @@ docker build -t bugsinpy .
 docker run -dt \
     -v ./framework:/home/bugsinpy/framework \
     -v ./projects:/home/bugsinpy/projects \
-    -v ./workspace:/home/workspace
+    -v ./workspace:/home/workspace \
     --name {your_container_name} bugsinpy
 docker exec -it {your_container_name} bash
 ```
