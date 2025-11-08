@@ -50,6 +50,8 @@ fi
 #   exit
 #fi
 
+cd "$work_dir"
+
 ###Remove environment if exist
 rm -r -f env/
 
