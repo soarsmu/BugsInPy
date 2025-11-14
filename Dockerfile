@@ -1,7 +1,7 @@
 FROM python:3.9-slim-trixie
 
 # The installer requires curl (and certificates) to download the release archive
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates git dos2unix vim bzip2
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates git nano dos2unix bzip2 build-essential
 
 # Download the latest installer
 ADD https://astral.sh/uv/install.sh /uv-installer.sh
@@ -44,4 +44,4 @@ ENV PATH="$BUGSINPY_HOME/framework/bin:$PATH"
 WORKDIR /home
 
 # Default command
-CMD ["bash"]
+CMD ["/bin/bash"]
