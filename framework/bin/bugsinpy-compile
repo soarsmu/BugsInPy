@@ -43,6 +43,17 @@ elif [[ ! -e "$work_dir/bugsinpy_run_test.sh" ]]; then
    exit
 fi
 
+# Read python version -------
+DONE=false
+until $DONE ;do
+read || DONE=true
+if [[ "$REPLY" == "python_version"* ]]; then
+   PYVER="$(cut -d'"' -f 2 <<< $REPLY)"
+fi
+done < "$work_dir/bugsinpy_bug.info"
+PYVER=${PYVER%.*}
+
+
 ###Check dos2unix
 #check_dos2unix=$(dos2unix --version 2>&1)
 #if [ "$check_dos2unix" == *"not found"* ]; then
@@ -54,7 +65,8 @@ fi
 rm -r -f env/
 
 ###Add environment
-python3 -m venv env
+echo "python${PYVER} -m venv env"
+python${PYVER} -m venv env
 
 ###Activate environment
 if [ -d "env/Scripts" ]; then
