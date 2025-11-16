@@ -142,7 +142,7 @@ cd "$work_dir/$project_name"
 git reset --hard "$fix_commit"
 
 ###Copy updated files in the fixed version to temp
-check_file=$(git show --name-only 2>&1)
+check_file=$(git show --name-only --first-parent 2>&1)
 change_file_all=""
 while IFS= read -r line; do
    if [ "$line" != "" ]; then
