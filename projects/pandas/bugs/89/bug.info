@@ -1,4 +1,4 @@
 python_version="3.8.3" 
-buggy_commit_id="0dc317f" 
+buggy_commit_id="0dc317fd76190e1932e2f7b81ed30657a23d918e"
 fixed_commit_id="feaa5033b7810f7775fd4806c27b2f9f1e9b5051"  
 test_file="pandas/tests/frame/test_reshape.py" 

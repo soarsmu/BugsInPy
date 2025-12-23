@@ -1,4 +1,4 @@
 python_version="3.8.3"
-buggy_commit_id="2740fb4"
+buggy_commit_id="2740fb44e5e2ff64087ca7de5999eb30352722f0"
 fixed_commit_id="55e8891f6d33be14e0db73ac06513129503f995c"
 test_file="pandas/tests/indexing/test_scalar.py"
