@@ -1,4 +1,4 @@
 python_version="3.8.3" 
-buggy_commit_id="794a1c2" 
+buggy_commit_id="794a1c21cfcbadd7a36653d9c8184868442be35b"
 fixed_commit_id="112e6b8d054f9adc1303138533ed6506975f94db"  
 test_file="pandas/tests/io/json/test_readlines.py" 

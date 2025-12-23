@@ -1,4 +1,4 @@
 python_version="3.8.3" 
-buggy_commit_id="01582c4" 
+buggy_commit_id="01582c4ac98a735adcd69209a735a2baaf0c68aa"
 fixed_commit_id="d28db65bdba16e9400a16469ba2707f94ae63483"  
 test_file="pandas/tests/arrays/interval/test_interval.py" 

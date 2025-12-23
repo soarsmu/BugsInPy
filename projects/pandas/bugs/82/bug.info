@@ -1,4 +1,4 @@
 python_version="3.8.3" 
-buggy_commit_id="6f395ad" 
+buggy_commit_id="6f395ad4215cafe6c1fa237e6a018aa32264985d"
 fixed_commit_id="e83a6bddac8c89b144dfe0783594dd332c5b3030"  
 test_file="pandas/tests/reshape/merge/test_merge.py" 
