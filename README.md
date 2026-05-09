@@ -16,7 +16,9 @@ docker build -t bugsinpy .
 docker run -dt \
     -v ./framework:/home/bugsinpy/framework \
     -v ./projects:/home/bugsinpy/projects \
-    -v ./workspace:/home/workspace
+    -v ./workspace:/home/workspace \
+    -v bugsinpy-pyenv-versions:/root/.pyenv/versions \
+    -v bugsinpy-pyenv-cache:/root/.pyenv/cache \
     --name {your_container_name} bugsinpy
 docker exec -it {your_container_name} bash
 ```
@@ -35,6 +37,7 @@ Command | Description
 info | Get the information of a specific project or a specific bug
 checkout	| Checkout buggy or fixed version project from dataset
 compile	| Compile sources from project that have been checkout
+safe-compile | Compile sources using the Python version declared by the checked-out project's `bugsinpy_bug.info`
 test	| Run test case that relevant with bug, single-test case from input user, or all test cases from project
 coverage |	Run code coverage analysis from test case that relevant with bug, single-test case from input user, or all test cases
 mutation |	Run mutation analysis from input user or test case that relevant with bug
@@ -46,6 +49,5 @@ fuzz | Run a test input generation from specific bug
 - Checkout a buggy source code version (youtube-dl, bug 2, buggy version):
     - `bugsinpy-checkout -p youtube-dl -v 0 -i 2 -w /temp/projects`
 - Compile sources and tests, and run tests from current directory:
-    - `bugsinpy-compile`
+    - `bugsinpy-safe-compile`
     - `bugsinpy-test`
-
