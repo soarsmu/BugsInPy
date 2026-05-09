@@ -1,21 +1,23 @@
-FROM python:3.12-slim-trixie
+FROM ubuntu:20.04
 
-# The installer requires curl (and certificates) to download the release archive
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates git dos2unix vim
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Download the latest installer
-ADD https://astral.sh/uv/install.sh /uv-installer.sh
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl build-essential dos2unix vim \
+    libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+    wget llvm libncursesw5-dev xz-utils tk-dev libxml2-dev \
+    libxmlsec1-dev libffi-dev liblzma-dev ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-# Run the installer then remove it
-RUN sh /uv-installer.sh && rm /uv-installer.sh
+ENV PYENV_ROOT=/root/.pyenv
+ENV PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:/home/bugsinpy/framework/bin:$PATH"
 
-# Ensure the installed binary is on the `PATH`
-ENV PATH="/root/.local/bin/:$PATH"
-ENV BUGSINPY_HOME="/home/bugsinpy/"
-ENV PATH="$BUGSINPY_HOME/framework/bin:$PATH"
+RUN curl -fsSL https://pyenv.run | bash && \
+    mkdir -p "$PYENV_ROOT/versions" "$PYENV_ROOT/cache" && \
+    pyenv rehash
 
-# Set working directory
+ENV BUGSINPY_HOME=/home/bugsinpy
+
 WORKDIR /home
 
-# Default command
 CMD ["bash"]

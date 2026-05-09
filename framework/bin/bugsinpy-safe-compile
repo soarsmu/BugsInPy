@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage="-w work_dir
+             The checked-out project directory to compile. Default will be the current directory.
+       --no-editable-install
+             Skip the post-compile editable install step.
+       --require-editable-install
+             Treat a failed editable install as a compile failure. By default it is best-effort.
+"
+
+print_usage() {
+    cat <<____HALP
+Usage: ${0##*/} [ --help ] [ -w work_dir ] [ --no-editable-install ] [ --require-editable-install ]
+$usage
+____HALP
+}
+
+die() {
+    echo "bugsinpy-safe-compile: $*" >&2
+    exit 1
+}
+
+work_dir=""
+run_editable_install="1"
+require_editable_install="0"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            print_usage
+            exit 0
+            ;;
+        -w)
+            shift
+            [[ $# -gt 0 ]] || die "-w requires a work directory"
+            work_dir="$1"
+            ;;
+        --no-editable-install)
+            run_editable_install="0"
+            ;;
+        --require-editable-install)
+            require_editable_install="1"
+            ;;
+        *)
+            die "unknown argument: $1"
+            ;;
+    esac
+    shift
+done
+
+if [[ -z "$work_dir" ]]; then
+    work_dir=$(pwd)
+fi
+
+cd "$work_dir" || die "cannot enter work directory: $work_dir"
+work_dir=$(pwd)
+
+[[ -e "$work_dir/bugsinpy_bug.info" ]] || die "this is not a checkout project folder: missing bugsinpy_bug.info"
+[[ -e "$work_dir/bugsinpy_requirements.txt" ]] || die "this is not a checkout project folder: missing bugsinpy_requirements.txt"
+[[ -e "$work_dir/bugsinpy_run_test.sh" ]] || die "this is not a checkout project folder: missing bugsinpy_run_test.sh"
+
+PYVER=$(awk -F'"' '/^python_version=/{ print $2; exit }' "$work_dir/bugsinpy_bug.info")
+[[ -n "$PYVER" ]] || die "could not read python_version from bugsinpy_bug.info"
+
+command -v pyenv >/dev/null 2>&1 || die "pyenv is required but was not found on PATH"
+
+echo "Using Python $PYVER for $work_dir"
+pyenv install -s "$PYVER"
+printf '%s\n' "$PYVER" > "$work_dir/.python-version"
+export PYENV_VERSION="$PYVER"
+pyenv rehash >/dev/null 2>&1 || true
+
+actual_pyver=$(python3 -c 'import sys; print("{}.{}.{}".format(*sys.version_info[:3]))')
+if [[ "$actual_pyver" != "$PYVER" ]]; then
+    die "python3 resolved to $actual_pyver, expected $PYVER"
+fi
+
+echo "Running bugsinpy-compile with Python $actual_pyver"
+script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+"$script_dir/bugsinpy-compile"
+
+if [[ "$run_editable_install" == "1" ]]; then
+    if [[ -f "$work_dir/setup.py" || -f "$work_dir/pyproject.toml" ]]; then
+        echo "Running post-compile editable install"
+        set +e
+        if [[ -d "$work_dir/env/Scripts" ]]; then
+            # shellcheck disable=SC1091
+            source "$work_dir/env/Scripts/activate"
+        else
+            # shellcheck disable=SC1091
+            source "$work_dir/env/bin/activate"
+        fi
+        python -m pip install -e . --no-deps
+        editable_status=$?
+        deactivate >/dev/null 2>&1 || true
+        set -e
+
+        if [[ "$editable_status" -ne 0 ]]; then
+            if [[ "$require_editable_install" == "1" ]]; then
+                die "editable install failed"
+            fi
+            echo "Warning: editable install failed; continuing because it is best-effort by default" >&2
+        fi
+    else
+        echo "Skipping editable install: no setup.py or pyproject.toml found"
+    fi
+fi
+
+echo "Safe compile finished for $work_dir"
